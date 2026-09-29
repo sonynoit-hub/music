@@ -6,3 +6,8 @@ data/dashboard/
 .venv-transcribe/
 .DS_Store
 *.blend1
+
+# Local scratch renders and backups
+outputs/test*.mp4
+outputs/preview_*.png
+outputs/*.before-*.blend
