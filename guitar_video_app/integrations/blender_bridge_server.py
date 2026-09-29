@@ -123,8 +123,13 @@ def _run_command(command: dict[str, Any]) -> dict[str, Any]:
             bpy.context.preferences.filepaths.save_version = versions
         return {"ok": True, "file": bpy.data.filepath}
     if name == "dashboard_sync":
-        from guitar_video_app.integrations.dashboard_bridge import sync
-        return sync(command)
+        import importlib
+        from guitar_video_app.core import lesson_v2
+        from guitar_video_app.integrations import dashboard_bridge, lesson_controller_v2, lesson_setup, title_overlay
+        # An open Blender keeps old modules; reload so dashboard code changes apply without a restart.
+        for module in (lesson_v2, lesson_controller_v2, title_overlay, lesson_setup, dashboard_bridge):
+            importlib.reload(module)
+        return dashboard_bridge.sync(command)
     if name == "ping":
         return {"ok": True, "message": "pong"}
     if name == "animate_chart":

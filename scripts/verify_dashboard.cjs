@@ -40,7 +40,7 @@ const base = process.env.DASHBOARD_URL || 'http://127.0.0.1:8780';
   assert.equal(second.audio_strips,1);assert.equal(second.markers,6);
   assert.equal(second.layout_fingerprint,before.layout_fingerprint);
   await page.click('button.song:has-text("32-measure guitar study")');
-  await page.waitForFunction(()=>document.querySelector('h1').textContent==='32-measure guitar study'&&!document.querySelector('#send').disabled);
+  await page.waitForFunction(()=>document.querySelector('#name').value==='32-measure guitar study'&&!document.querySelector('#send').disabled);
   await page.click('#send');
   await page.waitForFunction(()=>document.querySelector('#message').textContent.startsWith('Lesson and audio applied'),{},{timeout:60000});
   await page.click('#saveBlend');

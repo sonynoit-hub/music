@@ -1,6 +1,9 @@
 fastapi>=0.115,<1
 uvicorn>=0.30,<1
 python-multipart>=0.0.20,<1
+# Audio import from YouTube, Instagram and TikTok links, with a bundled ffmpeg for WAV conversion.
+yt-dlp>=2025.1.1
+imageio-ffmpeg>=0.5,<1
 
 # Optional local WAV-to-MIDI transcription backend.
 # Keep this outside the dashboard venv; Basic Pitch is not Python 3.14-friendly.

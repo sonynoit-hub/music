@@ -114,10 +114,11 @@ Importing a new song must preserve reusable setup:
 
 The latest known Blender scene candidate is:
 
-- `outputs/v3-tests.blend`
+- `outputs/v4-vertical.blend` (9:16, built from `outputs/v3-tests.blend` by `scripts/make_vertical_scene.py`)
 
 Other important reusable files:
 
+- `outputs/v3-tests.blend` (4:5 source scene)
 - `outputs/reference-guitar.blend`
 - `outputs/lesson-v2-tests.blend`
 - `outputs/complex_32_measures.mid`

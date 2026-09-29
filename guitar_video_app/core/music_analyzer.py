@@ -8,7 +8,7 @@ import re
 
 import mido
 
-from guitar_video_app.core.fingering_solver import choose_positions
+from guitar_video_app.core.fingering_solver import plan_positions
 from guitar_video_app.core.normalized_song import (
     SCHEMA_VERSION,
     NormalizedBeat,
@@ -448,69 +448,29 @@ def _map_guitar_positions(
 ) -> dict[int, object]:
     positions: dict[int, object] = {}
     track_strings = _track_string_map(tracks)
-    previous = None
-    index = 0
-    while index < len(parsed_notes):
-        start_tick = parsed_notes[index].start_tick
-        group: list[ParsedMidiNote] = []
-        while index < len(parsed_notes) and parsed_notes[index].start_tick == start_tick:
-            group.append(parsed_notes[index])
-            index += 1
+    planned: list[ParsedMidiNote] = []
+    for note in parsed_notes:
+        position = _position_from_track(note, track_strings)
+        if position is None:
+            planned.append(note)
+        else:
+            positions[id(note)] = position
 
-        explicit_positions = [_position_from_track(note, track_strings) for note in group]
-        if all(position is not None for position in explicit_positions):
-            chosen = explicit_positions
-            for note, position in zip(group, chosen, strict=True):
-                positions[id(note)] = position
-            previous = list(chosen)
-            continue
-
-        raw_group = [
-            RawNote(
-                pitch=note.pitch,
-                start_time=tick_to_seconds(note.start_tick),
-                end_time=tick_to_seconds(note.end_tick),
-                velocity=note.velocity,
-                channel=note.channel,
-            )
-            for note in group
-        ]
-        try:
-            chosen = choose_positions(raw_group, previous=previous)
-        except ValueError:
-            if not tolerate_unplayable:
-                raise
-            chosen = _choose_tolerant_positions(group, raw_group, previous)
-        for note, position in zip(group, chosen, strict=True):
-            if position is not None:
-                positions[id(note)] = position
-        if chosen:
-            previous = [position for position in chosen if position is not None]
+    raw_notes = [
+        RawNote(
+            pitch=note.pitch,
+            start_time=tick_to_seconds(note.start_tick),
+            end_time=tick_to_seconds(note.end_tick),
+            velocity=note.velocity,
+            channel=note.channel,
+        )
+        for note in planned
+    ]
+    chosen = plan_positions(raw_notes, tolerate_unplayable=tolerate_unplayable)
+    for note, position in zip(planned, chosen, strict=True):
+        if position is not None:
+            positions[id(note)] = position
     return positions
-
-
-def _choose_tolerant_positions(
-    group: list[ParsedMidiNote],
-    raw_group: list[RawNote],
-    previous: list[object] | None,
-) -> list[object | None]:
-    chosen: list[object | None] = []
-    used_strings: set[int] = set()
-    current_previous = previous
-    for note, raw_note in zip(group, raw_group, strict=True):
-        try:
-            options = choose_positions([raw_note], previous=current_previous)
-        except ValueError:
-            chosen.append(None)
-            continue
-        position = options[0]
-        if position.string in used_strings:
-            chosen.append(None)
-            continue
-        chosen.append(position)
-        used_strings.add(position.string)
-        current_previous = [position]
-    return chosen
 
 
 def _track_string_map(tracks: list[NormalizedTrack]) -> dict[int, int]:

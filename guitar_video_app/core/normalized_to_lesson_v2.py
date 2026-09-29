@@ -27,7 +27,7 @@ def normalized_to_lesson_v2(
 
     timing = normalized["timing"]
     ppq = int(timing["ppq"])
-    tempo = _single_effective_tempo(timing.get("tempo_changes", []))
+    tempos = _tempo_points(timing.get("tempo_changes", []), ppq)
     signature = _single_effective_time_signature(timing.get("time_signature_changes", []))
     lesson_notes = []
     for index, note in enumerate(normalized["notes"], start=1):
@@ -52,10 +52,10 @@ def normalized_to_lesson_v2(
     measure_end_tick = max((int(measure["end_tick"]) for measure in normalized.get("measures", [])), default=0)
     end_beat = Fraction(max(end_tick, measure_end_tick), ppq)
 
-    return {
+    lesson = {
         "version": 2,
         "name": name or normalized.get("song", {}).get("title") or "Normalized MIDI import",
-        "tempo_bpm": _clean_number(float(tempo["bpm"])),
+        "tempo_bpm": _clean_number(float(tempos[0][1])),
         "fps": fps,
         "time_signature": [int(signature["numerator"]), int(signature["denominator"])],
         "string_numbering": STRING_NUMBERING,
@@ -68,6 +68,10 @@ def normalized_to_lesson_v2(
         },
         "notes": lesson_notes,
     }
+    if len(tempos) > 1:
+        lesson["tempo_changes"] = [dict(beat=_fraction_string(position), bpm=_clean_number(float(bpm)))
+                                   for position, bpm in tempos[1:]]
+    return lesson
 
 
 def convert_normalized_file_to_lesson_v2(
@@ -93,24 +97,20 @@ def _clean_number(value: float) -> int | float:
     return rounded if abs(value - rounded) < 0.0001 else value
 
 
-def _single_effective_tempo(tempo_changes: list[dict[str, Any]]) -> dict[str, Any]:
+def _tempo_points(tempo_changes: list[dict[str, Any]], ppq: int) -> list[tuple[Fraction, Fraction]]:
+    """(beat, bpm) for each real tempo change; MIDI plays 120 BPM before the first one."""
     if not tempo_changes:
         raise ValueError("Normalized JSON is missing tempo data.")
-    tempos = {
-        int(change.get("microseconds_per_quarter", round(60_000_000 / float(change["bpm"]))))
-        for change in tempo_changes
-    }
-    if len(tempos) != 1:
-        raise ValueError(
-            "This MIDI has real tempo changes. The current Blender renderer uses V2 JSON, "
-            "which supports one tempo; keep this song as normalized JSON until direct "
-            "normalized Blender import is added."
-        )
-    tempo_us = tempos.pop()
-    first = dict(tempo_changes[0])
-    first["microseconds_per_quarter"] = tempo_us
-    first["bpm"] = 60_000_000 / tempo_us
-    return first
+    points: list[tuple[Fraction, Fraction]] = [(Fraction(0), Fraction(120))]
+    for change in sorted(tempo_changes, key=lambda c: int(c.get("tick", 0))):
+        tempo_us = int(change["microseconds_per_quarter"] if "microseconds_per_quarter" in change
+                       else round(60_000_000 / float(change["bpm"])))
+        position, bpm = Fraction(int(change.get("tick", 0)), ppq), Fraction(60_000_000, tempo_us)
+        if points[-1][0] == position:
+            points[-1] = (position, bpm)
+        elif points[-1][1] != bpm:
+            points.append((position, bpm))
+    return [point for index, point in enumerate(points) if not index or point[1] != points[index - 1][1]]
 
 
 def _single_effective_time_signature(

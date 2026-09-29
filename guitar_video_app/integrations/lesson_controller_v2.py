@@ -4,7 +4,7 @@ import math
 import bpy
 from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
-from guitar_video_app.core.lesson_v2 import prepare, state
+from guitar_video_app.core.lesson_v2 import prepare, seconds_between, state
 from guitar_video_app.integrations import lesson_controller as legacy
 
 HANDLER = 'guitar_lesson_v2_controller'
@@ -12,6 +12,26 @@ HANDLER = 'guitar_lesson_v2_controller'
 GUITAR_OBJECTS = {string: f'String_{7-string}' for string in range(1, 7)}
 _lesson = None
 _draw_key = None
+_retriggered = set()
+RETRIGGER_GAP_SECONDS = 0.1
+
+
+def _retriggered_notes(lesson):
+    """IDs of notes followed, with no gap, by the same fret on the same string."""
+    previous, ids = {}, set()
+    for note in lesson['notes']:
+        before = previous.get(note['string'])
+        if before and before['fret'] == note['fret'] and before['end'] == note['start']:
+            ids.add(before['id'])
+        previous[note['string']] = note
+    return ids
+
+
+def _in_retrigger_gap(lesson, note, position):
+    if note['id'] not in _retriggered:
+        return False
+    gap = min(RETRIGGER_GAP_SECONDS, seconds_between(lesson, note['start'], note['end']) / 2)
+    return seconds_between(lesson, position, note['end']) <= gap
 
 
 def _draw_number(scene, cam, slot, label, x, y, height, depth, material):
@@ -51,8 +71,9 @@ def _staff_number_gaps(scene, cam, slots):
         xa = world_to_camera_view(scene, cam, a).x
         xb = world_to_camera_view(scene, cam, b).x
         padding = (xb - xa) * 0.003
-        gaps = sorted((max(0.00001, (lo-padding-xa)/(xb-xa)),
-                       min(0.99999, (hi+padding-xa)/(xb-xa))) for lo,hi in ranges)
+        # Clamp both ends: a gap past the line end would otherwise lengthen the line.
+        gaps = sorted((min(0.99999, max(0.00001, (lo-padding-xa)/(xb-xa))),
+                       min(0.99999, max(0.00001, (hi+padding-xa)/(xb-xa)))) for lo,hi in ranges)
         spans, end = [], 0.0
         for lo, hi in gaps:
             if lo > end:
@@ -140,7 +161,8 @@ def update(scene):
                                max(left, min(right, x_at(position))), (ys[0] + ys[-1])/2)
     cursor.hide_set(False)
     cursor.hide_render = False
-    by_string = {n['string']: n for n in active}
+    # Blank the highlight just before a same-fret repeat so each attack reads as a new hit.
+    by_string = {n['string']: n for n in active if not _in_retrigger_gap(lesson, n, position)}
     for string in range(1, 7):
         obj = bpy.data.objects[GUITAR_OBJECTS[string]]
         legacy._restore_string_rest(obj)
@@ -161,7 +183,7 @@ def update(scene):
             marker.data.materials.clear()
             marker.data.materials.append(material)
             marker['note_id'] = note['id']
-            age = float((position - note['start']) * lesson['frames_per_beat']) / lesson['fps']
+            age = seconds_between(lesson, note['start'], position)
             # Small, deterministic attack decay; no lingering deformation at note-off.
             if age < 0.3:
                 legacy._vibrate_active_string(scene, cam, obj, string)
@@ -177,13 +199,16 @@ def update(scene):
 
 
 def register():
-    global _lesson, _draw_key
+    global _lesson, _draw_key, _retriggered
     _draw_key = None
     _lesson = prepare(json.loads(bpy.data.texts['Lesson_V2_JSON'].as_string()))
+    _retriggered = _retriggered_notes(_lesson)
     legacy.SEGMENTS.update({'5': [0,5,6,2,3], '6': [0,5,6,4,2,3],
                             '7': [0,1,2], '8': list(range(7)), '9': [0,1,2,3,5,6]})
     handlers = bpy.app.handlers.frame_change_post
     handlers[:] = [h for h in handlers if getattr(h, '__name__', '') not in (HANDLER, legacy.HANDLER_NAME)]
     update.__name__ = HANDLER
     handlers.append(update)
+    # On file load, world matrices are stale until the depsgraph is evaluated.
+    bpy.context.view_layer.update()
     update(bpy.context.scene)

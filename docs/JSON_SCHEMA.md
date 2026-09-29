@@ -148,3 +148,12 @@ Each mapped note should include:
 - `string`
 - `fret`
 
+## Lesson V2 Tempo
+
+Lesson V2 JSON (what the dashboard sends to Blender) is beat-based. Its timing fields are:
+
+- `tempo_bpm`: tempo from beat 0.
+- `tempo_changes` (optional): `[{"beat": "24", "bpm": 111}]`, beats strictly increasing and after 0; each tempo holds until the next change.
+
+Seconds come only from `tempo_map` / `seconds_at` / `beat_at` in `guitar_video_app/core/lesson_v2.py`; Blender and the MIDI export call these rather than dividing by one tempo.
+

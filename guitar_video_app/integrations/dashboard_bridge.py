@@ -25,6 +25,7 @@ def sync(command):
     import bpy
     from guitar_video_app.core.lesson_v2 import prepare
     from guitar_video_app.integrations.lesson_setup import install_v2
+    from guitar_video_app.integrations.title_overlay import install_title
 
     scene = bpy.context.scene
     data = json.loads(Path(command['json_path']).read_text())
@@ -65,6 +66,7 @@ def sync(command):
                                             frame_start=round(offset*lesson['fps']))
         new_audio.mute = True
         install_v2(data)
+        install_title(command.get('title', ''), command.get('subtitle', ''))
         scene.frame_set(0)
     except Exception:
         if new_audio:

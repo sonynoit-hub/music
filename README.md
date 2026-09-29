@@ -13,7 +13,7 @@ Detailed project memory is split by topic:
 - `docs/DECISIONS.md` for architectural decisions and rationale.
 - `skills/music-pipeline/SKILL.md` for the repeatable new-song workflow.
 
-The latest known Blender scene candidate is `outputs/v3-tests.blend`.
+The latest known Blender scene candidate is `outputs/v4-vertical.blend` (9:16), built from the 4:5 scene `outputs/v3-tests.blend` by `scripts/make_vertical_scene.py`.
 
 ## Local dashboard
 

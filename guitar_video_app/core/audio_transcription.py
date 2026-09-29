@@ -1,39 +1,32 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import subprocess
+
+from guitar_video_app.core import basic_pitch_runner
 
 
 class TranscriptionUnavailable(RuntimeError):
     pass
 
 
+# Tuned on a fingerstyle guitar recording against its published tab: stricter onsets and
+# no melodia note extension roughly halve the false notes while keeping about 90% of real notes.
+SETTINGS = dict(onset_threshold=0.6, frame_threshold=0.4, melodia_trick=False)
+
+
 def transcribe_wav_to_midi(wav_path: str | Path, output_dir: str | Path) -> Path:
+    """Write Basic Pitch MIDI (and a .onsets.json of onset peaks beside it); return the MIDI path."""
     wav = Path(wav_path)
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
     try:
-        from basic_pitch.inference import ICASSP_2022_MODEL_PATH, predict_and_save
+        import basic_pitch  # noqa: F401
     except Exception as exc:
         return _transcribe_with_external_python(wav, out, exc)
-
-    predict_and_save(
-        [str(wav)],
-        str(out),
-        save_midi=True,
-        sonify_midi=False,
-        save_model_outputs=False,
-        save_notes=False,
-        model_or_model_path=ICASSP_2022_MODEL_PATH,
-    )
-    midi_path = out / f"{wav.stem}_basic_pitch.mid"
-    if not midi_path.exists():
-        candidates = sorted(out.glob("*.mid"))
-        if not candidates:
-            raise RuntimeError("Basic Pitch finished without creating a MIDI file.")
-        midi_path = candidates[-1]
-    return midi_path
+    return basic_pitch_runner.run(str(wav), str(out), SETTINGS)
 
 
 def _transcription_python() -> Path | None:
@@ -54,33 +47,8 @@ def _transcribe_with_external_python(
             "then try again."
         ) from import_error
 
-    code = """
-from pathlib import Path
-import sys
-from basic_pitch.inference import ICASSP_2022_MODEL_PATH, predict_and_save
-
-wav = Path(sys.argv[1])
-out = Path(sys.argv[2])
-out.mkdir(parents=True, exist_ok=True)
-predict_and_save(
-    [str(wav)],
-    str(out),
-    save_midi=True,
-    sonify_midi=False,
-    save_model_outputs=False,
-    save_notes=False,
-    model_or_model_path=ICASSP_2022_MODEL_PATH,
-)
-midi = out / f"{wav.stem}_basic_pitch.mid"
-if not midi.exists():
-    candidates = sorted(out.glob("*.mid"))
-    if not candidates:
-        raise RuntimeError("Basic Pitch finished without creating a MIDI file.")
-    midi = candidates[-1]
-print(midi)
-"""
     result = subprocess.run(
-        [str(python), "-c", code, str(wav_path), str(output_dir)],
+        [str(python), basic_pitch_runner.__file__, str(wav_path), str(output_dir), json.dumps(SETTINGS)],
         text=True,
         capture_output=True,
         check=False,

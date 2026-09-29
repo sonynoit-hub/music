@@ -7,7 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import bpy
-from guitar_video_app.core.lesson_v2 import prepare, state
+from guitar_video_app.core.lesson_v2 import prepare, seconds_at, state
 from guitar_video_app.integrations.lesson_setup import install_lesson
 from guitar_video_app.integrations import lesson_controller_v2 as runtime
 from guitar_video_app.integrations import lesson_controller as geometry
@@ -27,7 +27,7 @@ for path in sorted((ROOT/'data/lesson_tests').glob('*.json')):
     frames = {0,lesson['frame_end'],lesson['frame_end']+1}
     for n in lesson['notes']:
         for boundary in (n['start'],n['end']):
-            f = math.ceil(boundary*lesson['frames_per_beat'])
+            f = math.ceil(seconds_at(lesson['tempo_map'], boundary) * lesson['fps'])
             frames.update((f-1,f,f+1))
     # Both playback directions plus loop restart must evaluate identically.
     for frame in sorted(frames) + list(reversed(sorted(frames)))[::7] + [0]:

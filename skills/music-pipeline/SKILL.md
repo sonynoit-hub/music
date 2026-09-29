@@ -42,7 +42,7 @@ Follow this sequence for each new song:
    - Include tempo and time-signature maps.
    - Include `audio_offset`.
 6. Import into Blender:
-   - Start from the selected reusable scene, currently `outputs/v3-tests.blend` unless the user chooses another file.
+   - Start from the selected reusable scene, currently `outputs/v4-vertical.blend` unless the user chooses another file.
    - Load normalized JSON.
    - Remove prior song-specific measures, notes, tabs, animations, and audio.
    - Preserve reusable scene, guitar model, camera, panel, staff, material, lighting, and render setup.

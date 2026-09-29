@@ -6,7 +6,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from guitar_video_app.core.lesson_v2 import prepare, state
+from guitar_video_app.core.lesson_v2 import prepare, seconds_at, state
 
 
 def build():
@@ -101,7 +101,7 @@ def build():
     ]
     compiled=prepare(data)
     for check in checkpoints:
-        frame=Fraction(check['beat'])*compiled['frames_per_beat']
+        frame=seconds_at(compiled['tempo_map'],Fraction(check['beat']))*compiled['fps']
         assert set(n['id'] for n in state(compiled,frame)[2])==set(check['active_ids']),check
     folder=ROOT/'data/lesson_tests'
     (folder/'12_complex_32_measures.json').write_text(json.dumps(data,indent=2)+'\n')

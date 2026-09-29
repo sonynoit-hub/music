@@ -26,7 +26,7 @@ Final WAV -> Blender audio sync
 
 ## Current Reuse Base
 
-Use `outputs/v3-tests.blend` as the latest Blender scene candidate unless the user selects another `.blend` file.
+Use `outputs/v4-vertical.blend` (9:16, 1080x1920) as the latest Blender scene candidate unless the user selects another `.blend` file. It is built from the 4:5 scene `outputs/v3-tests.blend` by `scripts/make_vertical_scene.py`; re-run that script after changing the 4:5 scene.
 
 Do not overwrite `outputs/reference-guitar.blend` unless explicitly requested.
 

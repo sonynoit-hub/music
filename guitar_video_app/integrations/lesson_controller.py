@@ -234,9 +234,12 @@ def _open_string_point(tab_string):
     pts = _curve_points_world(obj)
     if not pts:
         return Vector((0,0,0))
-    target = _object_center_world('Nut')
-    if target is None:
+    nut = _object_center_world('Nut')
+    if nut is None:
         return pts[-1]
+    first_fret = _object_center_world('Fret_01')
+    # Mirror the fret-1 marker across the nut so open strings sit on the headstock side.
+    target = nut if first_fret is None else nut + (nut - first_fret) * 0.5
     best = pts[0]
     best_dist = 1e18
     for a, b in zip(pts, pts[1:]):
