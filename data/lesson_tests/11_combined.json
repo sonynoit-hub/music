@@ -1,0 +1,517 @@
+{
+  "version": 2,
+  "tempo_bpm": 120,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 216,
+  "notes": [
+    {
+      "id": "n1",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "0",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n2",
+      "string": 1,
+      "fret": 1,
+      "start_beat": "1",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n3",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "2",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n4",
+      "string": 2,
+      "fret": 1,
+      "start_beat": "3",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n5",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "4",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n6",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "5",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n7",
+      "string": 4,
+      "fret": 0,
+      "start_beat": "6",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n8",
+      "string": 4,
+      "fret": 1,
+      "start_beat": "7",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n9",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "8",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n10",
+      "string": 5,
+      "fret": 1,
+      "start_beat": "9",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n11",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "10",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n12",
+      "string": 6,
+      "fret": 1,
+      "start_beat": "11",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n13",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "24",
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n14",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "25",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n15",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "26",
+      "duration_beats": 1
+    },
+    {
+      "id": "n16",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "28",
+      "duration_beats": 2
+    },
+    {
+      "id": "n17",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "30",
+      "duration_beats": 4
+    },
+    {
+      "id": "n18",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "34",
+      "duration_beats": 1.5
+    },
+    {
+      "id": "n19",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "36",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n20",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "109/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n21",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "110/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n22",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "48",
+      "duration_beats": 1
+    },
+    {
+      "id": "n23",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "48",
+      "duration_beats": 1
+    },
+    {
+      "id": "n24",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "51",
+      "duration_beats": 1
+    },
+    {
+      "id": "n25",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "51",
+      "duration_beats": 1
+    },
+    {
+      "id": "n26",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "51",
+      "duration_beats": 1
+    },
+    {
+      "id": "n27",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "54",
+      "duration_beats": 1
+    },
+    {
+      "id": "n28",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "54",
+      "duration_beats": 1
+    },
+    {
+      "id": "n29",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "54",
+      "duration_beats": 1
+    },
+    {
+      "id": "n30",
+      "string": 4,
+      "fret": 3,
+      "start_beat": "54",
+      "duration_beats": 1
+    },
+    {
+      "id": "n31",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "57",
+      "duration_beats": 1
+    },
+    {
+      "id": "n32",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "57",
+      "duration_beats": 1
+    },
+    {
+      "id": "n33",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "57",
+      "duration_beats": 1
+    },
+    {
+      "id": "n34",
+      "string": 4,
+      "fret": 3,
+      "start_beat": "57",
+      "duration_beats": 1
+    },
+    {
+      "id": "n35",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "57",
+      "duration_beats": 1
+    },
+    {
+      "id": "n36",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n37",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n38",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n39",
+      "string": 4,
+      "fret": 3,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n40",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n41",
+      "string": 6,
+      "fret": 3,
+      "start_beat": "60",
+      "duration_beats": 1
+    },
+    {
+      "id": "n42",
+      "string": 1,
+      "fret": 1,
+      "start_beat": "72",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n43",
+      "string": 2,
+      "fret": 2,
+      "start_beat": "72",
+      "duration_beats": 1.0
+    },
+    {
+      "id": "n44",
+      "string": 3,
+      "fret": 3,
+      "start_beat": "72",
+      "duration_beats": 1.5
+    },
+    {
+      "id": "n45",
+      "string": 4,
+      "fret": 4,
+      "start_beat": "72",
+      "duration_beats": 2.0
+    },
+    {
+      "id": "n46",
+      "string": 5,
+      "fret": 5,
+      "start_beat": "72",
+      "duration_beats": 2.5
+    },
+    {
+      "id": "n47",
+      "string": 6,
+      "fret": 6,
+      "start_beat": "72",
+      "duration_beats": 3.0
+    },
+    {
+      "id": "n48",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "96",
+      "duration_beats": 8
+    },
+    {
+      "id": "n49",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "96",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n50",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "97",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n51",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "98",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n52",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "99",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n53",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "100",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n54",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "101",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n55",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "102",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n56",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "103",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n57",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "120",
+      "duration_beats": 6
+    },
+    {
+      "id": "n58",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "121",
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n59",
+      "string": 2,
+      "fret": 5,
+      "start_beat": "123",
+      "duration_beats": 1
+    },
+    {
+      "id": "n60",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "124",
+      "duration_beats": 1
+    },
+    {
+      "id": "n61",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "145",
+      "duration_beats": 1
+    },
+    {
+      "id": "n62",
+      "string": 1,
+      "fret": 3,
+      "start_beat": "152",
+      "duration_beats": 1
+    },
+    {
+      "id": "n63",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "175",
+      "duration_beats": 3
+    },
+    {
+      "id": "n64",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "176",
+      "duration_beats": 1
+    },
+    {
+      "id": "n65",
+      "string": 1,
+      "fret": 2,
+      "start_beat": "183",
+      "duration_beats": 3
+    },
+    {
+      "id": "n66",
+      "string": 3,
+      "fret": 9,
+      "start_beat": "184",
+      "duration_beats": 1
+    },
+    {
+      "id": "n67",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "192",
+      "duration_beats": 1
+    },
+    {
+      "id": "n68",
+      "string": 1,
+      "fret": 1,
+      "start_beat": "194",
+      "duration_beats": 1
+    },
+    {
+      "id": "n69",
+      "string": 1,
+      "fret": 9,
+      "start_beat": "196",
+      "duration_beats": 1
+    },
+    {
+      "id": "n70",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "198",
+      "duration_beats": 1
+    },
+    {
+      "id": "n71",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "200",
+      "duration_beats": 1
+    },
+    {
+      "id": "n72",
+      "string": 1,
+      "fret": 20,
+      "start_beat": "202",
+      "duration_beats": 1
+    }
+  ]
+}

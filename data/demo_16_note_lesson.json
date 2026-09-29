@@ -1,0 +1,322 @@
+{
+  "name": "Demo 16 note tab and guitar timing",
+  "frame_start": 0,
+  "frame_end": 192,
+  "notes_per_staff": 4,
+  "visible_staff_count": 2,
+  "page_switch_frame": 96,
+  "staff_pages": [
+    {
+      "page": 1,
+      "staffs": [
+        1,
+        2
+      ],
+      "frames": [
+        0,
+        95
+      ]
+    },
+    {
+      "page": 2,
+      "staffs": [
+        3,
+        4
+      ],
+      "frames": [
+        96,
+        192
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "index": 1,
+      "staff": 1,
+      "slot_in_staff": 1,
+      "frame": 0,
+      "duration_frames": 12,
+      "string": 1,
+      "fret": 2,
+      "label": "2",
+      "guitar": {
+        "string": 1,
+        "fret": 2,
+        "pick_frame": 0,
+        "original_inverted_string": 6
+      },
+      "original_inverted_string": 6,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 2,
+      "staff": 1,
+      "slot_in_staff": 2,
+      "frame": 12,
+      "duration_frames": 12,
+      "string": 2,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 2,
+        "fret": 0,
+        "pick_frame": 12,
+        "original_inverted_string": 5
+      },
+      "original_inverted_string": 5,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 3,
+      "staff": 1,
+      "slot_in_staff": 3,
+      "frame": 24,
+      "duration_frames": 12,
+      "string": 3,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 3,
+        "fret": 0,
+        "pick_frame": 24,
+        "original_inverted_string": 4
+      },
+      "original_inverted_string": 4,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 4,
+      "staff": 1,
+      "slot_in_staff": 4,
+      "frame": 36,
+      "duration_frames": 12,
+      "string": 4,
+      "fret": 2,
+      "label": "2",
+      "guitar": {
+        "string": 4,
+        "fret": 2,
+        "pick_frame": 36,
+        "original_inverted_string": 3
+      },
+      "original_inverted_string": 3,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 5,
+      "staff": 2,
+      "slot_in_staff": 1,
+      "frame": 48,
+      "duration_frames": 12,
+      "string": 5,
+      "fret": 3,
+      "label": "3",
+      "guitar": {
+        "string": 5,
+        "fret": 3,
+        "pick_frame": 48,
+        "original_inverted_string": 2
+      },
+      "original_inverted_string": 2,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 6,
+      "staff": 2,
+      "slot_in_staff": 2,
+      "frame": 60,
+      "duration_frames": 12,
+      "string": 6,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 6,
+        "fret": 0,
+        "pick_frame": 60,
+        "original_inverted_string": 1
+      },
+      "original_inverted_string": 1,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 7,
+      "staff": 2,
+      "slot_in_staff": 3,
+      "frame": 72,
+      "duration_frames": 12,
+      "string": 5,
+      "fret": 1,
+      "label": "1",
+      "guitar": {
+        "string": 5,
+        "fret": 1,
+        "pick_frame": 72,
+        "original_inverted_string": 2
+      },
+      "original_inverted_string": 2,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 8,
+      "staff": 2,
+      "slot_in_staff": 4,
+      "frame": 84,
+      "duration_frames": 12,
+      "string": 4,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 4,
+        "fret": 0,
+        "pick_frame": 84,
+        "original_inverted_string": 3
+      },
+      "original_inverted_string": 3,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 9,
+      "staff": 3,
+      "slot_in_staff": 1,
+      "frame": 96,
+      "duration_frames": 12,
+      "string": 3,
+      "fret": 2,
+      "label": "2",
+      "guitar": {
+        "string": 3,
+        "fret": 2,
+        "pick_frame": 96,
+        "original_inverted_string": 4
+      },
+      "original_inverted_string": 4,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 10,
+      "staff": 3,
+      "slot_in_staff": 2,
+      "frame": 108,
+      "duration_frames": 12,
+      "string": 2,
+      "fret": 3,
+      "label": "3",
+      "guitar": {
+        "string": 2,
+        "fret": 3,
+        "pick_frame": 108,
+        "original_inverted_string": 5
+      },
+      "original_inverted_string": 5,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 11,
+      "staff": 3,
+      "slot_in_staff": 3,
+      "frame": 120,
+      "duration_frames": 12,
+      "string": 1,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 1,
+        "fret": 0,
+        "pick_frame": 120,
+        "original_inverted_string": 6
+      },
+      "original_inverted_string": 6,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 12,
+      "staff": 3,
+      "slot_in_staff": 4,
+      "frame": 132,
+      "duration_frames": 12,
+      "string": 2,
+      "fret": 2,
+      "label": "2",
+      "guitar": {
+        "string": 2,
+        "fret": 2,
+        "pick_frame": 132,
+        "original_inverted_string": 5
+      },
+      "original_inverted_string": 5,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 13,
+      "staff": 4,
+      "slot_in_staff": 1,
+      "frame": 144,
+      "duration_frames": 12,
+      "string": 3,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 3,
+        "fret": 0,
+        "pick_frame": 144,
+        "original_inverted_string": 4
+      },
+      "original_inverted_string": 4,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 14,
+      "staff": 4,
+      "slot_in_staff": 2,
+      "frame": 156,
+      "duration_frames": 12,
+      "string": 4,
+      "fret": 2,
+      "label": "2",
+      "guitar": {
+        "string": 4,
+        "fret": 2,
+        "pick_frame": 156,
+        "original_inverted_string": 3
+      },
+      "original_inverted_string": 3,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 15,
+      "staff": 4,
+      "slot_in_staff": 3,
+      "frame": 168,
+      "duration_frames": 12,
+      "string": 5,
+      "fret": 3,
+      "label": "3",
+      "guitar": {
+        "string": 5,
+        "fret": 3,
+        "pick_frame": 168,
+        "original_inverted_string": 2
+      },
+      "original_inverted_string": 2,
+      "string_mapping_fixed_2026_09_26": true
+    },
+    {
+      "index": 16,
+      "staff": 4,
+      "slot_in_staff": 4,
+      "frame": 180,
+      "duration_frames": 12,
+      "string": 6,
+      "fret": 0,
+      "label": "0",
+      "guitar": {
+        "string": 6,
+        "fret": 0,
+        "pick_frame": 180,
+        "original_inverted_string": 1
+      },
+      "original_inverted_string": 1,
+      "string_mapping_fixed_2026_09_26": true
+    }
+  ]
+}

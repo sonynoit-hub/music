@@ -1,0 +1,237 @@
+{
+  "version": 2,
+  "tempo_bpm": 120,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 8,
+  "notes": [
+    {
+      "id": "n1",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 0.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n2",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 0.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n3",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 0.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n4",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 0.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n5",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 1.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n6",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 1.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n7",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 1.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n8",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 1.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n9",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 2.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n10",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 2.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n11",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 2.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n12",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 2.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n13",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 3.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n14",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 3.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n15",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 3.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n16",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 3.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n17",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 4.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n18",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 4.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n19",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 4.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n20",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 4.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n21",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 5.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n22",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 5.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n23",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 5.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n24",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 5.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n25",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 6.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n26",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 6.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n27",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 6.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n28",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 6.75,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n29",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 7.0,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n30",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 7.25,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n31",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 7.5,
+      "duration_beats": 0.25
+    },
+    {
+      "id": "n32",
+      "string": 1,
+      "fret": 12,
+      "start_beat": 7.75,
+      "duration_beats": 0.25
+    }
+  ]
+}

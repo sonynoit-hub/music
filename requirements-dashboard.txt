@@ -1,0 +1,8 @@
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.20,<1
+
+# Optional local WAV-to-MIDI transcription backend.
+# Keep this outside the dashboard venv; Basic Pitch is not Python 3.14-friendly.
+# uv venv --python /opt/homebrew/bin/python3.11 .venv-transcribe
+# uv pip install --python .venv-transcribe/bin/python basic-pitch "setuptools<81"

@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "tempo_bpm": 120,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 20,
+  "notes": [
+    {
+      "id": "n1",
+      "string": 6,
+      "fret": 0,
+      "start_beat": 7,
+      "duration_beats": 3
+    },
+    {
+      "id": "n2",
+      "string": 2,
+      "fret": 3,
+      "start_beat": 8,
+      "duration_beats": 1
+    },
+    {
+      "id": "n3",
+      "string": 1,
+      "fret": 2,
+      "start_beat": 15,
+      "duration_beats": 3
+    },
+    {
+      "id": "n4",
+      "string": 3,
+      "fret": 9,
+      "start_beat": 16,
+      "duration_beats": 1
+    }
+  ]
+}

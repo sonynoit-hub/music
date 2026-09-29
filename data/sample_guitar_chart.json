@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "bpm": 120.0,
+  "fps": 30.0,
+  "tuning": "EADGBE",
+  "events": [
+    {
+      "start_time": 0.0,
+      "end_time": 0.5,
+      "start_frame": 0,
+      "end_frame": 15,
+      "notes": [
+        {
+          "pitch": 52,
+          "name": "E3",
+          "string": 4,
+          "fret": 2,
+          "velocity": 80
+        },
+        {
+          "pitch": 59,
+          "name": "B3",
+          "string": 2,
+          "fret": 0,
+          "velocity": 80
+        },
+        {
+          "pitch": 64,
+          "name": "E4",
+          "string": 1,
+          "fret": 0,
+          "velocity": 80
+        }
+      ]
+    },
+    {
+      "start_time": 1.0,
+      "end_time": 1.5,
+      "start_frame": 30,
+      "end_frame": 45,
+      "notes": [
+        {
+          "pitch": 55,
+          "name": "G3",
+          "string": 3,
+          "fret": 0,
+          "velocity": 80
+        }
+      ]
+    }
+  ]
+}

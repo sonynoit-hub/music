@@ -1,0 +1,44 @@
+{
+  "source": "sample",
+  "bpm": 120,
+  "ticks_per_beat": 480,
+  "notes": [
+    {
+      "pitch": 52,
+      "start_time": 0.0,
+      "end_time": 0.5,
+      "velocity": 80,
+      "channel": 0,
+      "track": null
+    },
+    {
+      "pitch": 59,
+      "start_time": 0.0,
+      "end_time": 0.5,
+      "velocity": 80,
+      "channel": 0,
+      "track": null
+    },
+    {
+      "pitch": 64,
+      "start_time": 0.0,
+      "end_time": 0.5,
+      "velocity": 80,
+      "channel": 0,
+      "track": null
+    },
+    {
+      "pitch": 55,
+      "start_time": 1.0,
+      "end_time": 1.5,
+      "velocity": 80,
+      "channel": 0,
+      "track": null
+    }
+  ],
+  "tempo_events": [],
+  "time_signature": [
+    4,
+    4
+  ]
+}

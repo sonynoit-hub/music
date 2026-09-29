@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "tempo_bpm": 120,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 16,
+  "notes": [
+    {
+      "id": "n1",
+      "string": 1,
+      "fret": 21,
+      "start_beat": 0,
+      "duration_beats": 1
+    }
+  ]
+}

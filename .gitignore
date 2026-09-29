@@ -1,0 +1,8 @@
+.venv/
+.ui-deps/
+__pycache__/
+*.pyc
+data/dashboard/
+.venv-transcribe/
+.DS_Store
+*.blend1

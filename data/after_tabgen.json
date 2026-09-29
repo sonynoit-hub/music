@@ -1,0 +1,4334 @@
+{
+  "Body_Back": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Body_Sides": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Body_Soundboard": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_3": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_4": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_5": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_6": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_3": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_4": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_5": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Bridge_Pin_Dot_6": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_01": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_02": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_03": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_04": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_05": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_06": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_07": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_08": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_09": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_10": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_11": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_12": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_13": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_14": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_15": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_16": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_17": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_18": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_19": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fret_20": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Fretboard": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Guitar_Bright_Area_Light": {
+    "type": "LIGHT",
+    "location": [
+      -0.65373015,
+      0.65977633,
+      0.42121643
+    ],
+    "rotation_euler": [
+      1.11769605,
+      -1e-08,
+      -1.60176945
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Guitar_Soft_Fill_Light": {
+    "type": "LIGHT",
+    "location": [
+      0.41666082,
+      1.45810187,
+      0.24963753
+    ],
+    "rotation_euler": [
+      1.41273189,
+      1.8e-07,
+      2.66995454
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "GuitarCamera": {
+    "type": "CAMERA",
+    "location": [
+      0.29602459,
+      0.77302885,
+      0.59448373
+    ],
+    "rotation_euler": [
+      0.80127627,
+      -0.51329166,
+      1.95426023
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Headstock": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Headstock_Face": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_03": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_05": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_07": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_09": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_12": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_12.001": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_15": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_17": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Inlay_19": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Lesson_Tab_Bar_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Bar_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Bar_3": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Cursor": {
+    "type": "CURVE",
+    "location": [
+      -0.23309129,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_3": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_4": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_5": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Line_6": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_001": {
+    "type": "FONT",
+    "location": [
+      -0.23309129,
+      -0.25284818,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_002": {
+    "type": "FONT",
+    "location": [
+      -0.17611343,
+      -0.25284818,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_003": {
+    "type": "FONT",
+    "location": [
+      -0.11395574,
+      -0.2371518,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_004": {
+    "type": "FONT",
+    "location": [
+      -0.05697787,
+      -0.2371518,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_005": {
+    "type": "FONT",
+    "location": [
+      0.02589903,
+      -0.25284818,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_006": {
+    "type": "FONT",
+    "location": [
+      0.08287691,
+      -0.25284818,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_007": {
+    "type": "FONT",
+    "location": [
+      0.14503458,
+      -0.26854458,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tab_Note_008": {
+    "type": "FONT",
+    "location": [
+      0.20201246,
+      -0.26854458,
+      0.012
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "Lesson_Tabs_Demo"
+  },
+  "Lesson_Tabs_Demo": {
+    "type": "EMPTY",
+    "location": [
+      0.0,
+      0.0,
+      -1.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": "LessonVerticalCamera"
+  },
+  "LessonVerticalCamera": {
+    "type": "CAMERA",
+    "location": [
+      -0.165638,
+      0.8016721,
+      1.7779448
+    ],
+    "rotation_euler": [
+      -0.18155494,
+      9.65e-06,
+      13.5877924
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "LessonVerticalCamera_Black_Backdrop": {
+    "type": "MESH",
+    "location": [
+      0.90284038,
+      0.07664549,
+      -3.05758286
+    ],
+    "rotation_euler": [
+      -0.29324603,
+      8.25e-06,
+      7.28340673
+    ],
+    "scale": [
+      0.91970998,
+      1.30803204,
+      1.0
+    ],
+    "parent": null
+  },
+  "Neck": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Neck_Heel": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0000_S1_F00": {
+    "type": "MESH",
+    "location": [
+      -0.01838149,
+      0.81929094,
+      0.11982067
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0001_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0002_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0003_S3_F00": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.81929094,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0004_S4_F02": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.76404798,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0005_S6_F00": {
+    "type": "MESH",
+    "location": [
+      0.01832613,
+      0.81929094,
+      0.11989617
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0006_S5_F02": {
+    "type": "MESH",
+    "location": [
+      0.01103561,
+      0.76404798,
+      0.1198824
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0007_S4_F02": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.76404798,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0008_S3_F00": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.81929094,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0009_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0010_S1_F00": {
+    "type": "MESH",
+    "location": [
+      -0.01838149,
+      0.81929094,
+      0.11982067
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0011_S6_F00": {
+    "type": "MESH",
+    "location": [
+      0.01832613,
+      0.81929094,
+      0.11989617
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0012_S5_F02": {
+    "type": "MESH",
+    "location": [
+      0.01103561,
+      0.76404798,
+      0.1198824
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0013_S4_F02": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.76404798,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0014_S3_F00": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.81929094,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0015_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0016_S1_F00": {
+    "type": "MESH",
+    "location": [
+      -0.01838149,
+      0.81929094,
+      0.11982067
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0017_S6_F00": {
+    "type": "MESH",
+    "location": [
+      0.01832613,
+      0.81929094,
+      0.11989617
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0018_S5_F02": {
+    "type": "MESH",
+    "location": [
+      0.01103561,
+      0.76404798,
+      0.1198824
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0019_S4_F02": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.76404798,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0020_S3_F00": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.81929094,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0021_S5_F00": {
+    "type": "MESH",
+    "location": [
+      0.01103561,
+      0.81929094,
+      0.1198824
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0022_S5_F02": {
+    "type": "MESH",
+    "location": [
+      0.01103561,
+      0.76404798,
+      0.1198824
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0023_S4_F00": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.81929094,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0024_S4_F02": {
+    "type": "MESH",
+    "location": [
+      0.00374652,
+      0.76404798,
+      0.11986697
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0025_S3_F00": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.81929094,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0026_S3_F01": {
+    "type": "MESH",
+    "location": [
+      -0.00375755,
+      0.79752856,
+      0.11985177
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0027_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0028_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0029_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0030_S2_F01": {
+    "type": "MESH",
+    "location": [
+      -0.01106875,
+      0.79752856,
+      0.11983689
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0031_S6_F00": {
+    "type": "MESH",
+    "location": [
+      0.01832613,
+      0.81929094,
+      0.11989617
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Note_0032_S1_F02": {
+    "type": "MESH",
+    "location": [
+      -0.01838149,
+      0.76404798,
+      0.11982067
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Nut": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Pickguard": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      -1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Body Lower Bout": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.62,
+      0.02
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Body Waist": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.05,
+      0.035
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.89999998,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 1": {
+    "type": "MESH",
+    "location": [
+      -0.22,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 2": {
+    "type": "MESH",
+    "location": [
+      -0.156,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 3": {
+    "type": "MESH",
+    "location": [
+      -0.092,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 4": {
+    "type": "MESH",
+    "location": [
+      -0.028,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 5": {
+    "type": "MESH",
+    "location": [
+      0.036,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Bridge Pin 6": {
+    "type": "MESH",
+    "location": [
+      0.1,
+      -0.89999998,
+      0.29499999
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 1": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.64999998,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 10": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.82999992,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 2": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.86000001,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 3": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.08000004,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 4": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.29999995,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 5": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.52999997,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 6": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.76999998,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 7": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.01999998,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 8": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.27999997,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fret 9": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.54999995,
+      0.255
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fretboard": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.77999997,
+      0.215
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fretboard Dot 1": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.17999995,
+      0.27200001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fretboard Dot 2": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.63,
+      0.27200001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fretboard Dot 3": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.11999989,
+      0.27200001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Fretboard Dot 4": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.6500001,
+      0.27200001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Headstock": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      3.31999993,
+      0.145
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Headstock Side Curve Left": {
+    "type": "MESH",
+    "location": [
+      -0.25999999,
+      3.29999995,
+      0.16500001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Headstock Side Curve Right": {
+    "type": "MESH",
+    "location": [
+      0.14,
+      3.29999995,
+      0.16500001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Lower Body Binding": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.62,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Neck": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      1.77999997,
+      0.095
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Nut": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      2.98000002,
+      0.27500001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Pickguard Main Teardrop": {
+    "type": "MESH",
+    "location": [
+      0.37,
+      -0.14,
+      0.215
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      -0.29670596
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Pickguard Shoulder": {
+    "type": "MESH",
+    "location": [
+      0.2,
+      0.14,
+      0.222
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      -0.52359879
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Preview Camera": {
+    "type": "CAMERA",
+    "location": [
+      0.0,
+      -6.0,
+      3.0
+    ],
+    "rotation_euler": [
+      1.17550373,
+      -0.0,
+      0.00719412
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Rosette Ring 1": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.2,
+      0.212
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Rosette Ring 2": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.2,
+      0.214
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Rosette Ring 3": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.2,
+      0.21600001
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Simple Headstock Logo Mark": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      3.55999994,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Sound Hole": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.2,
+      0.19
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 1": {
+    "type": "MESH",
+    "location": [
+      -0.22,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 2": {
+    "type": "MESH",
+    "location": [
+      -0.156,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 3": {
+    "type": "MESH",
+    "location": [
+      -0.092,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 4": {
+    "type": "MESH",
+    "location": [
+      -0.028,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 5": {
+    "type": "MESH",
+    "location": [
+      0.036,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - String 6": {
+    "type": "MESH",
+    "location": [
+      0.1,
+      1.32000005,
+      0.30500001
+    ],
+    "rotation_euler": [
+      1.57079637,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 01": {
+    "type": "MESH",
+    "location": [
+      -0.82499999,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 02": {
+    "type": "MESH",
+    "location": [
+      -0.74000001,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 03": {
+    "type": "MESH",
+    "location": [
+      -0.65499997,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 04": {
+    "type": "MESH",
+    "location": [
+      -0.56999999,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 05": {
+    "type": "MESH",
+    "location": [
+      -0.48500001,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 06": {
+    "type": "MESH",
+    "location": [
+      -0.40000001,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 07": {
+    "type": "MESH",
+    "location": [
+      -0.315,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 08": {
+    "type": "MESH",
+    "location": [
+      -0.23,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 09": {
+    "type": "MESH",
+    "location": [
+      -0.145,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 10": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 11": {
+    "type": "MESH",
+    "location": [
+      0.025,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 12": {
+    "type": "MESH",
+    "location": [
+      0.11,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 13": {
+    "type": "MESH",
+    "location": [
+      0.19499999,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 14": {
+    "type": "MESH",
+    "location": [
+      0.28,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 15": {
+    "type": "MESH",
+    "location": [
+      0.36500001,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 16": {
+    "type": "MESH",
+    "location": [
+      0.44999999,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 17": {
+    "type": "MESH",
+    "location": [
+      0.53500003,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 18": {
+    "type": "MESH",
+    "location": [
+      0.62,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Top Grain Line 19": {
+    "type": "MESH",
+    "location": [
+      0.70499998,
+      -0.22,
+      0.235
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Left 1": {
+    "type": "MESH",
+    "location": [
+      -0.63,
+      3.11999989,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Left 2": {
+    "type": "MESH",
+    "location": [
+      -0.63,
+      3.33999991,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Left 3": {
+    "type": "MESH",
+    "location": [
+      -0.63,
+      3.53999996,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Right 1": {
+    "type": "MESH",
+    "location": [
+      0.50999999,
+      3.11999989,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Right 2": {
+    "type": "MESH",
+    "location": [
+      0.50999999,
+      3.33999991,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Knob Right 3": {
+    "type": "MESH",
+    "location": [
+      0.50999999,
+      3.53999996,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Left 1": {
+    "type": "MESH",
+    "location": [
+      -0.49000001,
+      3.11999989,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Left 2": {
+    "type": "MESH",
+    "location": [
+      -0.49000001,
+      3.33999991,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Left 3": {
+    "type": "MESH",
+    "location": [
+      -0.49000001,
+      3.53999996,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Right 1": {
+    "type": "MESH",
+    "location": [
+      0.37,
+      3.11999989,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Right 2": {
+    "type": "MESH",
+    "location": [
+      0.37,
+      3.33999991,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Tuning Peg Right 3": {
+    "type": "MESH",
+    "location": [
+      0.37,
+      3.53999996,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      1.57079637,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - Upper Body Binding": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      0.47999999,
+      0.15000001
+    ],
+    "rotation_euler": [
+      0.0,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Reference Guitar - White Saddle": {
+    "type": "MESH",
+    "location": [
+      -0.06,
+      -0.81,
+      0.285
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Rosette_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Rosette_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Rosette_3": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Rosette_4": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Rosette_5": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Saddle": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_3": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_4": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_5": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "String_6": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_-1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_-1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_-1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Gear_1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_-1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_-1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_-1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Key_1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_-1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_-1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_-1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_1_0": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_1_1": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Post_1_2": {
+    "type": "MESH",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_-1_0": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_-1_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_-1_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_1_0": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_1_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Shaft_1_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_-1_0": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_-1_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_-1_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_1_0": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_1_1": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "Tuner_Washer_1_2": {
+    "type": "CURVE",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  }
+}

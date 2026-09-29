@@ -1,0 +1,97 @@
+{
+  "version": 2,
+  "tempo_bpm": 120,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 16,
+  "notes": [
+    {
+      "id": "n1",
+      "string": 1,
+      "fret": 0,
+      "start_beat": 0,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n2",
+      "string": 1,
+      "fret": 1,
+      "start_beat": 1,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n3",
+      "string": 2,
+      "fret": 0,
+      "start_beat": 2,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n4",
+      "string": 2,
+      "fret": 1,
+      "start_beat": 3,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n5",
+      "string": 3,
+      "fret": 0,
+      "start_beat": 4,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n6",
+      "string": 3,
+      "fret": 1,
+      "start_beat": 5,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n7",
+      "string": 4,
+      "fret": 0,
+      "start_beat": 6,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n8",
+      "string": 4,
+      "fret": 1,
+      "start_beat": 7,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n9",
+      "string": 5,
+      "fret": 0,
+      "start_beat": 8,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n10",
+      "string": 5,
+      "fret": 1,
+      "start_beat": 9,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n11",
+      "string": 6,
+      "fret": 0,
+      "start_beat": 10,
+      "duration_beats": 0.5
+    },
+    {
+      "id": "n12",
+      "string": 6,
+      "fret": 1,
+      "start_beat": 11,
+      "duration_beats": 0.5
+    }
+  ]
+}

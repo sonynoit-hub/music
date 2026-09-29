@@ -1,0 +1,1514 @@
+{
+  "version": 2,
+  "name": "32-measure mixed guitar test",
+  "tempo_bpm": 90,
+  "fps": 60,
+  "time_signature": [
+    4,
+    4
+  ],
+  "string_numbering": "1=high E, 6=low E",
+  "end_beat": 128,
+  "sections": [
+    {
+      "measures": [
+        1,
+        4
+      ],
+      "name": "Single notes and mapping"
+    },
+    {
+      "measures": [
+        5,
+        8
+      ],
+      "name": "Durations and triplets"
+    },
+    {
+      "measures": [
+        9,
+        12
+      ],
+      "name": "Chords and independent endings"
+    },
+    {
+      "measures": [
+        13,
+        16
+      ],
+      "name": "Bass and melody"
+    },
+    {
+      "measures": [
+        17,
+        20
+      ],
+      "name": "Overlapping arpeggios"
+    },
+    {
+      "measures": [
+        21,
+        24
+      ],
+      "name": "Retriggers and rests"
+    },
+    {
+      "measures": [
+        25,
+        28
+      ],
+      "name": "Page boundaries and high frets"
+    },
+    {
+      "measures": [
+        29,
+        32
+      ],
+      "name": "Combined ending"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n001",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "1",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n002",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "3/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n003",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n004",
+      "string": 4,
+      "fret": 0,
+      "start_beat": "5/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n005",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "3",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n006",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "7/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n007",
+      "string": 1,
+      "fret": 1,
+      "start_beat": "4",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n008",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "5",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n009",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "6",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n010",
+      "string": 4,
+      "fret": 7,
+      "start_beat": "7",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n011",
+      "string": 5,
+      "fret": 9,
+      "start_beat": "8",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n012",
+      "string": 6,
+      "fret": 12,
+      "start_beat": "9",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n013",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "10",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n014",
+      "string": 2,
+      "fret": 20,
+      "start_beat": "11",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n015",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "12",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n016",
+      "string": 1,
+      "fret": 3,
+      "start_beat": "25/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n017",
+      "string": 6,
+      "fret": 5,
+      "start_beat": "13",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n018",
+      "string": 1,
+      "fret": 7,
+      "start_beat": "27/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n019",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "14",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n020",
+      "string": 1,
+      "fret": 3,
+      "start_beat": "29/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n021",
+      "string": 6,
+      "fret": 5,
+      "start_beat": "15",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n022",
+      "string": 1,
+      "fret": 7,
+      "start_beat": "31/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n023",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "16",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n024",
+      "string": 2,
+      "fret": 2,
+      "start_beat": "33/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n025",
+      "string": 3,
+      "fret": 3,
+      "start_beat": "17",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n026",
+      "string": 4,
+      "fret": 5,
+      "start_beat": "18",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n027",
+      "string": 5,
+      "fret": 7,
+      "start_beat": "20",
+      "duration_beats": "4"
+    },
+    {
+      "id": "n028",
+      "string": 6,
+      "fret": 9,
+      "start_beat": "24",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n029",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "26",
+      "duration_beats": "3/4"
+    },
+    {
+      "id": "n030",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "28",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n031",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "85/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n032",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "86/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n033",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "29",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n034",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "88/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n035",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "89/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n036",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "30",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n037",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "91/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n038",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "92/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n039",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "31",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n040",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "94/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n041",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "95/3",
+      "duration_beats": "1/3"
+    },
+    {
+      "id": "n042",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "32",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n043",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "32",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n044",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "34",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n045",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "34",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n046",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "34",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n047",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "36",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n048",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "36",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n049",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "36",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n050",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "36",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n051",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "38",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n052",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "38",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n053",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "38",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n054",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "38",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n055",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "38",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n056",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n057",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n058",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n059",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n060",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "n061",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "40",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "chord_end_s1",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "44",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "chord_end_s2",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "44",
+      "duration_beats": "1"
+    },
+    {
+      "id": "chord_end_s3",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "44",
+      "duration_beats": "3/2"
+    },
+    {
+      "id": "chord_end_s4",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "44",
+      "duration_beats": "2"
+    },
+    {
+      "id": "chord_end_s5",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "44",
+      "duration_beats": "5/2"
+    },
+    {
+      "id": "chord_end_s6",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "44",
+      "duration_beats": "3"
+    },
+    {
+      "id": "bass_48",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "48",
+      "duration_beats": "4"
+    },
+    {
+      "id": "n069",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "48",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n070",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "48",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n071",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "97/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n072",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "49",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n073",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "99/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n074",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "50",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n075",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "101/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n076",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "51",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n077",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "103/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "bass_52",
+      "string": 6,
+      "fret": 3,
+      "start_beat": "52",
+      "duration_beats": "4"
+    },
+    {
+      "id": "n079",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "52",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n080",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "52",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n081",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "105/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n082",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "53",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n083",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "107/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n084",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "54",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n085",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "109/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n086",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "55",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n087",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "111/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "bass_56",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "56",
+      "duration_beats": "4"
+    },
+    {
+      "id": "n089",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "56",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n090",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "56",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n091",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "113/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n092",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "57",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n093",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "115/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n094",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "58",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n095",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "117/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n096",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "59",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n097",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "119/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "bass_60",
+      "string": 6,
+      "fret": 3,
+      "start_beat": "60",
+      "duration_beats": "4"
+    },
+    {
+      "id": "n099",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "60",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n100",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "60",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n101",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "121/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n102",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "61",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n103",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "123/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n104",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "62",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n105",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "125/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n106",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "63",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n107",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "127/2",
+      "duration_beats": "3/8"
+    },
+    {
+      "id": "n108",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "64",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n109",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "129/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n110",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "65",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n111",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "131/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n112",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "66",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n113",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "133/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n114",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "68",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n115",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "137/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n116",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "69",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n117",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "139/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n118",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "70",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n119",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "141/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n120",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "72",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n121",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "145/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n122",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "73",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n123",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "147/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n124",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "74",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n125",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "149/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n126",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "76",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n127",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "153/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n128",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "77",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n129",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "155/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n130",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "78",
+      "duration_beats": "2"
+    },
+    {
+      "id": "n131",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "157/2",
+      "duration_beats": "2"
+    },
+    {
+      "id": "long_retrigger",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "80",
+      "duration_beats": "6"
+    },
+    {
+      "id": "short_retrigger",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "81",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "fret_change",
+      "string": 2,
+      "fret": 5,
+      "start_beat": "82",
+      "duration_beats": "1"
+    },
+    {
+      "id": "open_change",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "83",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n136",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "88",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n137",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "177/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n138",
+      "string": 5,
+      "fret": 7,
+      "start_beat": "89",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n139",
+      "string": 1,
+      "fret": 9,
+      "start_beat": "179/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n140",
+      "string": 5,
+      "fret": 0,
+      "start_beat": "90",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n141",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "181/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n142",
+      "string": 5,
+      "fret": 7,
+      "start_beat": "91",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n143",
+      "string": 1,
+      "fret": 9,
+      "start_beat": "183/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "cross_page_bass",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "95",
+      "duration_beats": "3"
+    },
+    {
+      "id": "page_chord_s1",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "96",
+      "duration_beats": "1"
+    },
+    {
+      "id": "page_chord_s2",
+      "string": 2,
+      "fret": 10,
+      "start_beat": "96",
+      "duration_beats": "1"
+    },
+    {
+      "id": "page_chord_s3",
+      "string": 3,
+      "fret": 9,
+      "start_beat": "96",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n148",
+      "string": 1,
+      "fret": 9,
+      "start_beat": "98",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n149",
+      "string": 2,
+      "fret": 10,
+      "start_beat": "393/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n150",
+      "string": 3,
+      "fret": 12,
+      "start_beat": "197/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n151",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "395/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n152",
+      "string": 2,
+      "fret": 20,
+      "start_beat": "99",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n153",
+      "string": 3,
+      "fret": 9,
+      "start_beat": "397/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n154",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "199/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n155",
+      "string": 2,
+      "fret": 12,
+      "start_beat": "399/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n156",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "100",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n157",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "401/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n158",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "201/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n159",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "403/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n160",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "101",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n161",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "405/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n162",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "203/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n163",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "407/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n164",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "102",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n165",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "409/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n166",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "205/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n167",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "411/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n168",
+      "string": 1,
+      "fret": 10,
+      "start_beat": "103",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n169",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "413/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n170",
+      "string": 1,
+      "fret": 15,
+      "start_beat": "207/2",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n171",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "415/4",
+      "duration_beats": "1/4"
+    },
+    {
+      "id": "n172",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "104",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n173",
+      "string": 2,
+      "fret": 12,
+      "start_beat": "104",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n174",
+      "string": 3,
+      "fret": 12,
+      "start_beat": "104",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n175",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "106",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n176",
+      "string": 2,
+      "fret": 12,
+      "start_beat": "106",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n177",
+      "string": 3,
+      "fret": 12,
+      "start_beat": "106",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n178",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "108",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n179",
+      "string": 2,
+      "fret": 12,
+      "start_beat": "108",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n180",
+      "string": 3,
+      "fret": 12,
+      "start_beat": "108",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n181",
+      "string": 1,
+      "fret": 12,
+      "start_beat": "110",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n182",
+      "string": 2,
+      "fret": 12,
+      "start_beat": "110",
+      "duration_beats": "1"
+    },
+    {
+      "id": "n183",
+      "string": 3,
+      "fret": 12,
+      "start_beat": "110",
+      "duration_beats": "1"
+    },
+    {
+      "id": "final_bass",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "112",
+      "duration_beats": "8"
+    },
+    {
+      "id": "n185",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "112",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n186",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "225/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n187",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "113",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n188",
+      "string": 1,
+      "fret": 7,
+      "start_beat": "227/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n189",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "114",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n190",
+      "string": 3,
+      "fret": 3,
+      "start_beat": "229/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n191",
+      "string": 1,
+      "fret": 5,
+      "start_beat": "115",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n192",
+      "string": 2,
+      "fret": 7,
+      "start_beat": "231/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n193",
+      "string": 3,
+      "fret": 0,
+      "start_beat": "116",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n194",
+      "string": 1,
+      "fret": 3,
+      "start_beat": "233/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n195",
+      "string": 2,
+      "fret": 5,
+      "start_beat": "117",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n196",
+      "string": 3,
+      "fret": 7,
+      "start_beat": "235/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n197",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "118",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n198",
+      "string": 2,
+      "fret": 3,
+      "start_beat": "237/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n199",
+      "string": 3,
+      "fret": 5,
+      "start_beat": "119",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "n200",
+      "string": 1,
+      "fret": 7,
+      "start_beat": "239/2",
+      "duration_beats": "1/2"
+    },
+    {
+      "id": "final_chord_s1",
+      "string": 1,
+      "fret": 0,
+      "start_beat": "120",
+      "duration_beats": "4"
+    },
+    {
+      "id": "final_chord_s2",
+      "string": 2,
+      "fret": 0,
+      "start_beat": "120",
+      "duration_beats": "4"
+    },
+    {
+      "id": "final_chord_s3",
+      "string": 3,
+      "fret": 1,
+      "start_beat": "120",
+      "duration_beats": "4"
+    },
+    {
+      "id": "final_chord_s4",
+      "string": 4,
+      "fret": 2,
+      "start_beat": "120",
+      "duration_beats": "4"
+    },
+    {
+      "id": "final_chord_s5",
+      "string": 5,
+      "fret": 2,
+      "start_beat": "120",
+      "duration_beats": "4"
+    },
+    {
+      "id": "final_chord_s6",
+      "string": 6,
+      "fret": 0,
+      "start_beat": "120",
+      "duration_beats": "4"
+    }
+  ]
+}

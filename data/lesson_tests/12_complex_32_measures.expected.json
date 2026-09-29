@@ -1,0 +1,87 @@
+{
+  "checkpoints": [
+    {
+      "beat": "0",
+      "active_ids": []
+    },
+    {
+      "beat": "44",
+      "active_ids": [
+        "chord_end_s1",
+        "chord_end_s2",
+        "chord_end_s3",
+        "chord_end_s4",
+        "chord_end_s5",
+        "chord_end_s6"
+      ]
+    },
+    {
+      "beat": "89/2",
+      "active_ids": [
+        "chord_end_s2",
+        "chord_end_s3",
+        "chord_end_s4",
+        "chord_end_s5",
+        "chord_end_s6"
+      ]
+    },
+    {
+      "beat": "47",
+      "active_ids": []
+    },
+    {
+      "beat": "81",
+      "active_ids": [
+        "short_retrigger"
+      ]
+    },
+    {
+      "beat": "163/2",
+      "active_ids": []
+    },
+    {
+      "beat": "85",
+      "active_ids": []
+    },
+    {
+      "beat": "95",
+      "active_ids": [
+        "cross_page_bass"
+      ]
+    },
+    {
+      "beat": "96",
+      "active_ids": [
+        "cross_page_bass",
+        "page_chord_s1",
+        "page_chord_s2",
+        "page_chord_s3"
+      ]
+    },
+    {
+      "beat": "97",
+      "active_ids": [
+        "cross_page_bass"
+      ]
+    },
+    {
+      "beat": "120",
+      "active_ids": [
+        "final_chord_s1",
+        "final_chord_s2",
+        "final_chord_s3",
+        "final_chord_s4",
+        "final_chord_s5",
+        "final_chord_s6"
+      ]
+    },
+    {
+      "beat": "124",
+      "active_ids": []
+    },
+    {
+      "beat": "128",
+      "active_ids": []
+    }
+  ]
+}
