@@ -135,7 +135,7 @@ def install_lesson(chart_path: str | Path) -> dict:
 
 def install_v2(data):
     import bpy
-    from guitar_video_app.core.lesson_v2 import prepare
+    from guitar_video_app.instruments.guitar.view import prepare
     from guitar_video_app.integrations import lesson_controller as legacy
     from guitar_video_app.integrations import lesson_controller_v2 as runtime
     lesson = prepare(data)

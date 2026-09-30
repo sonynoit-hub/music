@@ -5,10 +5,10 @@ import json
 from pathlib import Path
 
 from guitar_video_app.api.service import build_chart_from_raw_json, build_from_midi
-from guitar_video_app.core.midi_to_json import write_raw_json
-from guitar_video_app.core.music_analyzer import normalize_midi_file
-from guitar_video_app.core.normalized_song import write_normalized_song
-from guitar_video_app.core.normalized_to_lesson_v2 import convert_normalized_file_to_lesson_v2
+from guitar_video_app.instruments.guitar.mapper import normalize_midi_file
+from guitar_video_app.instruments.guitar.normalized import convert_normalized_file_to_lesson_v2
+from guitar_video_app.music.midi_to_json import write_raw_json
+from guitar_video_app.music.normalized_song import write_normalized_song
 from guitar_video_app.integrations.blender_client import animate_chart_in_blender, ping_blender
 
 

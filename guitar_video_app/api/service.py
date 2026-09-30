@@ -4,9 +4,9 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from guitar_video_app.core.chart_builder import build_chart, write_chart
-from guitar_video_app.core.midi_to_json import midi_to_raw_song, write_raw_json
-from guitar_video_app.core.schema import RawNote
+from guitar_video_app.instruments.guitar.chart_builder import build_chart, write_chart
+from guitar_video_app.music.midi_to_json import midi_to_raw_song, write_raw_json
+from guitar_video_app.music.schema import RawNote
 
 
 @dataclass(frozen=True)

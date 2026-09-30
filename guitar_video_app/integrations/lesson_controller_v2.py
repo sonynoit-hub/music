@@ -4,7 +4,8 @@ import math
 import bpy
 from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
-from guitar_video_app.core.lesson_v2 import prepare, seconds_between, state
+from guitar_video_app.instruments.guitar.view import prepare
+from guitar_video_app.music.lesson import seconds_between, state
 from guitar_video_app.integrations import lesson_controller as legacy
 
 HANDLER = 'guitar_lesson_v2_controller'
