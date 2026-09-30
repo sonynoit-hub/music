@@ -4939,6 +4939,7 @@
     "file": "/Users/dc/CodexProjects/guitar/outputs/complex_32_measures.wav",
     "audio_offset": 0.0
   },
+  "pedal_events": [],
   "guitar": {
     "tuning": {
       "6": 40,

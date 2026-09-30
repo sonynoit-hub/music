@@ -28,6 +28,8 @@ Final WAV -> Blender audio sync
 
 Use `outputs/v4-vertical.blend` (9:16, 1080x1920) as the latest Blender scene candidate unless the user selects another `.blend` file. It is built from the 4:5 scene `outputs/v3-tests.blend` by `scripts/make_vertical_scene.py`; re-run that script after changing the 4:5 scene.
 
+Piano songs use `outputs/piano-vertical.blend`, built from code by `scripts/make_piano_scene.py`; rebuild it rather than editing it by hand.
+
 Do not overwrite `outputs/reference-guitar.blend` unless explicitly requested.
 
 ## V1 Boundaries

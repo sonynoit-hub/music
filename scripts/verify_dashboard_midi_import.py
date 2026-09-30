@@ -34,17 +34,22 @@ def main() -> None:
         assert row["summary"]["music_layer"]["tracks"] == 7
         assert row["summary"]["music_layer"]["beats"] == 128
 
-        lesson_data = json.loads(Path(lesson(song_id).path).read_text(encoding="utf-8"))
+        stored = json.loads(lesson(song_id).body)
+        assert stored["version"] == 3
+        assert len(stored["music"]["notes"]) == len(stored["parts"]["guitar"]["positions"]) == 206
+        lesson_data = json.loads(lesson(song_id, part="guitar").body)
         prepared = prepare(lesson_data)
         assert lesson_data["version"] == 2
         assert len(prepared["notes"]) == 206
         first_note = lesson_data["notes"][0]
         edited = update_note(song_id, TabNoteEdit(note_id=first_note["id"], string=2, fret=7))
         assert edited["revision"] == row["revision"] + 1
-        edited_lesson = json.loads(Path(lesson(song_id).path).read_text(encoding="utf-8"))
+        edited_lesson = json.loads(lesson(song_id, part="guitar").body)
         edited_note = next(note for note in edited_lesson["notes"] if note["id"] == first_note["id"])
         assert edited_note["string"] == 2
         assert edited_note["fret"] == 7
+        edited_music = json.loads(lesson(song_id).body)["music"]
+        assert next(note for note in edited_music["notes"] if note["id"] == first_note["id"])["pitch"] == 59 + 7
 
         wav_path = ROOT / "outputs" / "complex_32_measures.wav"
         wav_file = UploadFile(BytesIO(wav_path.read_bytes()), filename=wav_path.name)

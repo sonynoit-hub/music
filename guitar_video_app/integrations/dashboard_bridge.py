@@ -21,14 +21,102 @@ def status():
                 markers=len([o for o in bpy.data.objects if o.name.startswith('Lesson_V2_Marker_')]))
 
 
+def _piano_look(command):
+    """Scene check, loader, install and undo for the song's piano look: the lesson keyboard or PIANO_VISUAL with
+    rising notes or plumes."""
+    if command.get('piano_look') == 'visual':
+        import bpy
+        from guitar_video_app.integrations import piano_visual_particles as visual
+        from guitar_video_app.integrations.piano_visual import FRAME_OBJECT
+        effect = command.get('piano_effect', 'notes')
+        previous = bpy.context.scene.get(visual.EFFECT_PROPERTY, 'notes')
+        return dict(anchor=FRAME_OBJECT, scene_file='outputs/piano-visual.blend (PIANO_VISUAL)',
+                    text=visual.TEXT, loader=visual.LOADER, install=lambda data: visual.install(data, effect=effect),
+                    clear=visual.uninstall, restore=lambda data: visual.install(data, effect=previous))
+    from guitar_video_app.integrations.piano_lesson import LOADER, TEXT, install_piano
+    from guitar_video_app.integrations.piano_scene import KEYBOARD
+    from guitar_video_app.integrations.title_overlay import install_title
+
+    def install(data):
+        install_piano(data)
+        install_title(command.get('title', ''), command.get('subtitle', ''), anchor=KEYBOARD)
+    return dict(anchor=KEYBOARD, scene_file='the piano scene (outputs/piano-vertical.blend)', text=TEXT,
+                loader=LOADER, install=install, clear=lambda: None, restore=install_piano)
+
+
+def sync_piano(command):
+    """Install a piano view and its audio in the open piano scene of the song's look; the previous lesson comes
+    back on failure."""
+    import bpy
+    from guitar_video_app.instruments.piano.view import prepare
+
+    look = _piano_look(command)
+    scene = bpy.context.scene
+    data = json.loads(Path(command['json_path']).read_text())
+    lesson = prepare(data)
+    audio = Path(command['wav_path']).resolve(strict=True)
+    offset = float(command.get('offset_seconds', 0))
+    if not math.isfinite(offset) or abs(offset) > 60:
+        raise ValueError('Audio offset must be between -60 and 60 seconds.')
+    with wave.open(str(audio)) as wav:
+        if wav.getnframes() == 0:
+            raise ValueError('The WAV file is empty.')
+    if look['anchor'] not in scene.objects:
+        raise ValueError(f"Open {look['scene_file']} first.")
+    previous = bpy.data.texts.get(look['text'])
+    previous_data = json.loads(previous.as_string()) if previous else None
+    frame = scene.frame_current
+    timing = (scene.frame_start, scene.frame_end, scene.render.fps, scene.render.fps_base)
+    editor = scene.sequence_editor_create()
+    old_audio = [s for s in editor.strips if s.name.startswith('Lesson_JSON_Guitar_Audio')]
+    channel = max(s.channel for s in old_audio) if old_audio else max((s.channel for s in editor.strips), default=0) + 1
+    new_audio = None
+    try:
+        new_audio = editor.strips.new_sound('Dashboard_Audio_Pending', str(audio), channel=channel,
+                                            frame_start=round(offset * lesson['fps']))
+        new_audio.mute = True
+        look['install'](data)
+        scene.frame_set(0)
+    except Exception:
+        if new_audio:
+            editor.strips.remove(new_audio)
+        if previous_data:
+            look.get('restore', look['install'])(previous_data)
+        else:
+            look['clear']()
+        scene.frame_start, scene.frame_end, scene.render.fps, scene.render.fps_base = timing
+        scene.frame_set(frame)
+        raise
+    for strip in old_audio:
+        editor.strips.remove(strip)
+    new_audio.name = 'Lesson_JSON_Guitar_Audio'
+    new_audio.mute = False
+    new_audio.volume = 1
+    scene['Dashboard_Song_ID'] = command['song_id']
+    scene['Dashboard_Revision'] = command['revision']
+    loader = bpy.data.texts.get(look['loader'])
+    if loader:
+        loader.write('\nfrom guitar_video_app.integrations.blender_bridge_server import start_bridge\nstart_bridge()\n')
+    return dict(ok=True, frame_start=0, frame_end=scene.frame_end,
+                audio_start=new_audio.frame_final_start, note_count=len(lesson['notes']),
+                revision=command['revision'], saved=False)
+
+
 def sync(command):
     import bpy
-    from guitar_video_app.core.lesson_v2 import prepare
+    from guitar_video_app.instruments import as_lesson
+
+    if command.get('instrument') == 'piano':
+        return sync_piano(command)
+    from guitar_video_app.instruments.guitar.view import guitar_view, prepare
     from guitar_video_app.integrations.lesson_setup import install_v2
+    from guitar_video_app.integrations.guitar_style import install_style
     from guitar_video_app.integrations.title_overlay import install_title
 
     scene = bpy.context.scene
     data = json.loads(Path(command['json_path']).read_text())
+    if data.get('version') != 2:
+        data = guitar_view(as_lesson(data))
     lesson = prepare(data)
     audio = Path(command['wav_path']).resolve(strict=True)
     offset = float(command.get('offset_seconds', 0))
@@ -67,6 +155,7 @@ def sync(command):
         new_audio.mute = True
         install_v2(data)
         install_title(command.get('title', ''), command.get('subtitle', ''))
+        install_style(command.get('style') or 'natural')
         scene.frame_set(0)
     except Exception:
         if new_audio:

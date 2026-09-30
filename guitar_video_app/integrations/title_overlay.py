@@ -29,11 +29,12 @@ def _frame_point(scene, cam, nx, ny, depth):
     return point + forward * (depth - point).dot(forward)
 
 
-def install_title(title='', subtitle=''):
-    """Show title and subtitle centered above the guitar; an empty line is hidden."""
+def install_title(title='', subtitle='', anchor='App_Tab_White_Panel'):
+    """Show title and subtitle centered above the instrument; an empty line is hidden. The text
+    lies on a camera-facing plane just behind the anchor object (the guitar's tab panel)."""
     scene = bpy.context.scene
     cam = scene.camera
-    panel = bpy.data.objects['App_Tab_White_Panel']
+    panel = bpy.data.objects[anchor]
     depth = panel.matrix_world.translation + (cam.matrix_world.to_quaternion() @ Vector((0, 0, -1))) * 0.35
     frame_height = (_frame_point(scene, cam, 0.5, 1, depth) - _frame_point(scene, cam, 0.5, 0, depth)).length
     material = legacy._mat('Lesson_Title_Text', COLOR)

@@ -50,6 +50,25 @@ Each note must preserve:
 - Duration in seconds.
 - Beat and measure placement.
 
+## Pedals
+
+Sustain pedal events are extracted from MIDI CC64 and stored separately from notes.
+
+Each pedal event must preserve:
+
+- Type.
+- Track identity.
+- Start tick.
+- End tick.
+- Duration in ticks.
+- Start seconds.
+- End seconds.
+- Duration in seconds.
+- Beat and measure placement.
+- Raw MIDI value.
+
+Pedal events must not be baked into note end times. Piano rendering may later use them to show sound sustain separately from physical key release.
+
 ## Measures
 
 Measures are generated from PPQ, tempo-map context, and time-signature-map context.
@@ -75,4 +94,3 @@ Out of scope:
 - Section detection.
 - AI transcription.
 - Advanced guitar techniques.
-

@@ -38,13 +38,15 @@ def main() -> None:
         assert row["summary"]["music_layer"]["tempo_changes"] == 1
         assert row["summary"]["music_layer"]["time_signature_changes"] == 1
 
-        response = lesson(song_id)
-        lesson_data = json.loads(Path(response.path).read_text(encoding="utf-8"))
+        stored = json.loads(lesson(song_id).body)
+        assert stored["version"] == 3
+        assert stored["music"]["source"]["normalized_schema_version"] == "1.0"
+        lesson_data = json.loads(lesson(song_id, part="guitar").body)
         assert lesson_data["version"] == 2
         assert lesson_data["source"]["normalized_schema_version"] == "1.0"
         assert len(prepare(lesson_data)["notes"]) == 206
 
-        print("PASS: dashboard imports normalized JSON and stores valid V2 lesson JSON.")
+        print("PASS: dashboard imports normalized JSON and stores a V3 lesson with a valid guitar view.")
 
 
 if __name__ == "__main__":
