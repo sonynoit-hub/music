@@ -11,3 +11,7 @@ data/dashboard/
 outputs/test*.mp4
 outputs/preview_*.png
 outputs/*.before-*.blend
+outputs/*.mp4
+
+# Downloaded scene assets
+outputs/assets/
