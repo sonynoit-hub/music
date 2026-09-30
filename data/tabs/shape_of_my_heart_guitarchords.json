@@ -1,0 +1,451 @@
+{
+ "title": "Shape of My Heart",
+ "artist": "Sting",
+ "source": "Intro tab from a Songsterr-style image (2/2, quarter = 164, 16 bars); grace note in bar 11 left out",
+ "tempo_bpm": 164,
+ "time_signature": [
+  2,
+  2
+ ],
+ "end_beat": "64",
+ "notes": [
+  {
+   "string": 2,
+   "fret": 10,
+   "start_beat": "0",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 9,
+   "start_beat": "1",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 6,
+   "start_beat": "3/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 10,
+   "start_beat": "5/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 7,
+   "start_beat": "7/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 9,
+   "start_beat": "4",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 7,
+   "start_beat": "5",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 6,
+   "start_beat": "11/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 9,
+   "start_beat": "13/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "15/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "8",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "9",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "19/2",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "21/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "23/2",
+   "duration_beats": "1/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "12",
+   "duration_beats": "2"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "12",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "13",
+   "duration_beats": "4"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "27/2",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 2,
+   "fret": 6,
+   "start_beat": "14",
+   "duration_beats": "2"
+  },
+  {
+   "string": 2,
+   "fret": 10,
+   "start_beat": "16",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 9,
+   "start_beat": "17",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 7,
+   "start_beat": "35/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 10,
+   "start_beat": "37/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 7,
+   "start_beat": "39/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 9,
+   "start_beat": "20",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 7,
+   "start_beat": "21",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 6,
+   "start_beat": "43/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 9,
+   "start_beat": "45/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "47/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "24",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "25",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "51/2",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "53/2",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "55/2",
+   "duration_beats": "1/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "28",
+   "duration_beats": "2"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "28",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "29",
+   "duration_beats": "4"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "59/2",
+   "duration_beats": "2"
+  },
+  {
+   "string": 2,
+   "fret": 6,
+   "start_beat": "30",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "63/2",
+   "duration_beats": "1/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "32",
+   "duration_beats": "4"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "33",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "67/2",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "69/2",
+   "duration_beats": "7/2"
+  },
+  {
+   "string": 1,
+   "fret": 5,
+   "start_beat": "71/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "37",
+   "duration_beats": "3"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "38",
+   "duration_beats": "2"
+  },
+  {
+   "string": 2,
+   "fret": 5,
+   "start_beat": "40",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "40",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 0,
+   "start_beat": "40",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 5,
+   "start_beat": "83/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 3,
+   "fret": 2,
+   "start_beat": "83/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "44",
+   "duration_beats": "4"
+  },
+  {
+   "string": 4,
+   "fret": 6,
+   "start_beat": "45",
+   "duration_beats": "2"
+  },
+  {
+   "string": 2,
+   "fret": 6,
+   "start_beat": "46",
+   "duration_beats": "2"
+  },
+  {
+   "string": 4,
+   "fret": 6,
+   "start_beat": "47",
+   "duration_beats": "1"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "48",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 4,
+   "fret": 7,
+   "start_beat": "48",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "48",
+   "duration_beats": "3/2"
+  },
+  {
+   "string": 2,
+   "fret": 7,
+   "start_beat": "99/2",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 4,
+   "fret": 7,
+   "start_beat": "99/2",
+   "duration_beats": "5/2"
+  },
+  {
+   "string": 5,
+   "fret": 5,
+   "start_beat": "99/2",
+   "duration_beats": "4"
+  },
+  {
+   "string": 2,
+   "fret": 2,
+   "start_beat": "52",
+   "duration_beats": "4"
+  },
+  {
+   "string": 3,
+   "fret": 4,
+   "start_beat": "52",
+   "duration_beats": "4"
+  },
+  {
+   "string": 4,
+   "fret": 4,
+   "start_beat": "52",
+   "duration_beats": "4"
+  },
+  {
+   "string": 6,
+   "fret": 4,
+   "start_beat": "52",
+   "duration_beats": "4"
+  },
+  {
+   "string": 1,
+   "fret": 2,
+   "start_beat": "56",
+   "duration_beats": "8"
+  },
+  {
+   "string": 2,
+   "fret": 2,
+   "start_beat": "56",
+   "duration_beats": "8"
+  },
+  {
+   "string": 3,
+   "fret": 2,
+   "start_beat": "56",
+   "duration_beats": "8"
+  },
+  {
+   "string": 4,
+   "fret": 4,
+   "start_beat": "56",
+   "duration_beats": "8"
+  },
+  {
+   "string": 5,
+   "fret": 4,
+   "start_beat": "56",
+   "duration_beats": "8"
+  },
+  {
+   "string": 6,
+   "fret": 2,
+   "start_beat": "56",
+   "duration_beats": "8"
+  }
+ ]
+}
