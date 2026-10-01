@@ -17,6 +17,11 @@ def main() -> None:
         os.environ["GUITAR_DASHBOARD_STORE"] = store
         from fastapi import HTTPException, UploadFile
         from guitar_video_app.api.dashboard import SongInput, create, generate_midi, upload
+        from guitar_video_app.music import audio_transcription
+
+        # Basic Pitch may be installed on this machine; hide it and the .venv-transcribe fallback.
+        sys.modules["basic_pitch"] = None
+        audio_transcription._transcription_python = lambda: None
 
         created = create(SongInput(name="Generate MIDI unavailable test"))
         song_id = created["id"]

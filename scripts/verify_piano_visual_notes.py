@@ -180,6 +180,47 @@ def check_asset_untouched(asset_objects):
     assert not moving, f'animation baked into the asset: {moving[:3]}'
 
 
+def colors(seconds, note_id=None, chord=False):
+    """The main palette colour of a note's symbol at a time (the chord's when chord)."""
+    at(seconds)
+    obj = bpy.data.objects[pvp.OBJECT]
+    evaluated = obj.evaluated_get(bpy.context.evaluated_depsgraph_get()).evaluated_geometry()
+    mesh = evaluated.mesh
+    count = len(mesh.vertices)
+    part, which, main = np.empty(count), np.empty(count), np.empty(count * 4)
+    mesh.attributes['pv_part'].data.foreach_get('value', part)
+    mesh.attributes['pv_seed'].data.foreach_get('value', which)
+    mesh.attributes['pv_main'].data.foreach_get('color', main)
+    starts = [a.value for a in obj.data.attributes['pv_start'].data]
+    pick = [float(i) for i, s in enumerate(starts) if abs(s - 7.0) < 1e-6] if chord else [seed(note_id)]
+    rows = main.reshape(-1, 4)[(part == notes.PART_GLYPH) & np.isin(which, pick), :3]
+    assert len(rows), f'no symbol at {seconds} s'
+    return np.unique(np.round(rows, 4), axis=0)
+
+
+def check_colors():
+    """By hand: right-hand notes and their keys orange, left-hand blue; a theme colours everything alike."""
+    keys = pv.keys_by_midi()
+    orange, blue = pvp.PALETTES['orange'], pvp.PALETTES['blue']
+    summary = pvp.install(PHRASE, colors='hands')
+    assert summary['colors'] == 'hands' and bpy.context.scene[pvp.COLORS_PROPERTY] == 'hands'
+    assert np.allclose(colors(1.0, 'w'), [orange[1]], atol=1e-3), 'right-hand note is not orange'
+    assert np.allclose(colors(7.3, chord=True), [blue[1]], atol=1e-3), 'left-hand chord is not blue'
+    at(1.0)
+    assert np.allclose(tuple(keys[WHITE]['pv_highlight_color']), orange[3]), 'right-hand key glow is not orange'
+    at(7.2)
+    assert np.allclose(tuple(keys[48]['pv_highlight_color']), blue[3]), 'left-hand key glow is not blue'
+    at(4.5)
+    assert np.allclose(tuple(keys[BLACK]['pv_highlight_color']), orange[3]), 'pedal-held key lost its hand colour'
+    gold = pvp.PALETTES['gold']
+    pvp.install(PHRASE, colors='gold')
+    assert np.allclose(colors(7.3, chord=True), [gold[1]], atol=1e-3), 'gold theme not applied'
+    sustain = bpy.data.objects[pv.pedal_name('sustain')]
+    assert np.allclose(tuple(sustain['pv_highlight_color']), gold[3]), 'pedal glow does not follow the theme'
+    pvp.install(PHRASE)
+    assert np.allclose(colors(1.0, 'w'), [blue[1]], atol=1e-3), 'blue is not the default'
+
+
 def check_switching():
     """Plumes and back: one effect at a time, and a file reload rebuilds the stored effect."""
     templates = lambda: sorted(o.name for o in bpy.data.objects if o.name.startswith(f'{pv.PREFIX}_Note_'))
@@ -221,6 +262,7 @@ def main():
     check_keys_and_pedal()
     peak, slowest = check_budget(scene)
     check_asset_untouched(asset_objects)
+    check_colors()
     check_switching()
     if args.renders:
         render_views(args.renders)
@@ -230,7 +272,7 @@ def main():
     assert sha(BLEND) == before, '.blend changed'
     print(f"PASS: {summary['note_count']} notes; half/quarter/eighth symbols by length; one note per key press, "
           f"rising and fading on time; pedal-held glow {ratio:.2f}; upright facing the camera; {sparkles} "
-          f"sparkles in 0.5 s; seeking deterministic; keys and pedal follow; peak {peak} polygons (budget "
+          f"sparkles in 0.5 s; colours by hand and by theme, keys and pedal glow to match; seeking deterministic; keys and pedal follow; peak {peak} polygons (budget "
           f"{BUDGET}), slowest evaluation {slowest * 1000:.0f} ms; asset and .blend unchanged")
 
 

@@ -1,7 +1,7 @@
 """Check PIANO_VISUAL: 88 uniquely named keys A0-C8 on MIDI 21-108 (52 white, 36 black), no baked
-animation, every key pressing on its own, and nothing above the keys. With --renders, also render
-the presentation view, the piano from seven angles and a close-up with pressed, highlighted keys.
-The file is not saved.
+animation, every key pressing on its own, and nothing above the keys. A song saved in the file (rising notes or
+plumes, shot camera) is removed in memory first. With --renders, also render the presentation view, the piano from
+seven angles and a close-up with pressed, highlighted keys. The file is not saved.
 
 Blender -b outputs/piano-visual.blend --python-exit-code 1 --python scripts/verify_piano_visual.py -- [--renders DIR]
 """
@@ -206,6 +206,9 @@ def main():
     parser.add_argument('--renders', type=Path)
     args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
     scene, view_layer = bpy.context.scene, bpy.context.view_layer
+    # The dashboard's Save keeps the sent song in the .blend; check the bare stage under it.
+    from guitar_video_app.integrations.piano_visual_particles import uninstall
+    uninstall()
     keys = check_keys(scene)
     check_rest_and_no_animation(keys)
     dips = check_independent(keys, view_layer)

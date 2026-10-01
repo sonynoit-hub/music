@@ -127,14 +127,15 @@ def _run_command(command: dict[str, Any]) -> dict[str, Any]:
         from guitar_video_app.core import lesson_v2
         from guitar_video_app.music import lesson, rules, tempo
         from guitar_video_app.instruments.guitar import tuning, view
-        from guitar_video_app.instruments.piano import keyboard, performance, view as piano_view
+        from guitar_video_app.instruments.piano import camera, keyboard, performance, view as piano_view
         from guitar_video_app.integrations import (dashboard_bridge, guitar_style, lesson_controller_v2, lesson_setup,
-                                                   piano_lesson, piano_scene, piano_visual, piano_visual_notes,
-                                                   piano_visual_particles, title_overlay)
+                                                   piano_lesson, piano_scene, piano_visual, piano_visual_camera,
+                                                   piano_visual_notes, piano_visual_particles, title_overlay)
         # An open Blender keeps old modules; reload so dashboard code changes apply without a restart.
         for module in (tempo, rules, lesson, tuning, view, lesson_v2, lesson_controller_v2, keyboard, piano_view,
-                       performance, piano_scene, piano_lesson, piano_visual, piano_visual_particles,
-                       piano_visual_notes, title_overlay, guitar_style, lesson_setup, dashboard_bridge):
+                       performance, camera, piano_scene, piano_lesson, piano_visual, piano_visual_camera,
+                       piano_visual_particles, piano_visual_notes, title_overlay, guitar_style, lesson_setup,
+                       dashboard_bridge):
             importlib.reload(module)
         return dashboard_bridge.sync(command)
     if name == "ping":

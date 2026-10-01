@@ -1,4 +1,6 @@
-# Guitar Video App
+# Music Video Studio
+
+Synchronized short music videos for guitar and piano, from MIDI, lesson JSON, Blender and a final WAV.
 
 ## Project Context For Codex
 
@@ -233,6 +235,17 @@ PYTHONPATH=work python3 -m guitar_video_app.cli render input.mid outputs/lesson.
 ```
 
 This currently builds the MIDI chart, sends it to Blender, and configures the render output path. Rendering execution can be triggered from Blender after inspection.
+
+## Checks
+
+Run every verify script, the Blender ones in background Blender, with one pass/fail line each:
+
+```sh
+.venv/bin/python scripts/verify_all.py            # all checks, about 2 minutes
+.venv/bin/python scripts/verify_all.py --only piano
+```
+
+No check writes a scene you work in. `scripts/verify_lesson_v2.py` regenerates its own samples, `outputs/lesson-v2-tests.blend` and `outputs/lesson-v2-chords.png`. `scripts/verify_dashboard.cjs` (Playwright, with the dashboard and Blender running) is run separately.
 
 ## Blender Verification
 

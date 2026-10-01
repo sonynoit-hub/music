@@ -238,6 +238,29 @@ What the piano scene and the renderer read for a piano song; the dashboard write
 - `key` is 0-87 from A0; `x_mm` is the key's center from the left edge of A0. White keys are 23.5 mm wide; black key centers split each octave (164.5 mm) into 12 equal steps, so they sit off-center between white keys as on a real piano.
 - Keys cut notes off: a note on a key ends when the next note on that key starts.
 
+## Piano Camera Shots
+
+An optional shot list for a piano song on the PIANO_VISUAL stage, kept apart from the piano view, which does not change. The dashboard stores it per song (`camera_shots`; NULL means none) and writes it as `camera_shots.json` beside `piano_view.json` for renders (`scripts/render_piano_visual.py --camera`). Send to Blender carries it as `camera_shots` in `dashboard_sync`. Checked by `validate` and played by `CameraPath` in `guitar_video_app/instruments/piano/camera.py`.
+
+```json
+{
+  "version": 1,
+  "shots": [
+    {"start_bar": 1, "camera": "hero", "move": "push", "transition": "cut"},
+    {"start_bar": 3, "camera": "high", "move": "drift", "transition": "blend"},
+    {"start_bar": 5, "camera": "wide", "move": "static", "transition": "blend"}
+  ]
+}
+```
+
+- No list (NULL, or no `--camera`) is the single wide view of the presentation camera.
+- `start_bar` is 1-based, counted in the view's `time_signature` from beat 0, and must be from 1 to the song's last bar. The first shot starts at bar 1 and each next shot starts on a later bar. A shot lasts until the next one starts, and the last shot until the end.
+- `camera`: `wide`, `hero`, `along`, `high`, `close` or `side`.
+- `move` (optional, default `static`): `static`, `push`, `drift` or `arc`.
+- `transition` (optional, default `cut`): `cut` switches on the bar's downbeat frame, and `blend` orbits from the previous shot, starting on the downbeat. It lasts 0.75 to 2 s depending on how far the view turns and zooms, and never more than one bar or half the shot. The first shot's transition is always `cut`.
+- No other fields are allowed. A list that no longer fits the song (for example, after the lesson got shorter) is refused with a message rather than trimmed.
+- Times come from the view's tempo map, not from bars at a fixed tempo, so tempo changes move the cuts with the music.
+
 ## Tab File
 
 A published tab written as data, read by `read_tab` in `guitar_video_app/instruments/guitar/tab.py` into a V3 lesson and fitted to the recording (dashboard Tab row or `scripts/import_tab.py`). It is Lesson V2 without the timing that comes from the audio:

@@ -23,16 +23,20 @@ def status():
 
 def _piano_look(command):
     """Scene check, loader, install and undo for the song's piano look: the lesson keyboard or PIANO_VISUAL with
-    rising notes or plumes."""
+    rising notes or plumes in the song's colours, seen through its camera shots (or the presentation camera)."""
     if command.get('piano_look') == 'visual':
         import bpy
+        from guitar_video_app.integrations import piano_visual_camera as shot_camera
         from guitar_video_app.integrations import piano_visual_particles as visual
         from guitar_video_app.integrations.piano_visual import FRAME_OBJECT
-        effect = command.get('piano_effect', 'notes')
-        previous = bpy.context.scene.get(visual.EFFECT_PROPERTY, 'notes')
+        scene = bpy.context.scene
+        chosen = dict(effect=command.get('piano_effect', 'notes'), colors=command.get('piano_colors', 'blue'),
+                      camera=command.get('camera_shots'))
+        previous = dict(effect=scene.get(visual.EFFECT_PROPERTY, 'notes'), colors=scene.get(visual.COLORS_PROPERTY, 'blue'),
+                        camera=shot_camera.shots())
         return dict(anchor=FRAME_OBJECT, scene_file='outputs/piano-visual.blend (PIANO_VISUAL)',
-                    text=visual.TEXT, loader=visual.LOADER, install=lambda data: visual.install(data, effect=effect),
-                    clear=visual.uninstall, restore=lambda data: visual.install(data, effect=previous))
+                    text=visual.TEXT, loader=visual.LOADER, install=lambda data: visual.install(data, **chosen),
+                    clear=visual.uninstall, restore=lambda data: visual.install(data, **previous))
     from guitar_video_app.integrations.piano_lesson import LOADER, TEXT, install_piano
     from guitar_video_app.integrations.piano_scene import KEYBOARD
     from guitar_video_app.integrations.title_overlay import install_title
@@ -92,6 +96,7 @@ def sync_piano(command):
     new_audio.name = 'Lesson_JSON_Guitar_Audio'
     new_audio.mute = False
     new_audio.volume = 1
+    scene.sync_mode = 'AUDIO_SYNC'
     scene['Dashboard_Song_ID'] = command['song_id']
     scene['Dashboard_Revision'] = command['revision']
     loader = bpy.data.texts.get(look['loader'])

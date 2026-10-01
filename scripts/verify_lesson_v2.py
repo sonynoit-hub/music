@@ -46,7 +46,9 @@ for path in sorted((ROOT/'data/lesson_tests').glob('*.json')):
         for string in range(1,7):
             obj = bpy.data.objects[f'String_{7-string}']
             marker = bpy.data.objects[f'Lesson_V2_Marker_{string}']
-            note = next((n for n in active if n['string']==string),None)
+            # A note followed by the same fret blanks just before its repeat (lesson_controller_v2).
+            note = next((n for n in active if n['string']==string
+                         and not runtime._in_retrigger_gap(lesson,n,position)),None)
             assert marker.hide_render == (note is None)
             if note:
                 assert marker['note_id'] == note['id']

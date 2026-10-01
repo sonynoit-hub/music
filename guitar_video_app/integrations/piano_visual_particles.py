@@ -22,10 +22,12 @@ from pathlib import Path
 
 import bpy
 
+from guitar_video_app.instruments.piano.camera import validate as validate_shots
 from guitar_video_app.instruments.piano.keyboard import HIGH, LOW, WHITE_MM, is_black
 from guitar_video_app.instruments.piano.performance import pedal_amount, performance
 from guitar_video_app.instruments.piano.view import prepare
 from guitar_video_app.integrations import piano_visual as pv
+from guitar_video_app.integrations import piano_visual_camera as shot_camera
 from guitar_video_app.integrations.piano_lesson import key_events, key_state
 
 COLLECTION = 'PIANO_VISUAL_PARTICLES'
@@ -60,6 +62,18 @@ FLASH = 16.0                 # extra glow of a newborn particle, which lights th
 FLASH_SECONDS = 0.2
 PLUME_COLORS = ((0.0, (0.01, 0.05, 0.45)), (0.55, (0.04, 0.3, 1.0)), (1.0, (0.6, 0.85, 1.0)))
 KEY_GLOW_COLOR = (0.1, 0.4, 1.0)
+# A palette is the deep, main and pale colour an effect cools through, and the colour its key glows.
+PALETTE_ATTRIBUTES = ('pv_deep', 'pv_main', 'pv_pale')
+PALETTE_MIDDLE = PLUME_COLORS[1][0]
+PALETTES = {
+    'blue': (*(color for _, color in PLUME_COLORS), KEY_GLOW_COLOR),
+    'white': ((0.22, 0.24, 0.3), (0.72, 0.78, 0.9), (1.0, 1.0, 1.0), (0.85, 0.9, 1.0)),
+    'gold': ((0.35, 0.12, 0.01), (1.0, 0.55, 0.12), (1.0, 0.9, 0.6), (1.0, 0.62, 0.18)),
+    'orange': ((0.4, 0.08, 0.0), (1.0, 0.38, 0.05), (1.0, 0.8, 0.55), (1.0, 0.6, 0.22)),
+}
+COLORS = ('blue', 'white', 'gold', 'hands')
+COLORS_PROPERTY = 'pv_colors'
+HAND_PALETTES = {'right': 'orange', 'left': 'blue'}   # like the lesson piano; other hands are white
 KEY_SUSTAIN_GLOW = 0.3
 PEDAL_GLOW = 0.4
 EVENT_ATTRIBUTES = ('pv_start', 'pv_end', 'pv_sound_end', 'pv_seed', 'pv_width', 'pv_kind')
@@ -71,6 +85,7 @@ _keys = {}
 _sustain = {}
 _pedals = []
 _shown = {}
+_colors = 'blue'
 
 
 # Geometry Nodes
@@ -271,24 +286,35 @@ def plume_material():
 
 
 def glow_material(name, painted=True):
-    """Emission coloured by pv_heat, as strong as pv_glow and as opaque as pv_alpha; painted adds the round
-    falloff read from the sprite's pv_uv."""
+    """Emission as strong as pv_glow and as opaque as pv_alpha, coloured by pv_heat along the point's own palette
+    (pv_deep at 0, pv_main at PALETTE_MIDDLE, pv_pale at 1); painted adds the round falloff read from the sprite's
+    pv_uv."""
     mat = bpy.data.materials.get(name) or bpy.data.materials.new(name)
     if mat.node_tree is None:
         mat.use_nodes = True
     nodes, links = mat.node_tree.nodes, mat.node_tree.links
     nodes.clear()
     heat = nodes.new('ShaderNodeAttribute')
-    heat.attribute_type, heat.attribute_name, heat.location = 'GEOMETRY', 'pv_heat', (-700, 100)
+    heat.attribute_type, heat.attribute_name, heat.location = 'GEOMETRY', 'pv_heat', (-900, 100)
     glow = nodes.new('ShaderNodeAttribute')
     glow.attribute_type, glow.attribute_name, glow.location = 'GEOMETRY', 'pv_glow', (-700, -150)
-    ramp = nodes.new('ShaderNodeValToRGB')
-    ramp.location = (-450, 100)
-    stops = ramp.color_ramp.elements
-    while len(stops) < len(PLUME_COLORS):
-        stops.new(0.5)
-    for stop, (position, color) in zip(stops, PLUME_COLORS):
-        stop.position, stop.color = position, (*color, 1)
+    shades = []
+    for index, attribute in enumerate(PALETTE_ATTRIBUTES):
+        shade = nodes.new('ShaderNodeAttribute')
+        shade.attribute_type, shade.attribute_name, shade.location = 'GEOMETRY', attribute, (-900, -300 - 150 * index)
+        shades.append(shade.outputs['Color'])
+    ramp = None
+    for index, (low, high) in enumerate(((0.0, PALETTE_MIDDLE), (PALETTE_MIDDLE, 1.0))):
+        along = nodes.new('ShaderNodeMapRange')
+        along.clamp, along.location = True, (-700, 250 - 150 * index)
+        along.inputs['From Min'].default_value, along.inputs['From Max'].default_value = low, high
+        links.new(heat.outputs['Fac'], along.inputs['Value'])
+        blend = nodes.new('ShaderNodeMix')
+        blend.data_type, blend.location = 'RGBA', (-450, 150 - 150 * index)
+        links.new(along.outputs['Result'], blend.inputs['Factor'])
+        links.new(ramp if ramp else shades[0], pv._socket(blend.inputs, 'A', 'RGBA'))
+        links.new(shades[index + 1], pv._socket(blend.inputs, 'B', 'RGBA'))
+        ramp = pv._socket(blend.outputs, 'Result', 'RGBA')
     alpha = nodes.new('ShaderNodeAttribute')
     alpha.attribute_type, alpha.attribute_name, alpha.location = 'GEOMETRY', 'pv_alpha', (-450, 300)
     emission = nodes.new('ShaderNodeEmission')
@@ -299,8 +325,7 @@ def glow_material(name, painted=True):
     mix.location = (100, 100)
     out = nodes.new('ShaderNodeOutputMaterial')
     out.location = (300, 100)
-    links.new(heat.outputs['Fac'], ramp.inputs['Fac'])
-    links.new(ramp.outputs['Color'], emission.inputs['Color'])
+    links.new(ramp, emission.inputs['Color'])
     links.new(glow.outputs['Fac'], emission.inputs['Strength'])
     links.new(clear.outputs[0], mix.inputs[1])
     links.new(emission.outputs[0], mix.inputs[2])
@@ -358,12 +383,19 @@ def install_glow(scene):
 
 # The notes
 
+def palette(colors, hand=None):
+    """(deep, main, pale, key) for a note of this hand in a colour theme; hand None is the theme's neutral."""
+    if colors == 'hands':
+        return PALETTES[HAND_PALETTES.get(hand, 'white')]
+    return PALETTES[colors]
+
+
 def note_kind(beats):
     """0 half, 1 quarter, 2 eighth, from a note's written length in beats."""
     return 0 if beats >= HALF_BEATS else 1 if beats >= QUARTER_BEATS else 2
 
 
-def _plume_object(notes, effect='plumes'):
+def _plume_object(notes, effect='plumes', colors='blue'):
     remove_plumes()
     frame = bpy.data.objects[pv.FRAME_OBJECT]
     to_frame = frame.matrix_world.inverted()
@@ -377,6 +409,10 @@ def _plume_object(notes, effect='plumes'):
                   pv_width=[width(n['pitch']) for n in notes], pv_kind=[float(n.get('kind', 1)) for n in notes])
     for name in EVENT_ATTRIBUTES:
         mesh.attributes.new(name, 'FLOAT', 'POINT').data.foreach_set('value', values[name])
+    shades = [palette(colors, n.get('hand')) for n in notes]
+    for index, name in enumerate(PALETTE_ATTRIBUTES):
+        flat = [channel for shade in shades for channel in (*shade[index], 1.0)]
+        mesh.attributes.new(name, 'FLOAT_COLOR', 'POINT').data.foreach_set('color', flat)
     collection = bpy.data.collections.new(COLLECTION)
     bpy.context.scene.collection.children.link(collection)
     obj = bpy.data.objects.new(OBJECT, mesh)
@@ -389,6 +425,10 @@ def _plume_object(notes, effect='plumes'):
     else:
         tree = plume_tree()
     obj.modifiers.new('PV_Plumes', 'NODES').node_group = tree
+    # Solid view shows one flat colour per material: the theme's neutral.
+    for mat in (bpy.data.materials.get(n) for n in (MATERIAL, 'PV_NoteGlyph')):
+        if mat:
+            mat.diffuse_color = (*palette(colors)[1], 1)
     return obj
 
 
@@ -407,42 +447,46 @@ def remove_plumes():
 
 
 def uninstall():
-    """Stop the handler, delete the plumes and put keys and pedals at rest; the asset stays."""
+    """Stop the handler, delete the plumes and the shot camera and put keys and pedals at rest; the asset stays."""
     handlers = bpy.app.handlers.frame_change_post
     handlers[:] = [h for h in handlers if getattr(h, '__name__', '') != HANDLER]
     remove_plumes()
+    shot_camera.uninstall()
     pv.reset_keys()
     pv.reset_pedals()
     _shown.clear()
 
 
 def _sustain_spans(notes):
-    """{pitch: (ends, spans)}: when only the pedal holds a key's note, after the key has lifted."""
+    """{pitch: (ends, spans)}: when only the pedal holds a key's note, after the key has lifted, and whose note."""
     spans = defaultdict(list)
     for note in notes:
         if note['sound_end'] > note['end']:
-            spans[note['pitch']].append((note['end'], note['sound_end']))
+            spans[note['pitch']].append((note['end'], note['sound_end'], note.get('hand')))
     return {p: ([s[0] for s in sorted(v)], sorted(v)) for p, v in spans.items()}
 
 
 def _sustained(pitch, now):
+    """The hand of the note the pedal alone holds on this key, or False."""
     ends, spans = _sustain.get(pitch, ((), ()))
     index = bisect_right(ends, now)
-    return any(start <= now < stop for start, stop in spans[max(0, index - 3):index])
+    return next((hand for start, stop, hand in spans[max(0, index - 3):index] if start <= now < stop), False)
 
 
 def update(scene, *_):
     now = (scene.frame_current + scene.frame_subframe) / (scene.render.fps / scene.render.fps_base)
     for pitch in range(LOW, HIGH + 1):
-        amount = 0.0
+        amount, hand = 0.0, None
         if pitch in _keys:
-            amount, _ = key_state(*_keys[pitch], now)
-        glow = max(amount, KEY_SUSTAIN_GLOW if _sustained(pitch, now) else 0.0)
-        if _shown.get(pitch) == (amount, glow):
+            amount, hand = key_state(*_keys[pitch], now)
+        held = _sustained(pitch, now)
+        glow = max(amount, KEY_SUSTAIN_GLOW if held is not False else 0.0)
+        color = palette(_colors, hand if amount > 0 else held or None)[3]
+        if _shown.get(pitch) == (amount, glow, color):
             continue
-        _shown[pitch] = (amount, glow)
+        _shown[pitch] = (amount, glow, color)
         pv.press(pitch, amount)
-        pv.highlight(pitch, glow, KEY_GLOW_COLOR)
+        pv.highlight(pitch, glow, color)
     amount = pedal_amount(_pedals, now)
     if _shown.get('sustain') != amount:
         _shown['sustain'] = amount
@@ -458,10 +502,11 @@ def tail(note, effect):
 
 
 def register():
-    """Rebuild the effect, keys and pedals from the stored lesson and start the frame handler."""
-    global _keys, _sustain, _pedals
+    """Rebuild the effect, keys, pedals and shot camera from the stored lesson and start the frame handlers."""
+    global _keys, _sustain, _pedals, _colors
     data = json.loads(bpy.data.texts[TEXT].as_string())
     effect = bpy.context.scene.get(EFFECT_PROPERTY, 'notes')
+    _colors = bpy.context.scene.get(COLORS_PROPERTY, 'blue')
     lesson = prepare(data)
     notes, _pedals = performance(data, lesson)
     beats = {n['id']: float(n['end'] - n['start']) for n in lesson['notes']}
@@ -469,9 +514,9 @@ def register():
         note['kind'] = note_kind(beats[note['id']])
     _keys = key_events(lesson)
     _sustain = _sustain_spans(notes)
-    _plume_object(notes, effect)
+    _plume_object(notes, effect, _colors)
     pedal = bpy.data.objects[pv.pedal_name('sustain')]
-    pedal['pv_highlight_color'] = KEY_GLOW_COLOR
+    pedal['pv_highlight_color'] = palette(_colors)[3]
     pv.reset_keys()
     pv.reset_pedals()
     _shown.clear()
@@ -480,15 +525,22 @@ def register():
     update.__name__ = HANDLER
     handlers.append(update)
     update(bpy.context.scene)
+    shot_camera.register(data)
     return notes
 
 
-def install(data, effect='notes'):
-    """Load a piano view into the open PIANO_VISUAL scene: rising notes (or plumes), key and pedal motion, frame
-    range from its tempo map (with a tail for the last effect to fade) and the compositor glow."""
+def install(data, effect='notes', colors='blue', camera=None):
+    """Load a piano view into the open PIANO_VISUAL scene: rising notes (or plumes) in a colour theme (or coloured
+    by hand), key and pedal motion, frame range from its tempo map (with a tail for the last effect to fade) and the
+    compositor glow. camera is a shot list for the shot camera (instruments.piano.camera); None keeps the
+    presentation camera."""
     if effect not in EFFECTS:
         raise ValueError(f'Effect must be one of {", ".join(EFFECTS)}.')
+    if colors not in COLORS:
+        raise ValueError(f'Colors must be one of {", ".join(COLORS)}.')
     lesson = prepare(data)
+    if camera is not None:
+        validate_shots(camera, lesson)
     scene = bpy.context.scene
     missing = [pv.key_name(p) for p in range(LOW, HIGH + 1) if pv.key_name(p) not in bpy.data.objects]
     if missing or pv.FRAME_OBJECT not in bpy.data.objects:
@@ -507,11 +559,13 @@ def install(data, effect='notes'):
     scene.render.fps_base = 1
     scene.render.use_lock_interface = True
     scene[EFFECT_PROPERTY] = effect
+    scene[COLORS_PROPERTY] = colors
+    shot_camera.store(data, camera)
     notes = register()
     last = max((tail(n, effect) for n in notes), default=0.0)
     scene.frame_start = 0
     scene.frame_end = max(lesson['frame_end'], math.ceil(last * lesson['fps']))
     install_glow(scene)
     scene.frame_set(scene.frame_start)
-    return {'instrument': 'piano', 'visual': 'PIANO_VISUAL', 'effect': effect, 'note_count': len(notes),
-            'timing': 'beats'}
+    return {'instrument': 'piano', 'visual': 'PIANO_VISUAL', 'effect': effect, 'colors': colors,
+            'camera': 'shots' if camera is not None else 'wide', 'note_count': len(notes), 'timing': 'beats'}

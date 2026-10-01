@@ -33,6 +33,7 @@ from guitar_video_app.instruments.guitar.tuning import pitch_of
 from guitar_video_app.instruments.guitar.view import (PART as GUITAR, guitar_view, prepare as prepare_guitar_view,
                                                       set_notes, set_position)
 from guitar_video_app.instruments.piano import PIANO
+from guitar_video_app.instruments.piano import camera as piano_camera
 from guitar_video_app.instruments.piano.normalized import lesson_from_normalized as piano_lesson_from_normalized
 from guitar_video_app.instruments.piano.view import piano_view, prepare as prepare_piano_view, set_hand
 from guitar_video_app.integrations.link_audio import LinkAudioError, download_audio
@@ -59,6 +60,8 @@ RENDER_SCRIPT = ROOT/'scripts/render_lesson.py'
 PIANO_VISUAL_SCRIPT = ROOT/'scripts/render_piano_visual.py'
 # EEVEE particle renders take seconds per frame, so the 4 s test is a half-size draft.
 PIANO_VISUAL_TEST_OPTIONS = ('--scale','50','--samples','32')
+# The full render keeps 1080x1920 for phones; 32 samples look as clean as the scene's 64 in half the time.
+PIANO_VISUAL_FULL_OPTIONS = ('--samples','32')
 RENDER_FPS = 30
 RENDER_TEST_SECONDS = 4
 RENDER_LOCK = threading.Lock()
@@ -68,7 +71,7 @@ FRAME_RANGE_LINE = re.compile(r'^Frame range:\s*(\d+)-(\d+)')
 HARMLESS_RENDER_ERRORS = ('_RestrictData', 'Address already in use')
 render_job = {}
 render_process = None
-app = FastAPI(title='Guitar Lesson Studio',docs_url=None,redoc_url=None)
+app = FastAPI(title='Music Video Studio',docs_url=None,redoc_url=None)
 
 
 @contextmanager
@@ -107,6 +110,13 @@ with db() as conn:
     # notes and 'plumes' is PIANO_VISUAL with plumes.
     if 'piano_look' not in columns:
         conn.execute('ALTER TABLE songs ADD COLUMN piano_look TEXT')
+    # Colour of the PIANO_VISUAL notes or plumes: NULL is blue; 'white', 'gold', or 'hands' (right orange, left blue).
+    if 'piano_colors' not in columns:
+        conn.execute('ALTER TABLE songs ADD COLUMN piano_colors TEXT')
+    # Camera shots on the PIANO_VISUAL stage (a version 1 shot list, instruments.piano.camera); NULL is the single
+    # wide view of the presentation camera.
+    if 'camera_shots' not in columns:
+        conn.execute('ALTER TABLE songs ADD COLUMN camera_shots TEXT')
     # The lesson fields before the last tab review (JSON), for Undo.
     if 'previous_state' not in columns:
         conn.execute('ALTER TABLE songs ADD COLUMN previous_state TEXT')
@@ -384,6 +394,8 @@ def song(identity):
 def public(row):
     result={k:v for k,v in row.items() if k not in ('json_path','wav_path','midi_path','previous_state')}
     result['can_undo_review']=bool(row.get('previous_state') and (row.get('summary') or {}).get('tab_review'))
+    if 'camera_shots' in result:
+        result['camera_shots']=json.loads(result['camera_shots']) if result['camera_shots'] else None
     return result
 
 
@@ -615,12 +627,114 @@ def update_piano_look(identity: str,payload: PianoLookInput):
     return public(song(identity))
 
 
+class PianoColorsInput(BaseModel):
+    colors: Literal['blue','white','gold','hands']
+
+
+@app.post('/api/songs/{identity}/piano-colors')
+def update_piano_colors(identity: str,payload: PianoColorsInput):
+    """Colour theme of the PIANO_VISUAL notes or plumes, or colours by hand; the lesson is unchanged."""
+    row=song(identity)
+    colors=None if payload.colors=='blue' else payload.colors
+    if row.get('piano_colors')!=colors:
+        with db() as conn:
+            conn.execute('UPDATE songs SET piano_colors=?,revision=revision+1,updated=? WHERE id=?',
+                         (colors,time.time(),identity))
+    return public(song(identity))
+
+
 def piano_visual(row):
     return song_instrument(row)=='piano' and row.get('piano_look') in ('visual','plumes')
 
 
 def piano_effect(row):
     return 'plumes' if row.get('piano_look')=='plumes' else 'notes'
+
+
+def piano_colors(row):
+    return row.get('piano_colors') or 'blue'
+
+
+def camera_lesson(row):
+    """The song's prepared piano view at the render frame rate, which camera shots are planned against."""
+    if song_instrument(row)!='piano':
+        raise HTTPException(400,'Camera shots are for piano songs on the PIANO_VISUAL stage.')
+    if not row['json_path']:
+        raise HTTPException(400,'Import the lesson first')
+    lesson=read_lesson(row['json_path'])
+    try:
+        return prepare_piano_view(dict(piano_view(lesson,parts(lesson)[0][0]),fps=RENDER_FPS))
+    except (KeyError,ValueError) as exc:
+        raise HTTPException(400,f'This lesson cannot be drawn on the piano: {exc}') from exc
+
+
+def camera_shots(row, prepared=None):
+    """The song's checked shot list, or None for the single wide view."""
+    if not row.get('camera_shots'):
+        return None
+    try:
+        return piano_camera.validate(json.loads(row['camera_shots']),prepared or camera_lesson(row))
+    except ValueError as exc:
+        raise HTTPException(400,f'The camera shots no longer fit this song ({exc}); edit them or press Auto.') from exc
+
+
+def camera_reply(identity):
+    row=song(identity)
+    prepared=camera_lesson(row)
+    return dict(song=public(row),camera_shots=camera_shots(row,prepared),bars=piano_camera.bar_count(prepared),
+                measure_beats=float(prepared['measure']),cameras=list(piano_camera.CAMERAS),
+                moves=list(piano_camera.MOVES),transitions=list(piano_camera.TRANSITIONS))
+
+
+def save_camera_shots(identity, plan):
+    stored=json.dumps(plan) if plan is not None else None
+    if song(identity).get('camera_shots')!=stored:
+        with db() as conn:
+            conn.execute('UPDATE songs SET camera_shots=?,revision=revision+1,updated=? WHERE id=?',
+                         (stored,time.time(),identity))
+    return camera_reply(identity)
+
+
+class CameraShotInput(BaseModel):
+    start_bar: int
+    camera: str
+    move: str = 'static'
+    transition: str = 'cut'
+
+
+class CameraShotsInput(BaseModel):
+    version: int = 1
+    shots: list[CameraShotInput]
+
+
+@app.get('/api/songs/{identity}/camera')
+def get_camera(identity: str):
+    """The song's camera shots on the PIANO_VISUAL stage (None is the single wide view) and its bars."""
+    return camera_reply(identity)
+
+
+@app.put('/api/songs/{identity}/camera')
+def put_camera(identity: str, payload: CameraShotsInput):
+    """Replace the camera shots: known presets, moves and transitions on rising bars from bar 1 within the song."""
+    prepared=camera_lesson(song(identity))
+    try:
+        plan=piano_camera.validate(payload.model_dump(),prepared)
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)) from exc
+    return save_camera_shots(identity,plan)
+
+
+@app.post('/api/songs/{identity}/camera/auto')
+def auto_camera(identity: str):
+    """Suggest camera shots from the music and save them in place of the current ones."""
+    return save_camera_shots(identity,piano_camera.auto_shots(camera_lesson(song(identity))))
+
+
+@app.delete('/api/songs/{identity}/camera')
+def delete_camera(identity: str):
+    """Back to the single wide view."""
+    camera_lesson(song(identity))
+    return save_camera_shots(identity,None)
 
 
 class FingeringInput(BaseModel):
@@ -1090,6 +1204,7 @@ def send(identity: str):
         summary(lesson)
         instrument=song_instrument(row)
         view_path,_=write_view(identity,lesson,instrument)
+        shots=camera_shots(row) if piano_visual(row) else None
         if not TRANSFER_LOCK.acquire(blocking=False):
             raise HTTPException(409,'Another transfer is in progress')
         title,subtitle=video_title(row)
@@ -1099,7 +1214,8 @@ def send(identity: str):
         if instrument!='guitar':
             command['instrument']=instrument
         if piano_visual(row):
-            command['piano_look'],command['piano_effect']='visual',piano_effect(row)
+            command.update(piano_look='visual',piano_effect=piano_effect(row),piano_colors=piano_colors(row),
+                           camera_shots=shots)
         try:
             result=bridge(command)
         finally:
@@ -1123,6 +1239,8 @@ def save_blender():
 
 class RenderInput(BaseModel):
     mode: Literal['test','full'] = 'test'
+    # A PIANO_VISUAL test render can start on a bar (a shot's first bar) instead of the beginning.
+    start_bar: int | None = Field(default=None,ge=1)
 
 
 def render_status():
@@ -1175,10 +1293,25 @@ def start_render(identity: str, payload: RenderInput):
     view_path,view=write_view(identity,read_lesson(row['json_path']),instrument)
     prepare_view=prepare_piano_view if instrument=='piano' else prepare_guitar_view
     try:
-        last=prepare_view(dict(view,fps=RENDER_FPS))['frame_end']
+        prepared=prepare_view(dict(view,fps=RENDER_FPS))
     except Exception as exc:
         raise HTTPException(400,f'This lesson cannot render at {RENDER_FPS} fps: {exc}') from exc
-    end=min(last,RENDER_FPS*RENDER_TEST_SECONDS-1) if payload.mode=='test' else last
+    last=prepared['frame_end']
+    start=0
+    if visual and payload.mode=='test' and payload.start_bar:
+        if payload.start_bar>piano_camera.bar_count(prepared):
+            raise HTTPException(400,f'Bar {payload.start_bar} is past the end of the song.')
+        start=round(piano_camera.bar_seconds(prepared,payload.start_bar)*RENDER_FPS)
+        end=start+RENDER_FPS*RENDER_TEST_SECONDS-1
+    else:
+        end=min(last,RENDER_FPS*RENDER_TEST_SECONDS-1) if payload.mode=='test' else last
+    shots=camera_shots(row,prepared) if visual else None
+    shots_path=STORE/identity/'camera_shots.json'
+    if visual:
+        if shots:
+            shots_path.write_text(json.dumps(shots,indent=2)+'\n',encoding='utf-8')
+        else:
+            shots_path.unlink(missing_ok=True)
     with RENDER_LOCK:
         if render_job.get('status')=='running':
             raise HTTPException(409,'A render is already running')
@@ -1190,9 +1323,14 @@ def start_render(identity: str, payload: RenderInput):
             # A full render runs until the last note has faded; the script reports that frame range.
             command=[str(BLENDER),'-b',str(scene),'--python-exit-code','1','--python',str(PIANO_VISUAL_SCRIPT),'--',
                      '--json',str(view_path),'--wav',row['wav_path'],'--offset',str(row['offset']),
-                     '--out',str(output),'--fps',str(RENDER_FPS),'--start','0','--effect',piano_effect(row)]
+                     '--out',str(output),'--fps',str(RENDER_FPS),'--start',str(start),'--effect',piano_effect(row),
+                     '--colors',piano_colors(row)]
+            if shots:
+                command+=['--camera',str(shots_path)]
             if payload.mode=='test':
                 command+=['--end',str(end),*PIANO_VISUAL_TEST_OPTIONS]
+            else:
+                command+=[*PIANO_VISUAL_FULL_OPTIONS]
         else:
             command=[str(BLENDER),'-b',str(scene),'--python-exit-code','1','--python',str(RENDER_SCRIPT),'--',
                      '--json',str(view_path),'--wav',row['wav_path'],'--offset',str(row['offset']),
@@ -1201,7 +1339,7 @@ def start_render(identity: str, payload: RenderInput):
         render_process=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
                                         text=True,bufsize=1,cwd=ROOT)
         render_job=dict(id=uuid.uuid4().hex,song_id=identity,song_name=row['name'],revision=row['revision'],
-                        mode=payload.mode,status='running',frame=None,frame_start=0,frame_end=end,
+                        mode=payload.mode,status='running',frame=None,frame_start=start,frame_end=end,
                         fps=RENDER_FPS,started=time.time(),finished=None,output=str(output),error=None)
         threading.Thread(target=watch_render,args=(render_process,render_job),daemon=True).start()
         return render_status()

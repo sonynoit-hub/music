@@ -12,7 +12,7 @@ def create_app():
     except ImportError as exc:
         raise RuntimeError("Install FastAPI to run the API: python -m pip install fastapi uvicorn") from exc
 
-    app = FastAPI(title="Guitar Video App")
+    app = FastAPI(title="Music Video Studio")
 
     class MidiBuildRequest(BaseModel):
         midi_path: str

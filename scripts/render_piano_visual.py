@@ -1,6 +1,7 @@
 """Render a piano view on PIANO_VISUAL with rising musical notes (or glowing plumes), without the Blender UI.
 
-Blender -b outputs/piano-visual.blend --python scripts/render_piano_visual.py -- --json piano_view.json [--wav AUDIO.wav] [options]
+Blender -b outputs/piano-visual.blend --python scripts/render_piano_visual.py -- --json piano_view.json [--wav AUDIO.wav]
+    [--camera camera_shots.json] [options]
 
 The .blend is not saved. --stills 4.5,8 renders PNGs at those seconds into --out (a folder) instead of a video.
 """
@@ -12,7 +13,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import bpy
-from guitar_video_app.integrations.piano_visual_particles import EFFECTS, install
+from guitar_video_app.integrations.piano_visual_particles import COLORS, EFFECTS, install
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--json', type=Path, required=True, help='A version 1 piano view.')
@@ -23,6 +24,10 @@ parser.add_argument('--fps', type=int, default=30, help='Frame rate; timing is i
 parser.add_argument('--start', type=int, help='First frame; defaults to the lesson start.')
 parser.add_argument('--end', type=int, help='Last frame; defaults to when the last note has faded.')
 parser.add_argument('--effect', choices=EFFECTS, default='notes', help='Rising note symbols, or particle plumes.')
+parser.add_argument('--colors', choices=COLORS, default='blue',
+                    help='Colour theme; hands colours right-hand notes orange and left-hand notes blue.')
+parser.add_argument('--camera', type=Path,
+                    help='A version 1 camera shots file (camera_shots.json); omitted keeps the single wide view.')
 parser.add_argument('--scale', type=int, default=100, help='Resolution percentage.')
 parser.add_argument('--samples', type=int, help='EEVEE samples; defaults to the scene value.')
 parser.add_argument('--stills', help='Comma-separated seconds to render as PNG stills into --out.')
@@ -31,7 +36,8 @@ args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 scene = bpy.context.scene
 data = json.loads(args.json.read_text())
 data['fps'] = args.fps
-print(install(data, effect=args.effect), flush=True)
+shots = json.loads(args.camera.read_text()) if args.camera else None
+print(install(data, effect=args.effect, colors=args.colors, camera=shots), flush=True)
 
 editor = scene.sequence_editor_create()
 for strip in [s for s in editor.strips if s.type == 'SOUND']:
