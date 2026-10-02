@@ -236,12 +236,41 @@ PYTHONPATH=work python3 -m guitar_video_app.cli render input.mid outputs/lesson.
 
 This currently builds the MIDI chart, sends it to Blender, and configures the render output path. Rendering execution can be triggered from Blender after inspection.
 
+## Compositing over a background (piano stage)
+
+A piano song on the PIANO_VISUAL stage (Piano look Musical notes or Particle plumes) can be rendered as a transparent foreground for a background video made separately, for example by an AI video generator, and put together in DaVinci Resolve. This project does not make the background. Test 4 s and Render full still make MP4 previews.
+
+In the dashboard, under Render video, use the "For compositing" row:
+
+- **Reference frames** writes one set of stills per camera shot into `data/dashboard/<song>/renders/<name> reference/`. Each set has a reference (grey floor and background), a guide (floor grid, red horizon, yellow safe box, blue space for the rising notes) and a mask (white where the piano and notes go), plus `cameras.json`. Give the reference or guide to the video generator so its scene matches the camera's perspective and horizon and keeps the masked space clear. Make one still-camera clip per shot, as long as the shot (frames in `cameras.json`).
+- **Layers (PNG)** writes the whole song, full size, into `<name> layers/`: the folders `instrument`, `notes`, `shadow` and `fx` of 16-bit RGBA PNGs, and `composite.json`. It is several times slower than Render full: one second of song at half size took about 3.5 minutes for the four layers on an M1 with 8 GB, and full size takes longer.
+
+Show in Finder opens the folder. From the command line:
+
+```sh
+Blender -b outputs/piano-visual.blend --python scripts/render_piano_visual.py -- --json piano_view.json \
+    --wav final.wav --camera camera_shots.json --out renders/song-layers --layers          # all layers
+Blender -b outputs/piano-visual.blend --python scripts/render_piano_visual.py -- --json piano_view.json \
+    --camera camera_shots.json --out renders/song-reference --reference-frames
+```
+
+Every shot is held still in these renders (its move becomes static and every change a cut), so a still background clip lines up with it. To match the Test 4 s preview, use Static moves and Cut transitions in the Camera strip.
+
+In Resolve (settings in `composite.json`):
+
+1. Set the timeline to the render's fps (30) and 1080×1920.
+2. Import each layer folder as an image sequence and stack, bottom to top: the background clips (one per shot, at the frames in `shots`), `shadow` (composite mode Multiply), `instrument`, `fx` (Add or Screen) and `notes` (Normal). The PNGs have straight alpha; if edges look dark or fringed, set the clip's alpha mode to Straight.
+3. Add the final WAV as the audio, starting at `audio.start_frame`. The layers carry no audio.
+4. Add glow in Resolve (for example Glow on the `notes` and `fx` layers). Blender's bloom is off in the layers so the glow can spread over the background.
+
+The colours are already in Blender's AgX view, like the MP4. Formats: `docs/JSON_SCHEMA.md`, "Compositing files"; design: decision 40.
+
 ## Checks
 
 Run every verify script, the Blender ones in background Blender, with one pass/fail line each:
 
 ```sh
-.venv/bin/python scripts/verify_all.py            # all checks, about 2 minutes
+.venv/bin/python scripts/verify_all.py            # all checks, about 2 to 3 minutes
 .venv/bin/python scripts/verify_all.py --only piano
 ```
 

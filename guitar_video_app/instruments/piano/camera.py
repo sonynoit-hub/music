@@ -225,6 +225,12 @@ def validate(plan: dict, prepared: dict) -> dict:
     return dict(version=VERSION, shots=checked)
 
 
+def locked(plan: dict) -> dict:
+    """The shot list with every shot static and cut in: one fixed perspective per shot, so a background made
+    separately (which cannot follow camera moves) can be composited behind each shot."""
+    return dict(version=VERSION, shots=[dict(shot, move='static', transition='cut') for shot in plan['shots']])
+
+
 # Notes and focus
 
 def timed_keys(prepared: dict) -> list[tuple[float, float, float]]:

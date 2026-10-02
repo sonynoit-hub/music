@@ -203,6 +203,23 @@ def preset_checks():
     assert state['target'] == camera.WIDE_TARGET and state['lens'] == camera.WIDE_LENS
 
 
+def locked_checks(prepared, plan):
+    """camera.locked keeps bars and cameras, and every shot holds one camera from its cut to the next."""
+    still = camera.locked(plan)
+    assert [(s['start_bar'], s['camera']) for s in still['shots']] == \
+           [(s['start_bar'], s['camera']) for s in plan['shots']]
+    assert all(s['move'] == 'static' and s['transition'] == 'cut' for s in still['shots'])
+    assert camera.validate(still, prepared) == still
+    path = camera.camera_path(prepared, still)
+    for shot in path.shots:
+        first = shot.state(shot.start)
+        for t in (shot.start + 0.5 * (shot.end - shot.start), shot.end - 1e-3):
+            later = path.camera_at(t)
+            assert all(abs(a - b) < 1e-9 for a, b in zip(first['location'], later['location'])), t
+            assert all(abs(a - b) < 1e-9 for a, b in zip(first['target'], later['target'])), t
+    return len(path.shots)
+
+
 def main():
     preset_checks()
     long, short = long_song(), short_song()
@@ -227,11 +244,13 @@ def main():
         if b['transition'] == 'blend':
             assert camera.view_turn(a['camera'], b['camera']) <= camera.BLEND_TURN, (a, b)
     errors = validation_checks(short)
+    locked_shots = locked_checks(long, plan)
     print(json.dumps(plan))
     print(f'Auto: {len(plan["shots"])} shots on bars {starts}, {len(short_plan["shots"])} on the short song, '
           f'blending only between close views; {checked + short_checked} sounding-key frames inside the safe box; '
           f'every preset and move fits; focus at most {top:.3f} m/s; blends at most {glide:.2f} m/s and '
-          f'{kick:.1f} m/s2, gliding in and out; {errors} bad shot lists refused.')
+          f'{kick:.1f} m/s2, gliding in and out; {errors} bad shot lists refused; locked for compositing, '
+          f'{locked_shots} shots each hold one camera.')
     print('verify_piano_camera: OK')
 
 

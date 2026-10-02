@@ -261,6 +261,68 @@ An optional shot list for a piano song on the PIANO_VISUAL stage, kept apart fro
 - No other fields are allowed. A list that no longer fits the song (for example, after the lesson got shorter) is refused with a message rather than trimmed.
 - Times come from the view's tempo map, not from bars at a fixed tempo, so tempo changes move the cuts with the music.
 
+## Compositing Files
+
+Written by `scripts/render_piano_visual.py` for compositing a PIANO_VISUAL foreground over a background made elsewhere (decision 40). They describe a render and are not read back by this project. Every shot is held still in these renders (`camera.locked`), so each shot has one camera.
+
+`composite.json`, beside the layer folders written by `--layers`:
+
+```json
+{
+  "version": 1,
+  "fps": 30,
+  "resolution": [1080, 1920],
+  "frame_start": 0,
+  "frame_end": 812,
+  "effect": "notes",
+  "colors": "blue",
+  "layers": [
+    {"name": "instrument", "pattern": "instrument/instrument_####.png", "engine": "BLENDER_EEVEE"},
+    {"name": "notes", "pattern": "notes/notes_####.png", "engine": "BLENDER_EEVEE"},
+    {"name": "shadow", "pattern": "shadow/shadow_####.png", "engine": "CYCLES"},
+    {"name": "fx", "pattern": "fx/fx_####.png", "engine": "BLENDER_EEVEE"}
+  ],
+  "stack_bottom_to_top": ["background", "shadow", "instrument", "fx", "notes"],
+  "color": {"view_transform": "AgX", "png_alpha": "straight", "depth": 16},
+  "audio": {"wav": "/abs/path/final.wav", "offset_seconds": 0.0, "start_frame": 0},
+  "shots": [{"shot": 1, "start_bar": 1, "camera": "hero", "frame_start": 0, "frame_end": 178}]
+}
+```
+
+- `####` is the frame number, padded to 4 digits; frames are numbered as in Blender (`frame_start` to `frame_end`).
+- `layers` lists what was rendered: plumes have no `notes` layer, and `--layers NAME ...` renders only some.
+- PNGs are 16-bit RGBA with straight (unpremultiplied) alpha, already in the AgX view transform like the MP4.
+- `audio.start_frame` is where the WAV starts on the timeline (offset × fps; a negative offset starts it before frame 0).
+- `shots` lists the shots in the rendered frame range; without camera shots it is one `wide` shot.
+
+`cameras.json`, beside the images written by `--reference-frames`:
+
+```json
+{
+  "version": 1,
+  "fps": 30.0,
+  "resolution": [1080, 1920],
+  "safe_box": {"left": 0.04, "right": 0.86, "bottom": 0.2, "top": 0.92},
+  "shots": [{
+    "shot": 1, "start_bar": 1, "camera": "hero",
+    "frame_start": 0, "frame_end": 178, "seconds_start": 0.0, "seconds_end": 5.967,
+    "lens_mm": 40.0, "sensor_mm": 36.0, "sensor_fit": "AUTO", "shift_x": 0.028, "shift_y": 0.1,
+    "fov_vertical_degrees": 48.46,
+    "location": [-0.635, -1.075, 1.425], "rotation_euler_degrees": [66.0, 0.0, -28.0],
+    "rotation_quaternion": [0.814, 0.528, -0.132, -0.203],
+    "horizon_from_bottom": 0.895, "floor_z": 0.0,
+    "note_space": [[0.12, 0.25], [0.95, 0.40], [0.90, 0.67], [0.05, 0.59]],
+    "files": {"reference": "shot_01_bar_001_reference.png", "guide": "shot_01_bar_001_guide.png",
+              "mask": "shot_01_bar_001_mask.png"}
+  }]
+}
+```
+
+- Lengths are metres in Blender world space (Z up, floor at `floor_z`); the camera looks along its local -Z. The 36 mm sensor fits the frame's height (portrait, `AUTO`).
+- Image positions (`safe_box`, `horizon_from_bottom`, `note_space`) are fractions of the frame, 0 to 1 from the left and from the bottom. They can fall outside 0 to 1 when off-frame. `horizon_from_bottom` is null when the camera looks straight down.
+- `note_space` is the outline of the box above the keys that the rising notes use.
+- Files, per shot: the opaque reference (grey floor to the horizon, grey background), the guide (the same with a 25 cm floor grid, red horizon, yellow safe box, blue note space) and the mask (white where the piano and notes go, black where the background shows).
+
 ## Tab File
 
 A published tab written as data, read by `read_tab` in `guitar_video_app/instruments/guitar/tab.py` into a V3 lesson and fitted to the recording (dashboard Tab row or `scripts/import_tab.py`). It is Lesson V2 without the timing that comes from the audio:

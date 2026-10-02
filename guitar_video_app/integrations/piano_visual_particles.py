@@ -33,6 +33,7 @@ from guitar_video_app.integrations.piano_lesson import key_events, key_state
 COLLECTION = 'PIANO_VISUAL_PARTICLES'
 OBJECT = f'{pv.PREFIX}_Plumes'
 TREE = 'PV_Plumes'
+MODIFIER = 'PV_Plumes'
 MATERIAL = 'PV_Plume'
 GLOW_TREE = 'PV_Glow'
 HANDLER = 'piano_visual_particles_controller'
@@ -424,7 +425,7 @@ def _plume_object(notes, effect='plumes', colors='blue'):
         tree = piano_visual_notes.notes_tree(collection)
     else:
         tree = plume_tree()
-    obj.modifiers.new('PV_Plumes', 'NODES').node_group = tree
+    obj.modifiers.new(MODIFIER, 'NODES').node_group = tree
     # Solid view shows one flat colour per material: the theme's neutral.
     for mat in (bpy.data.materials.get(n) for n in (MATERIAL, 'PV_NoteGlyph')):
         if mat:

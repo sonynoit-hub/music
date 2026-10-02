@@ -37,16 +37,26 @@ def midi_bytes():
 
 
 class FakeRender:
-    """Stands in for background Blender: reports a frame range and frames, then writes the video file."""
+    """Stands in for background Blender: reports a frame range and frames, then writes the video file (or the
+    layer / reference folder)."""
     calls = []
 
     def __init__(self, args, **_):
         FakeRender.calls.append(args)
         self.output = Path(args[args.index('--out') + 1])
-        self.stdout = iter(['Frame range: 0-150\n', 'Frame written: 0\n', 'Frame written: 150\n'])
+        self.folder = '--layers' in args or '--reference-frames' in args
+        if '--reference-frames' in args:
+            self.stdout = iter(['Reference written: shot 1 (bar 1, hero)\n', 'Reference written: shot 2 (bar 2, close)\n'])
+        else:
+            layers = ['Layer 1/2: instrument\n', 'Frame written: 150\n', 'Layer 2/2: notes\n'] if self.folder else []
+            self.stdout = iter(['Frame range: 0-150\n', *layers, 'Frame written: 0\n', 'Frame written: 150\n'])
 
     def wait(self):
-        self.output.write_bytes(b'video')
+        if self.folder:
+            self.output.mkdir(parents=True)
+            (self.output / 'frame_0000.png').write_bytes(b'png')
+        else:
+            self.output.write_bytes(b'video')
         return 0
 
     def terminate(self):
@@ -138,6 +148,38 @@ def camera_checks(dashboard, song_id):
     dashboard.put_camera(song_id, CameraShotsInput(**plan))
 
 
+def compositing_checks(dashboard, song_id):
+    """Test and full stay MP4 previews; layers and reference frames are folders with their own progress."""
+    for mode in ('test', 'full'):
+        args, job = render(dashboard, song_id, mode)
+        assert job['format'] == 'mp4' and job['output'].endswith('.mp4'), job
+        assert not {'--layers', '--reference-frames', '--passes'} & set(args), args
+    assert str(dashboard.render_video().path).endswith('.mp4')
+
+    args, job = render(dashboard, song_id, 'layers')
+    assert '--layers' in args and '--end' not in args and '--scale' not in args, 'layers are the whole song, full size'
+    assert args[args.index('--samples') + 1] == '32' and '--camera' in args, args
+    output = Path(args[args.index('--out') + 1])
+    assert output.name == 'Plume test layers' and job['format'] == 'folder' and output.is_dir(), job
+    assert (job['part'], job['parts'], job['part_name']) == (2, 2, 'notes'), job
+    assert 'Show in Finder' in refused(dashboard.render_video)
+    opened = []
+    real = dashboard.subprocess.run
+    dashboard.subprocess.run = lambda command, **_: opened.append(command)
+    try:
+        assert dashboard.reveal_render()['path'] == str(output)
+    finally:
+        dashboard.subprocess.run = real
+    assert opened == [['open', str(output)]], opened
+    args, job = render(dashboard, song_id, 'layers')
+    assert Path(args[args.index('--out') + 1]).name == 'Plume test layers 2', 'an earlier layer render was replaced'
+
+    args, job = render(dashboard, song_id, 'reference')
+    assert '--reference-frames' in args and '--layers' not in args and '--camera' in args, args
+    assert Path(args[args.index('--out') + 1]).name == 'Plume test reference' and job['format'] == 'folder'
+    assert (job['part'], job['parts']) == (2, 2), job
+
+
 def dashboard_checks():
     with tempfile.TemporaryDirectory() as store:
         os.environ['GUITAR_DASHBOARD_STORE'] = store
@@ -162,6 +204,8 @@ def dashboard_checks():
         assert 'piano_look' not in lesson_command and lesson_command['instrument'] == 'piano'
         args, _ = render(dashboard, song_id, 'test')
         assert str(dashboard.PIANO_RENDER_SCENE) in args and str(dashboard.RENDER_SCRIPT) in args
+        for mode in dashboard.COMPOSITING_MODES:
+            assert 'piano stage' in refused(render, dashboard, song_id, mode), 'compositing needs PIANO_VISUAL'
 
         revision = row['revision']
         row = update_piano_look(song_id, PianoLookInput(look='visual'))
@@ -190,6 +234,7 @@ def dashboard_checks():
         assert args[args.index('--samples') + 1] == '32', args
         assert job['frame_end'] == 150, 'the frame range reported by the render script was not used'
         camera_checks(dashboard, song_id)
+        compositing_checks(dashboard, song_id)
 
         row = update_piano_look(song_id, PianoLookInput(look='plumes'))
         assert row['piano_look'] == 'plumes'
@@ -304,5 +349,7 @@ if __name__ == '__main__':
               'by default, or plumes) and note colours (blue by default) only for piano songs on the particle stage; '
               'test render is a half-size PIANO_VISUAL draft to frame 119 (or 4 s from a shot\'s bar), full render '
               'runs at full size and 32 samples to the reported end; camera shots (NULL is the wide view) are checked, saved with one revision '
-              'bump, suggested by Auto, deleted, sent and passed to the render as camera_shots.json; lesson look and '
+              'bump, suggested by Auto, deleted, sent and passed to the render as camera_shots.json; test and full '
+              'stay MP4, layers (whole song, 32 samples) and reference frames render to numbered folders with '
+              'progress per layer or shot and Show in Finder, and are refused for the lesson look; lesson look and '
               'guitar unchanged. ' + blender)

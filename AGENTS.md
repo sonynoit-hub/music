@@ -32,6 +32,10 @@ Piano songs use `outputs/piano-vertical.blend`, built from code by `scripts/make
 
 Do not overwrite `outputs/reference-guitar.blend` unless explicitly requested.
 
+## Compositing Renders (PIANO_VISUAL)
+
+Foregrounds for a background made elsewhere (for example an AI video, composited in DaVinci Resolve) are transparent RGBA PNG sequences per layer (instrument, notes, shadow, fx) with no background or bloom baked in, from `scripts/render_piano_visual.py --layers`; reference frames come from `--reference-frames`. MP4 stays the format for Test 4 s and Render full previews. The layers are set up at render time by `guitar_video_app/integrations/compositing.py` and removed afterwards; never save them into a `.blend`. This project does not generate backgrounds. See decision 40 and the README section "Compositing over a background".
+
 ## V1 Boundaries
 
 V1 includes MIDI parsing, musical timing analysis, guitar mapping, normalized JSON export, final WAV sync, and Blender rendering.

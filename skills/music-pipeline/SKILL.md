@@ -44,6 +44,7 @@ Follow this sequence for each new song:
    For piano, set the song's instrument to Piano in the dashboard before importing: hands come from the MIDI file's left- and right-hand tracks when it has them, otherwise they are planned (`instruments/piano/hands.py`). Check the piano roll, click notes to flip a wrong hand, then Plan hands to re-plan the rest around your choices.
 6. Import into Blender:
    - Start from the selected reusable scene, currently `outputs/v4-vertical.blend` unless the user chooses another file. Piano songs use `outputs/piano-vertical.blend` (rebuild it with `Blender -b --factory-startup --python scripts/make_piano_scene.py`), or `outputs/piano-visual.blend` when the song's Piano look is Musical notes or Particle plumes (rebuild it with `scripts/make_piano_visual_scene.py`; render with `scripts/render_piano_visual.py`, which shows blue notes unless given `--effect plumes` or `--colors white|gold|hands`). For a short with several camera views, choose Shots in the dashboard's Camera section and press Auto, then fix it in the Camera by bar strip under the piano roll: click a bar (shift-click or drag for several) and pick a camera, move or transition for those bars. Use Test 4 s from the selected shot to check it. Renders pass the list as `--camera camera_shots.json` (format: `docs/JSON_SCHEMA.md`, "Piano camera shots"). Without a list the presentation camera is used.
+   - For a background made elsewhere (an AI video, composited in DaVinci Resolve), render Reference frames first (one reference, guide and mask per shot plus `cameras.json`) for the background maker, then Layers (PNG): transparent RGBA sequences of instrument, notes, shadow and fx plus `composite.json` (`scripts/render_piano_visual.py --reference-frames` / `--layers`; README "Compositing over a background"). Shots are held still in both. Keep Test 4 s and Render full as MP4 previews.
    - Load normalized JSON.
    - Remove prior song-specific measures, notes, tabs, animations, and audio.
    - Preserve reusable scene, guitar model, camera, panel, staff, material, lighting, and render setup.
@@ -76,6 +77,7 @@ When the user gives a published tab (image or PDF) for a song whose audio is in 
 - Do not add out-of-scope music-analysis features to V1 unless the roadmap is intentionally updated.
 - Do not preserve old song-specific data during a new-song import.
 - Do not overwrite `outputs/reference-guitar.blend` unless explicitly requested.
+- Do not save compositing view layers, holdouts, shadow-catcher settings or the Parts split into a `.blend`; `integrations/compositing.py` builds them at render time and `teardown()` removes them.
 
 ## Update Rules
 

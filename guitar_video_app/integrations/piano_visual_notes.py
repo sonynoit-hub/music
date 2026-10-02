@@ -47,6 +47,8 @@ TRAIL_SCATTER = 0.03         # m/s
 TRAIL_GLOW = 6.0
 TRAIL_RADIUS = 0.0018
 PART_GLYPH, PART_HALO, PART_TRAIL = 0.0, 1.0, 2.0
+PARTS_INPUT = 'Parts'
+PARTS_ALL, PARTS_NOTES, PARTS_FX = 0, 1, 2
 
 
 def life(note):
@@ -203,8 +205,26 @@ def notes_tree(collection):
     glows = g.node('GeometryNodeJoinGeometry')
     g.feed(glows.inputs[0], sparks)
     g.feed(glows.inputs[0], halo)
+
+    # Parts: PARTS_ALL (default), PARTS_NOTES (symbols only) or PARTS_FX (halos and sparkles only), so compositing
+    # renders the notes and their effects as separate layers from one set of events.
+    socket = g.tree.interface.new_socket(PARTS_INPUT, in_out='INPUT', socket_type='NodeSocketInt')
+    socket.default_value, socket.min_value, socket.max_value = PARTS_ALL, PARTS_ALL, PARTS_FX
+    parts = g.node('NodeGroupInput').outputs[PARTS_INPUT]
+    glyphs = g.geometry('GeometryNodeDeleteGeometry', glyphs, domain='POINT',
+                        Selection=m('COMPARE', parts, PARTS_FX, 0.1)).outputs[0]
+    effects = g.geometry('GeometryNodeDeleteGeometry', particles.sprites(g, glows.outputs[0]), domain='POINT',
+                         Selection=m('COMPARE', parts, PARTS_NOTES, 0.1)).outputs[0]
     everything = g.node('GeometryNodeJoinGeometry')
-    g.feed(everything.inputs[0], particles.sprites(g, glows.outputs[0]))
+    g.feed(everything.inputs[0], effects)
     g.feed(everything.inputs[0], glyphs)
     g.feed(output.inputs[0], everything.outputs[0])
     return g.tree
+
+
+def set_parts(obj, parts):
+    """Show all of a notes object's parts, only the symbols or only the halos and sparkles."""
+    modifier = obj.modifiers[particles.MODIFIER]
+    identifier = modifier.node_group.interface.items_tree[PARTS_INPUT].identifier
+    getattr(modifier.properties.inputs, identifier).value = parts
+    obj.update_tag()

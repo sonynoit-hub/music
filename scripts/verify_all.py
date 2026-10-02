@@ -38,6 +38,7 @@ CHECKS = [
     ('verify_piano_visual_notes.py', 'outputs/piano-visual.blend'),
     ('verify_piano_visual_particles.py', 'outputs/piano-visual.blend'),
     ('verify_piano_visual_camera.py', 'outputs/piano-visual.blend'),
+    ('verify_piano_visual_layers.py', 'outputs/piano-visual.blend'),
 ]
 
 

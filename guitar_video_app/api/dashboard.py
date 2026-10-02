@@ -67,6 +67,9 @@ RENDER_TEST_SECONDS = 4
 RENDER_LOCK = threading.Lock()
 FRAME_LINE = re.compile(r'^Frame written:\s*(\d+)')
 FRAME_RANGE_LINE = re.compile(r'^Frame range:\s*(\d+)-(\d+)')
+LAYER_LINE = re.compile(r'^Layer (\d+)/(\d+):\s*(\w+)')
+REFERENCE_LINE = re.compile(r'^Reference written: shot (\d+)')
+COMPOSITING_MODES = ('layers','reference')
 # Messages from the user's Blender startup script; they do not affect background renders.
 HARMLESS_RENDER_ERRORS = ('_RestrictData', 'Address already in use')
 render_job = {}
@@ -474,6 +477,15 @@ def render_path(folder, name, mode):
     path,count=folder/f'{stem}.mp4',2
     while path.exists():
         path,count=folder/f'{stem} {count}.mp4',count+1
+    return path
+
+
+def render_folder_path(folder, name, mode):
+    """Folder for compositing renders (layers or reference frames); a number is added instead of replacing one."""
+    stem=f'{file_stem(name)} {mode}'
+    path,count=folder/stem,2
+    while path.exists():
+        path,count=folder/f'{stem} {count}',count+1
     return path
 
 
@@ -1238,7 +1250,8 @@ def save_blender():
 
 
 class RenderInput(BaseModel):
-    mode: Literal['test','full'] = 'test'
+    # layers and reference are PIANO_VISUAL renders for compositing over a background made elsewhere.
+    mode: Literal['test','full','layers','reference'] = 'test'
     # A PIANO_VISUAL test render can start on a bar (a shot's first bar) instead of the beginning.
     start_bar: int | None = Field(default=None,ge=1)
 
@@ -1261,12 +1274,22 @@ def watch_render(process, job):
         span=FRAME_RANGE_LINE.search(line)
         if span:
             job['frame_start'],job['frame_end']=int(span.group(1)),int(span.group(2))
+        layer=LAYER_LINE.search(line)
+        if layer:
+            job['part'],job['parts'],job['part_name'],job['frame']=int(layer.group(1)),int(layer.group(2)),layer.group(3),None
+        reference=REFERENCE_LINE.search(line)
+        if reference:
+            job['part']=int(reference.group(1))
     code=process.wait()
     with RENDER_LOCK:
         output=Path(job['output'])
+        complete=output.exists() and (any(output.rglob('*.png')) if output.is_dir() else output.stat().st_size)
         if job['status']=='cancelled':
-            output.unlink(missing_ok=True)
-        elif code==0 and output.exists() and output.stat().st_size:
+            if output.is_dir():
+                shutil.rmtree(output,ignore_errors=True)
+            else:
+                output.unlink(missing_ok=True)
+        elif code==0 and complete:
             job['status']='done'
             job['frame']=job['frame_end']
         else:
@@ -1286,6 +1309,9 @@ def start_render(identity: str, payload: RenderInput):
         raise HTTPException(503,f'Blender was not found at {BLENDER}')
     instrument=song_instrument(row)
     visual=piano_visual(row)
+    folder_render=payload.mode in COMPOSITING_MODES
+    if folder_render and not visual:
+        raise HTTPException(400,'Layers and reference frames are for the piano stage; choose the Musical notes or Plumes look.')
     scene=PIANO_VISUAL_SCENE if visual else PIANO_RENDER_SCENE if instrument=='piano' else RENDER_SCENE
     if not scene.exists():
         builder='make_piano_visual_scene.py' if visual else 'make_piano_scene.py'
@@ -1317,7 +1343,7 @@ def start_render(identity: str, payload: RenderInput):
             raise HTTPException(409,'A render is already running')
         folder=STORE/identity/'renders'
         folder.mkdir(parents=True,exist_ok=True)
-        output=render_path(folder,row['name'],payload.mode)
+        output=(render_folder_path if folder_render else render_path)(folder,row['name'],payload.mode)
         title,subtitle=video_title(row)
         if visual:
             # A full render runs until the last note has faded; the script reports that frame range.
@@ -1329,8 +1355,12 @@ def start_render(identity: str, payload: RenderInput):
                 command+=['--camera',str(shots_path)]
             if payload.mode=='test':
                 command+=['--end',str(end),*PIANO_VISUAL_TEST_OPTIONS]
+            elif payload.mode=='reference':
+                command+=['--reference-frames']
             else:
                 command+=[*PIANO_VISUAL_FULL_OPTIONS]
+                if payload.mode=='layers':
+                    command+=['--layers']
         else:
             command=[str(BLENDER),'-b',str(scene),'--python-exit-code','1','--python',str(RENDER_SCRIPT),'--',
                      '--json',str(view_path),'--wav',row['wav_path'],'--offset',str(row['offset']),
@@ -1340,7 +1370,9 @@ def start_render(identity: str, payload: RenderInput):
                                         text=True,bufsize=1,cwd=ROOT)
         render_job=dict(id=uuid.uuid4().hex,song_id=identity,song_name=row['name'],revision=row['revision'],
                         mode=payload.mode,status='running',frame=None,frame_start=start,frame_end=end,
-                        fps=RENDER_FPS,started=time.time(),finished=None,output=str(output),error=None)
+                        fps=RENDER_FPS,started=time.time(),finished=None,output=str(output),error=None,
+                        format='folder' if folder_render else 'mp4',part=None,
+                        parts=len(shots['shots']) if payload.mode=='reference' and shots else 1,part_name=None)
         threading.Thread(target=watch_render,args=(render_process,render_job),daemon=True).start()
         return render_status()
 
@@ -1365,8 +1397,21 @@ def render_video(download: bool = False):
     if render_job.get('status')!='done':
         raise HTTPException(404,'No finished render')
     path=Path(render_job['output'])
+    if path.is_dir():
+        raise HTTPException(400,'This render is a folder for compositing, not a video; use Show in Finder.')
     return FileResponse(path,media_type='video/mp4',filename=path.name,
                         content_disposition_type='attachment' if download else 'inline')
+
+
+@app.post('/api/render/reveal')
+def reveal_render():
+    if render_job.get('status')!='done':
+        raise HTTPException(404,'No finished render')
+    path=Path(render_job['output'])
+    if not path.exists():
+        raise HTTPException(404,f'{path.name} is no longer there')
+    subprocess.run(['open',str(path)] if path.is_dir() else ['open','-R',str(path)],check=False)
+    return dict(path=str(path))
 
 
 def seed():
