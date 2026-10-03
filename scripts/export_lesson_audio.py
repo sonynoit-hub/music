@@ -1,4 +1,4 @@
-"""Export a V2 JSON lesson to MIDI and optionally macOS sampled guitar audio."""
+"""Export a guitar or bass lesson to MIDI and optionally macOS sampled audio (one sampler per string)."""
 import argparse
 from pathlib import Path
 import subprocess

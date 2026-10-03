@@ -36,6 +36,19 @@ The Music Analyzer uses the time-signature map to determine:
 - Beat positions within measures.
 - The measure number for each note.
 
+A lesson has one time signature for the whole song. The dashboard can change it (`set_time_signature`):
+notes keep their quarter-note beats and seconds, tempo changes stay at their beats, and only measure
+boundaries move; the end moves to a measure boundary. A 6/8 measure is three quarter-note beats.
+
+## Timing A Transcription
+
+Generate MIDI fits one tempo and a measure start to the transcribed note times (`suggest_grid`), then
+gives a measure its own tempo only when that puts clearly more notes on the grid (`fit_tempo_map`).
+The measure start is the beat nearest the first note, except for an instrument transcribed as one line
+(a bass): its measures start where its long, low notes (its roots) land, so a pickup stays a pickup,
+and a tempo change must fix at least six notes (`root_downbeat`, `LINE_TEMPO_CHANGE_COST`, decision 47).
+First beat and Apply timing still move bar 1 by hand.
+
 ## Notes
 
 Each note must preserve:

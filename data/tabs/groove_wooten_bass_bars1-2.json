@@ -1,0 +1,25 @@
+{
+ "title": "Groove",
+ "artist": "Victor Wooten",
+ "instrument": "bass",
+ "source": "Bars 1-2 of a tab-video screenshot (4/4); bar 1 is a pickup from beat 3; the two x notes have no fret in the tab and use fret 7, where the hand is; bar 2 beats 2-2.5 (x, 0, 7) timed from the recording's onsets; bar 2 after its first two 16ths on beat 4 was cut off",
+ "tempo_bpm": 100,
+ "time_signature": [4, 4],
+ "end_beat": "8",
+ "notes": [
+  {"string": 3, "fret": 10, "start_beat": "9/4", "duration_beats": "1/4"},
+  {"string": 2, "fret": 9, "start_beat": "5/2", "duration_beats": "1/2"},
+  {"string": 2, "fret": 12, "start_beat": "3", "duration_beats": "1/2"},
+  {"string": 1, "fret": 9, "start_beat": "7/2", "duration_beats": "1/4"},
+  {"string": 1, "fret": 12, "start_beat": "15/4", "duration_beats": "1/4"},
+  {"string": 4, "fret": 0, "start_beat": "4", "duration_beats": "1/2"},
+  {"string": 2, "fret": 7, "start_beat": "9/2", "duration_beats": "1/2", "muted": true},
+  {"string": 1, "fret": 7, "start_beat": "5", "duration_beats": "1/4", "muted": true},
+  {"string": 4, "fret": 0, "start_beat": "21/4", "duration_beats": "1/4"},
+  {"string": 4, "fret": 7, "start_beat": "11/2", "duration_beats": "1/2"},
+  {"string": 3, "fret": 5, "start_beat": "6", "duration_beats": "1/2"},
+  {"string": 4, "fret": 0, "start_beat": "13/2", "duration_beats": "1/2"},
+  {"string": 2, "fret": 9, "start_beat": "7", "duration_beats": "1/4"},
+  {"string": 2, "fret": 9, "start_beat": "29/4", "duration_beats": "1/4"}
+ ]
+}

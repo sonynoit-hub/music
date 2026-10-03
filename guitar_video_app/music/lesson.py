@@ -21,10 +21,27 @@ def check_timing(fps, signature) -> Fraction:
     """Validate the frame rate and time signature; returns the measure length in beats."""
     if type(fps) is not int or not 1 <= fps <= 240:
         raise ValueError('FPS must be an integer from 1 to 240.')
+    return check_signature(signature)
+
+
+def check_signature(signature) -> Fraction:
+    """Validate a [numerator, denominator] time signature; returns the measure length in beats."""
     if (len(signature) != 2 or any(type(v) is not int for v in signature)
             or signature[0] <= 0 or signature[1] not in (1, 2, 4, 8, 16)):
         raise ValueError('Invalid time signature.')
     return measure_beats(signature)
+
+
+def set_time_signature(music: dict, signature) -> None:
+    """Re-bar the music layer in a new time signature: notes, tempo changes and every time in seconds
+    stay put; only the bar lines move. The end moves to the bar line after the last note, or to the
+    last whole new bar within the old end when that is later, so switching back and forth keeps it."""
+    measure = check_signature(list(signature))
+    last = max((beat(n['start_beat']) + beat(n['duration_beats']) for n in music['notes']), default=Fraction(0))
+    old_end = beat(music['end_beat']) if music.get('end_beat') is not None else last
+    bars = max(1, math.ceil(last / measure), math.floor(old_end / measure))
+    music['time_signature'] = list(signature)
+    music['end_beat'] = str(bars * measure)
 
 
 def timed_notes(items, tempos, fps, slot, check=None, slot_name='pitch') -> list[dict]:

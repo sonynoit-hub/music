@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import product
 
+from guitar_video_app.instruments.fretted import GUITAR_SPEC, Fretted
 from guitar_video_app.instruments.guitar.schema import GuitarPosition
 from guitar_video_app.instruments.guitar.tuning import possible_positions
 from guitar_video_app.music.schema import RawNote
@@ -229,14 +230,16 @@ def plan_positions(
     max_fret: int = 20,
     position: int | None = None,
     fixed: dict[int, GuitarPosition] | None = None,
+    spec: Fretted = GUITAR_SPEC,
 ) -> list[GuitarPosition | None]:
-    """Choose string/fret for every note over the whole song.
+    """Choose string/fret for every note over the whole song on spec's strings.
 
     Notes starting within GROUP_SECONDS are fingered together. A beam search keeps
     the hand in one position when possible, prefers low frets (or, with position, frets
-    position..position+HAND_WIDTH), and avoids cutting strings that are still ringing.
-    fixed maps note indexes to a position they must keep.
+    position..position+width, width being spec.hand_frets - 1), and avoids cutting strings
+    that are still ringing. fixed maps note indexes to a position they must keep.
     """
+    width = spec.hand_frets - 1
     order = sorted(range(len(notes)), key=lambda i: (notes[i].start_time, notes[i].pitch))
     groups: list[list[int]] = []
     for index in order:
@@ -248,14 +251,14 @@ def plan_positions(
     # (cost, hand, ringing {string: (end_time, pitch)}, path (previous_path, members, combo))
     beam: list[tuple[float, int | None, dict[int, tuple[float, int]], tuple | None]] = [(0.0, None, {}, None)]
     for group in groups:
-        members, combos = _group_options(notes, group, tolerate_unplayable, max_fret, position, fixed)
+        members, combos = _group_options(notes, group, tolerate_unplayable, max_fret, position, fixed, spec)
         if not members:
             continue
         start = min(notes[i].start_time for i in members)
         best: dict[tuple, tuple] = {}
         for cost, hand, ringing, path in beam:
             for static_cost, combo in combos:
-                new_hand, move_cost = _move_hand(hand, [pos.fret for pos in combo if pos.fret > 0])
+                new_hand, move_cost = _move_hand(hand, [pos.fret for pos in combo if pos.fret > 0], width)
                 total = cost + static_cost + move_cost
                 for index, pos in zip(members, combo):
                     held = ringing.get(pos.string)
@@ -288,19 +291,21 @@ def _group_options(
     max_fret: int,
     position: int | None = None,
     fixed: dict[int, GuitarPosition] | None = None,
+    spec: Fretted = GUITAR_SPEC,
 ) -> tuple[list[int], list[tuple[float, tuple[GuitarPosition, ...]]]]:
     fixed = fixed or {}
-    candidates = {i: [fixed[i]] if i in fixed else possible_positions(notes[i].pitch, max_fret=max_fret) for i in group}
+    candidates = {i: [fixed[i]] if i in fixed else possible_positions(notes[i].pitch, max_fret=max_fret, spec=spec)
+                  for i in group}
     missing = [notes[i].pitch for i in group if not candidates[i]]
     if missing and not tolerate_unplayable:
-        raise ValueError(f"Unplayable note(s) for standard guitar tuning: {missing}")
+        raise ValueError(f"Unplayable note(s) for standard {spec.name} tuning: {missing}")
     members = sorted((i for i in group if candidates[i]), key=lambda i: -notes[i].velocity)
-    if len(members) > 6 and not tolerate_unplayable:
+    if len(members) > spec.strings and not tolerate_unplayable:
         raise ValueError("No playable fingering found within span/string constraints")
-    members = members[:6]
+    members = members[:spec.strings]
     while members:
         combos = [
-            (_static_cost(combo, position), combo)
+            (_static_cost(combo, position, spec.hand_frets - 1), combo)
             for combo in product(*(candidates[i] for i in members))
             if _playable(combo)
         ]
@@ -320,21 +325,21 @@ def _playable(combo: tuple[GuitarPosition, ...]) -> bool:
     return not fretted or max(fretted) - min(fretted) <= MAX_SPAN
 
 
-def _static_cost(combo: tuple[GuitarPosition, ...], position: int | None = None) -> float:
+def _static_cost(combo: tuple[GuitarPosition, ...], position: int | None = None, width: int = HAND_WIDTH) -> float:
     fretted = [pos.fret for pos in combo if pos.fret > 0]
     opens = (len(combo) - len(fretted)) * OPEN_STRING_COST if position and position >= OPEN_POSITION_LIMIT else 0.0
     if not fretted:
         return opens
     if position:
-        outside = lambda fret: max(0, position - fret, fret - position - HAND_WIDTH)
+        outside = lambda fret: max(0, position - fret, fret - position - width)
         height = sum(0.3 * abs(fret - position - 1) + 2.0 * outside(fret) for fret in fretted) + opens
     else:
         height = sum(0.3 * fret + 2.0 * max(0, fret - COMFORT_FRET) for fret in fretted)
-    stretch = 3.0 * max(0, max(fretted) - min(fretted) - HAND_WIDTH)
+    stretch = 3.0 * max(0, max(fretted) - min(fretted) - width)
     return height + stretch
 
 
-def _move_hand(hand: int | None, fretted: list[int]) -> tuple[int | None, float]:
+def _move_hand(hand: int | None, fretted: list[int], width: int = HAND_WIDTH) -> tuple[int | None, float]:
     if not fretted:
         return hand, 0.0
     low, high = min(fretted), max(fretted)
@@ -342,8 +347,8 @@ def _move_hand(hand: int | None, fretted: list[int]) -> tuple[int | None, float]
         return low, 0.0
     if low < hand:
         new_hand = low
-    elif high > hand + HAND_WIDTH:
-        new_hand = high - HAND_WIDTH
+    elif high > hand + width:
+        new_hand = high - width
     else:
         new_hand = hand
     shift = abs(new_hand - hand)

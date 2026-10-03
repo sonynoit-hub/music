@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from guitar_video_app.instruments.fretted import GUITAR_SPEC, Fretted
 from guitar_video_app.instruments.guitar.schema import GuitarPosition
 from guitar_video_app.music.pitch import NOTE_NAMES, midi_note_name  # noqa: F401
 
@@ -17,14 +18,10 @@ TUNING = [OPEN_STRING_MIDI[string] for string in range(1, 7)]
 MAX_FRET = 20
 
 
-def pitch_of(string: int, fret: int) -> int:
-    return OPEN_STRING_MIDI[string] + fret
+def pitch_of(string: int, fret: int, spec: Fretted | None = None) -> int:
+    return spec.pitch_of(string, fret) if spec else OPEN_STRING_MIDI[string] + fret
 
 
-def possible_positions(pitch: int, max_fret: int = MAX_FRET) -> list[GuitarPosition]:
-    positions: list[GuitarPosition] = []
-    for string, open_pitch in STANDARD_TUNING.items():
-        fret = pitch - open_pitch
-        if 0 <= fret <= max_fret:
-            positions.append(GuitarPosition(string=string, fret=fret))
-    return sorted(positions, key=lambda pos: (pos.fret, -pos.string))
+def possible_positions(pitch: int, max_fret: int = MAX_FRET, spec: Fretted | None = None) -> list[GuitarPosition]:
+    """Where pitch is played on spec's strings (default the guitar's)."""
+    return (spec or GUITAR_SPEC).positions(pitch, max_fret)

@@ -1,6 +1,7 @@
 """Render a dashboard lesson from the terminal, without the Blender UI.
 
 Blender -b outputs/v4-vertical.blend --python scripts/render_lesson.py -- --json LESSON.json --wav AUDIO.wav [options]
+Blender -b outputs/bass-vertical.blend --python scripts/render_lesson.py -- --json BASS_LESSON.json --wav AUDIO.wav [options]
 Blender -b outputs/piano-vertical.blend --python scripts/render_lesson.py -- --json piano_view.json --wav AUDIO.wav [options]
 """
 import argparse
@@ -11,8 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import bpy
-from guitar_video_app.instruments import as_lesson
-from guitar_video_app.instruments.guitar.view import guitar_view
+from guitar_video_app.instruments import as_lesson, part_view
 from guitar_video_app.integrations.lesson_setup import install_v2
 from guitar_video_app.integrations.guitar_style import STYLES, install_style
 from guitar_video_app.integrations.title_overlay import install_title
@@ -48,7 +48,8 @@ if piano:
     install_title(args.title, args.subtitle, anchor=KEYBOARD)
 else:
     if data.get('version') != 2:
-        data = guitar_view(as_lesson(data))
+        lesson = as_lesson(data)
+        data = part_view(lesson, next(iter(lesson['parts'])))
     data['fps'] = args.fps
     install_v2(data)
     install_title(args.title, args.subtitle)

@@ -10,6 +10,11 @@ HANDLER_NAME = 'demo_16_note_tab_controller'
 TAB_STRING_TO_LINE = {1: 'Lesson_Tab_Line_1', 2: 'Lesson_Tab_Line_2', 3: 'Lesson_Tab_Line_3', 4: 'Lesson_Tab_Line_4', 5: 'Lesson_Tab_Line_5', 6: 'Lesson_Tab_Line_6'}
 TAB_STRING_TO_GUITAR = {1: 'String_6', 2: 'String_5', 3: 'String_4', 4: 'String_3', 5: 'String_2', 6: 'String_1'}
 
+
+def string_object(tab_string, strings=6):
+    """Scene object of a tab string on an instrument with strings strings (the bass scene has 4)."""
+    return f'String_{strings + 1 - int(tab_string)}'
+
 SEGMENTS = {'0':[0,1,2,3,4,5], '1':[1,2], '2':[0,1,6,4,3], '3':[0,1,6,2,3], '4':[5,6,1,2]}
 SEG_DEF = {0:((-0.35,0.50),(0.35,0.50)), 1:((0.35,0.50),(0.35,0.00)), 2:((0.35,0.00),(0.35,-0.50)), 3:((-0.35,-0.50),(0.35,-0.50)), 4:((-0.35,0.00),(-0.35,-0.50)), 5:((-0.35,0.50),(-0.35,0.00)), 6:((-0.35,0.00),(0.35,0.00))}
 
@@ -208,8 +213,8 @@ def _fret_region_center(fret):
     return left.lerp(right, 0.5)
 
 
-def _point_on_string(tab_string, fret):
-    obj = bpy.data.objects.get(TAB_STRING_TO_GUITAR[int(tab_string)])
+def _point_on_string(tab_string, fret, strings=6):
+    obj = bpy.data.objects.get(string_object(tab_string, strings))
     pts = _curve_points_world(obj)
     if not pts:
         return Vector((0,0,0))
@@ -229,8 +234,8 @@ def _point_on_string(tab_string, fret):
 
 
 
-def _open_string_point(tab_string):
-    obj = bpy.data.objects.get(TAB_STRING_TO_GUITAR[int(tab_string)])
+def _open_string_point(tab_string, strings=6):
+    obj = bpy.data.objects.get(string_object(tab_string, strings))
     pts = _curve_points_world(obj)
     if not pts:
         return Vector((0,0,0))

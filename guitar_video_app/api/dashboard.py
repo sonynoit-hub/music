@@ -23,15 +23,16 @@ from fastapi import FastAPI, HTTPException, UploadFile, Request
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-from guitar_video_app.instruments import (activate, active_instrument, as_lesson, check_lesson, lesson_rules,
-                                          part_view, parts, sync_parts)
+from guitar_video_app.instruments import (activate, active_instrument, as_lesson, check_lesson, get_instrument,
+                                          lesson_rules, part_view, parts, sync_parts)
+from guitar_video_app.instruments.bass.normalized import lesson_from_normalized as bass_lesson_from_normalized
+from guitar_video_app.instruments.fretted import SPECS as FRETTED, spec_of
 from guitar_video_app.instruments.guitar.mapper import normalize_midi_file
 from guitar_video_app.instruments.guitar.normalized import lesson_from_normalized
 from guitar_video_app.instruments.guitar.refinger import refinger_part
 from guitar_video_app.instruments.guitar.tab import import_tab_to_audio, read_tab, review_with_tab
-from guitar_video_app.instruments.guitar.tuning import pitch_of
-from guitar_video_app.instruments.guitar.view import (PART as GUITAR, guitar_view, prepare as prepare_guitar_view,
-                                                      set_notes, set_position)
+from guitar_video_app.instruments.guitar.view import (guitar_view, prepare as prepare_guitar_view,
+                                                      set_muted, set_notes, set_position)
 from guitar_video_app.instruments.piano import PIANO
 from guitar_video_app.instruments.piano import camera as piano_camera
 from guitar_video_app.instruments.piano.normalized import lesson_from_normalized as piano_lesson_from_normalized
@@ -39,12 +40,15 @@ from guitar_video_app.instruments.piano.view import piano_view, prepare as prepa
 from guitar_video_app.integrations.link_audio import LinkAudioError, download_audio
 from guitar_video_app.music.analyzer import analyze_midi_file
 from guitar_video_app.music.alignment import played_notes
-from guitar_video_app.music.audio_transcription import TranscriptionUnavailable, transcribe_wav_to_midi
-from guitar_video_app.music.lesson import extend_to_bar, new_note_id, trim_to_last_measure
+from guitar_video_app.music.audio_transcription import (TranscriptionUnavailable, band_settings, made_with,
+                                                        transcribe_wav_to_midi)
+from guitar_video_app.music.lesson import extend_to_bar, new_note_id, set_time_signature, trim_to_last_measure
 from guitar_video_app.music.midi_export import music_midi
-from guitar_video_app.music.retime import (choose_grid, fit_tempo_map, restore_repeats, retime_lesson,
-                                           suggest_grid, tidy_lesson, trim_leading_measures)
-from guitar_video_app.music.tempo import beat as lesson_beat, seconds_at, tempo_map
+from guitar_video_app.music.retime import (LINE_TEMPO_CHANGE_COST, TEMPO_CHANGE_COST, choose_grid, fit_tempo_map,
+                                           restore_repeats, retime_lesson, root_downbeat, suggest_grid, tidy_lesson,
+                                           trim_leading_measures)
+from guitar_video_app.music.tempo import beat as lesson_beat, measure_beats, seconds_at, tempo_map
+from guitar_video_app.music.stem_separation import bass_stem_paths, separated_bass
 from guitar_video_app.music.transcription_cleanup import clean_transcribed_midi
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,6 +58,7 @@ STATIC = ROOT/'guitar_video_app/ui'
 TRANSFER_LOCK = threading.Lock()
 BLENDER = Path(os.environ.get('GUITAR_BLENDER', '/Applications/Blender.app/Contents/MacOS/Blender'))
 RENDER_SCENE = ROOT/'outputs/v4-vertical.blend'
+BASS_RENDER_SCENE = ROOT/'outputs/bass-vertical.blend'
 PIANO_RENDER_SCENE = ROOT/'outputs/piano-vertical.blend'
 PIANO_VISUAL_SCENE = ROOT/'outputs/piano-visual.blend'
 RENDER_SCRIPT = ROOT/'scripts/render_lesson.py'
@@ -126,6 +131,16 @@ with db() as conn:
     # Instrument that plays the song (instruments.INSTRUMENTS); NULL is guitar.
     if 'instrument' not in columns:
         conn.execute('ALTER TABLE songs ADD COLUMN instrument TEXT')
+    # What the audio holds, for transcribing one line (a bass): NULL is the instrument alone, as in a tab video,
+    # 'band' is a full mix.
+    if 'recording' not in columns:
+        conn.execute('ALTER TABLE songs ADD COLUMN recording TEXT')
+    # Time signature the user chose ('3/4'), used by Generate MIDI and tabs without their own; NULL is 4/4.
+    if 'signature' not in columns:
+        conn.execute('ALTER TABLE songs ADD COLUMN signature TEXT')
+    # How the bass is played, for transcribing a bass extracted from a full band: NULL is fingers, 'slap' is slap or pick.
+    if 'bass_style' not in columns:
+        conn.execute('ALTER TABLE songs ADD COLUMN bass_style TEXT')
 
 
 def summary(lesson, source_format='v2'):
@@ -169,19 +184,27 @@ def write_lesson(path, lesson):
     Path(path).write_text(lesson_json(lesson),encoding='utf-8')
 
 
+def fretted_name(lesson):
+    """Name of the lesson's active guitar or bass part (the first part)."""
+    found=parts(lesson)
+    if not found or found[0][2].name not in FRETTED:
+        raise HTTPException(400,'This lesson has no guitar or bass part.')
+    return found[0][0]
+
+
 def guitar_part(lesson):
-    if GUITAR not in lesson.get('parts',{}):
-        raise HTTPException(400,'This lesson has no guitar part.')
-    return lesson['parts'][GUITAR]
+    return lesson['parts'][fretted_name(lesson)]
 
 
 def write_guitar_view(identity, lesson):
-    """The guitar view (V2) that Blender and the renderer read, beside the song's lesson."""
+    """The guitar (or bass) view (V2) that Blender and the renderer read, beside the song's lesson."""
+    name=fretted_name(lesson)
+    instrument=spec_of(lesson['parts'][name]).name
     try:
-        view=guitar_view(lesson)
+        view=guitar_view(lesson,name)
     except (KeyError,ValueError) as exc:
-        raise HTTPException(400,f'This lesson cannot be drawn on the guitar: {exc}') from exc
-    path=STORE/identity/'guitar_view.json'
+        raise HTTPException(400,f'This lesson cannot be drawn on the {instrument}: {exc}') from exc
+    path=STORE/identity/f'{instrument}_view.json'
     path.write_text(json.dumps(view,indent=2)+'\n',encoding='utf-8')
     return path,view
 
@@ -218,7 +241,8 @@ def normalize_dashboard_json(content, instrument='guitar'):
                               tempo_changes=len(data.get('timing',{}).get('tempo_changes',[])),
                               time_signature_changes=len(data.get('timing',{}).get('time_signature_changes',[])),
                               audio_offset=data.get('audio',{}).get('audio_offset',0))
-        lesson=piano_lesson_from_normalized(data,fps=60) if instrument=='piano' else lesson_from_normalized(data,fps=60)
+        lesson=(piano_lesson_from_normalized(data,fps=60) if instrument=='piano'
+                else bass_lesson_from_normalized(data,fps=60) if instrument=='bass' else lesson_from_normalized(data,fps=60))
     else:
         lesson=as_lesson(data)
         if not lesson['parts']:
@@ -242,9 +266,10 @@ def dashboard_music_layer(normalized):
 
 def analyze_dashboard_midi(path, title, *, tolerate_unplayable=False, instrument='guitar'):
     """Normalized song JSON, lesson and summary of a MIDI file. Guitar maps every note to a string
-    and fret (unplayable notes raise, or with tolerate_unplayable are left out); piano leaves out
-    notes beyond its 88 keys and takes the hands from the MIDI tracks or plans them."""
-    if instrument=='piano':
+    and fret, bass plans them from the pitches (unplayable notes raise, or with tolerate_unplayable
+    are left out); piano leaves out notes beyond its 88 keys and takes the hands from the MIDI tracks
+    or plans them."""
+    if instrument in ('piano','bass'):
         normalized=analyze_midi_file(path,title=title)
     else:
         normalized=normalize_midi_file(path,title=title,tolerate_unplayable=tolerate_unplayable)
@@ -262,6 +287,8 @@ def analyze_dashboard_midi(path, title, *, tolerate_unplayable=False, instrument
     }))
     if instrument=='piano':
         lesson_data=piano_lesson_from_normalized(normalized_data,fps=60,name=title)
+    elif instrument=='bass':
+        lesson_data=bass_lesson_from_normalized(normalized_data,fps=60,name=title,skip_unplayable=tolerate_unplayable)
     else:
         lesson_data=lesson_from_normalized(normalized_data,fps=60,name=title,skip_unmapped=tolerate_unplayable)
     details=summary(lesson_data)
@@ -291,16 +318,25 @@ def store_midi_analysis(identity, midi_path, midi_name, title, *, tolerate_unpla
 
 def auto_time_transcription(identity,onsets=()):
     """Fit tempo, downbeat and per-measure tempo changes to a fresh transcription, restore
-    missed repeats from the model's onsets (audio seconds), then tidy it; notes keep their audio times."""
+    missed repeats from the model's onsets (audio seconds), then tidy it; notes keep their audio times.
+    An instrument transcribed as one line (a bass) starts its measures on its roots (root_downbeat)
+    and changes tempo only when that fixes LINE_TEMPO_CHANGE_COST notes."""
     row=song(identity)
     path=Path(row['json_path'])
     lesson=read_lesson(path)
     music,rules=lesson['music'],lesson_rules(lesson)
+    music['time_signature']=song_signature(row)
     tempos=tempo_map(music)
-    bpm,first=suggest_grid([float(seconds_at(tempos,lesson_beat(n['start_beat']))) for n in music['notes']])
+    seconds=lambda position: float(seconds_at(tempos,position))
+    bpm,first=suggest_grid([seconds(lesson_beat(n['start_beat'])) for n in music['notes']])
+    line=bool(get_instrument(song_instrument(row)).transcription.get('line'))
+    if line:
+        first=root_downbeat([(seconds(lesson_beat(n['start_beat'])),n['pitch'],
+                              seconds(lesson_beat(n['start_beat'])+lesson_beat(n['duration_beats']))-seconds(lesson_beat(n['start_beat'])))
+                             for n in music['notes']],bpm,first,measure_beats(music['time_signature']))
     zero=retime_lesson(music,bpm,first)
     grid=choose_grid(music)
-    changes=fit_tempo_map(music,grid)
+    changes=fit_tempo_map(music,grid,LINE_TEMPO_CHANGE_COST if line else TEMPO_CHANGE_COST)
     restored=restore_repeats(music,[(time-float(zero),pitch,strength) for time,pitch,strength in onsets],grid,rules)
     stats=tidy_lesson(music,grid=grid,rules=rules)
     trim_to_last_measure(music)
@@ -318,16 +354,56 @@ def auto_time_transcription(identity,onsets=()):
     return dict(tempo_bpm=music['tempo_bpm'],tempo_changes=changes,restored=restored,**stats)
 
 
+STEM_ATTACK_STRENGTH=0.4
+SLAP_ATTACK_STRENGTH=0.6
+
+
+def transcription_setup(row):
+    """The song instrument's transcription options (Instrument.transcription) and the folder its
+    Basic Pitch output is kept in; a range-limited transcription has its own folder. An instrument that
+    keeps one line takes it from the strongest attacks when it is recorded alone (the song's recording);
+    when its part is extracted from a full band ('stem') the attacks are those of the separated stem,
+    from STEM_ATTACK_STRENGTH (SLAP_ATTACK_STRENGTH when the song's bass style is 'slap'), at the
+    pitches of its pitch track (options['pitch'])."""
+    instrument=song_instrument(row)
+    options=dict(get_instrument(instrument).transcription)
+    folder=STORE/row['id']/('generated-midi' if not options else f'generated-midi-{instrument}')
+    if options.get('line') and row.get('recording')!='band':
+        options['line']='attacks'
+    if options.get('line') and row.get('recording')=='stem' and row.get('wav_path'):
+        strength=SLAP_ATTACK_STRENGTH if row.get('bass_style')=='slap' else STEM_ATTACK_STRENGTH
+        options.update(attack_strength=strength,pitch=str(bass_stem_paths(row['wav_path'],folder)[1]))
+    return options,folder
+
+
+BASIC_PITCH_OPTIONS=('low','high','onset_threshold','frame_threshold')
+
+
+def transcription_source(row, folder, options):
+    """The audio Basic Pitch hears: the song's WAV, or its separated bass stem when options have a pitch track."""
+    return bass_stem_paths(row['wav_path'],folder)[0] if options.get('pitch') else Path(row['wav_path'])
+
+
+def transcribe_song(row, folder, options):
+    if options.get('pitch'):
+        separated_bass(row['wav_path'],folder,options['low'],options['high'])
+    return transcribe_wav_to_midi(transcription_source(row,folder,options),folder,
+                                  **{k:options[k] for k in BASIC_PITCH_OPTIONS if k in options})
+
+
 def song_transcription(row):
     """Basic Pitch onset peaks (audio seconds, pitch, strength) and cleaned notes (start, end,
-    pitch) of the song's audio, transcribing the audio first when it has not been done yet."""
-    folder=STORE/row['id']/'generated-midi'
-    raw=folder/f"{Path(row['wav_path']).stem}_basic_pitch.mid"
-    if not raw.exists() or not raw.with_suffix('.onsets.json').exists():
-        raw=transcribe_wav_to_midi(row['wav_path'],folder)
+    pitch) of the song's audio, transcribing the audio first when it has not been done yet or
+    was done with other settings."""
+    options,folder=transcription_setup(row)
+    raw=folder/f"{transcription_source(row,folder,options).stem}_basic_pitch.mid"
+    settings=band_settings(**{k:options[k] for k in BASIC_PITCH_OPTIONS if k in options})
+    if (not raw.exists() or not raw.with_suffix('.onsets.json').exists() or (options and not made_with(raw,settings))
+            or (options.get('pitch') and not Path(options['pitch']).exists())):
+        raw=transcribe_song(row,folder,options)
     with tempfile.TemporaryDirectory() as scratch:
         cleaned=Path(scratch)/'clean.mid'
-        clean_transcribed_midi(raw,cleaned)
+        clean_transcribed_midi(raw,cleaned,line=options or None)
         played=played_notes(cleaned)
     return json.loads(raw.with_suffix('.onsets.json').read_text(encoding='utf-8')),played
 
@@ -339,12 +415,19 @@ def import_tab(identity, content, name):
     (review_with_tab): the tab's bars are replaced wherever the recording plays them and the
     other notes stay, re-fingered like the tab. The previous lesson is kept for Undo."""
     row=song(identity)
-    if song_instrument(row)!='guitar':
-        raise HTTPException(400,'Tab files are for guitar songs; switch the song to guitar first.')
+    instrument=song_instrument(row)
+    if instrument not in FRETTED:
+        raise HTTPException(400,'Tab files are for guitar and bass songs; switch the song to guitar or bass first.')
     if not row['wav_path']:
         raise HTTPException(400,'Import the audio first; the tab is fitted to it.')
     try:
-        tab=read_tab(json.loads(content))
+        data=json.loads(content)
+        if isinstance(data,dict):
+            data.setdefault('instrument',instrument)
+            data.setdefault('time_signature',song_signature(row))
+            if data['instrument']!=instrument:
+                raise ValueError(f"this is a {data['instrument']} tab and the song is played on the {instrument}")
+        tab=read_tab(data)
     except (ValueError,TypeError) as exc:
         raise HTTPException(400,f'Invalid tab: {exc}') from exc
     review=fit=None
@@ -399,7 +482,17 @@ def public(row):
     result['can_undo_review']=bool(row.get('previous_state') and (row.get('summary') or {}).get('tab_review'))
     if 'camera_shots' in result:
         result['camera_shots']=json.loads(result['camera_shots']) if result['camera_shots'] else None
+    stem=bass_stem_of(row)
+    result['bass_stem']=bool(stem and stem.exists())
     return result
+
+
+def bass_stem_of(row):
+    """Where the song's bass separated from its audio is kept (beside the bass transcription, so Generate MIDI
+    with recording 'stem' and listening share it); None without audio."""
+    if not row.get('wav_path'):
+        return None
+    return bass_stem_paths(row['wav_path'],transcription_setup(dict(row,instrument='bass'))[1])[0]
 
 
 def bridge(command,port=8765):
@@ -494,12 +587,15 @@ class TimingInput(BaseModel):
     first_beat: float = Field(ge=-60,le=3600,allow_inf_nan=False)
 
 
+# The instrument narrows these limits (check_position): 1-6 strings on the guitar, 1-4 on the bass.
 class TabNoteEdit(BaseModel):
     note_id: str = Field(min_length=1,max_length=80)
     string: int = Field(ge=1,le=6)
     fret: int = Field(ge=0,le=20)
     start_beat: str | None = Field(default=None,max_length=40)
     duration_beats: str | None = Field(default=None,max_length=40)
+    # A muted (dead) note is drawn "x" and sounds as a short click; None leaves it as it is.
+    muted: bool | None = None
 
 
 class TabNoteNew(BaseModel):
@@ -507,6 +603,7 @@ class TabNoteNew(BaseModel):
     fret: int = Field(ge=0,le=20)
     start_beat: str = Field(max_length=40)
     duration_beats: str = Field(max_length=40)
+    muted: bool = False
 
 
 class TabNotes(BaseModel):
@@ -521,6 +618,24 @@ def create(payload: SongInput):
         conn.execute('INSERT INTO songs(id,name,offset,updated) VALUES(?,?,?,?)',
                      (identity,payload.name.strip() or 'Untitled song',payload.offset,time.time()))
     return public(song(identity))
+
+
+@app.delete('/api/songs/{identity}')
+def delete_song(identity: str):
+    """Remove the song from the library. Its folder (audio, MIDI, lessons, extracted bass, renders) moves
+    to STORE/trash/<id>-<time>, with its library row as song.json, so it can be recovered by hand."""
+    row=song(identity)
+    folder=STORE/identity
+    trash=STORE/'trash'/f'{identity}-{int(time.time())}'
+    trash.parent.mkdir(exist_ok=True)
+    if folder.exists():
+        shutil.move(str(folder),str(trash))
+    else:
+        trash.mkdir()
+    (trash/'song.json').write_text(json.dumps(row,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    with db() as conn:
+        conn.execute('DELETE FROM songs WHERE id=?',(identity,))
+    return dict(deleted=identity,trash=str(trash))
 
 
 @app.patch('/api/songs/{identity}')
@@ -622,6 +737,38 @@ def update_style(identity: str,payload: StyleInput):
     return public(song(identity))
 
 
+class RecordingInput(BaseModel):
+    recording: Literal['alone','band','stem']
+
+
+@app.post('/api/songs/{identity}/recording')
+def update_recording(identity: str,payload: RecordingInput):
+    """Whether the audio is the instrument alone, a full band, or a full band to extract the instrument
+    from first ('stem'); used the next time MIDI is generated."""
+    row=song(identity)
+    recording=None if payload.recording=='alone' else payload.recording
+    if row.get('recording')!=recording:
+        with db() as conn:
+            conn.execute('UPDATE songs SET recording=?,updated=? WHERE id=?',(recording,time.time(),identity))
+    return public(song(identity))
+
+
+class BassStyleInput(BaseModel):
+    style: Literal['fingers','slap']
+
+
+@app.post('/api/songs/{identity}/bass-style')
+def update_bass_style(identity: str,payload: BassStyleInput):
+    """How the bass is played; with recording 'stem' it sets the attack strength a note needs
+    (transcription_setup), used the next time MIDI is generated."""
+    row=song(identity)
+    style=None if payload.style=='fingers' else payload.style
+    if row.get('bass_style')!=style:
+        with db() as conn:
+            conn.execute('UPDATE songs SET bass_style=?,updated=? WHERE id=?',(style,time.time(),identity))
+    return public(song(identity))
+
+
 class PianoLookInput(BaseModel):
     look: Literal['lesson','visual','plumes']
 
@@ -696,6 +843,63 @@ def camera_reply(identity):
     return dict(song=public(row),camera_shots=camera_shots(row,prepared),bars=piano_camera.bar_count(prepared),
                 measure_beats=float(prepared['measure']),cameras=list(piano_camera.CAMERAS),
                 moves=list(piano_camera.MOVES),transitions=list(piano_camera.TRANSITIONS))
+
+
+SIGNATURES=('4/4','3/4','2/4','2/2','6/8','9/8','12/8','5/4','7/8')
+
+
+def song_signature(row):
+    """The time signature the song's user chose, as [numerator, denominator]; 4/4 when none was chosen."""
+    return [int(v) for v in (row.get('signature') or '4/4').split('/')]
+
+
+class SignatureInput(BaseModel):
+    signature: Literal[SIGNATURES]
+
+
+@app.post('/api/songs/{identity}/signature')
+def update_signature(identity: str,payload: SignatureInput):
+    """Set the song's time signature. The lesson is re-barred (set_time_signature): notes keep their beats
+    and audio times and only the bar lines move; camera shots move to the bar nearest their old time.
+    Generate MIDI and tabs without their own time_signature use it from then on."""
+    row=song(identity)
+    signature=[int(v) for v in payload.signature.split('/')]
+    stored=None if payload.signature=='4/4' else payload.signature
+    details,shots=row.get('summary'),row.get('camera_shots')
+    if row['json_path']:
+        path=Path(row['json_path'])
+        lesson=read_lesson(path)
+        old=measure_beats(lesson['music']['time_signature'])
+        try:
+            set_time_signature(lesson['music'],signature)
+            details=summary(lesson)
+        except ValueError as exc:
+            raise HTTPException(400,f'Could not change the time signature: {exc}') from exc
+        previous=row.get('summary') or {}
+        for field in ('source_format','music_layer','tab_fit','mapping_mode'):
+            if previous.get(field):
+                details[field]=previous[field]
+        shots=rebar_shots(shots,old,measure_beats(signature),lesson_beat(lesson['music']['end_beat']))
+        write_lesson(path,lesson)
+    with db() as conn:
+        conn.execute('UPDATE songs SET signature=?,summary=?,camera_shots=?,synced_revision=NULL,revision=revision+1,'
+                     'updated=? WHERE id=?',(stored,json.dumps(details) if details else None,shots,time.time(),identity))
+    return public(song(identity))
+
+
+def rebar_shots(stored, old_measure, new_measure, end):
+    """A stored shot list with each shot on the bar of the new measure nearest its old start; shots that land
+    on an earlier shot's bar or past the end are dropped."""
+    if not stored:
+        return stored
+    plan=json.loads(stored)
+    bars=max(1,math.ceil(end/new_measure))
+    kept=[]
+    for shot in plan.get('shots',[]):
+        bar=1+round((shot['start_bar']-1)*old_measure/new_measure)
+        if bar<=bars and (not kept or bar>kept[-1]['start_bar']):
+            kept.append(dict(shot,start_bar=bar))
+    return json.dumps(dict(plan,shots=kept))
 
 
 def save_camera_shots(identity, plan):
@@ -778,8 +982,14 @@ def update_fingering(identity: str,payload: FingeringInput):
 
 
 def require_guitar(row):
-    if song_instrument(row)!='guitar':
-        raise HTTPException(400,'This is for guitar songs; this song is played on the piano.')
+    if song_instrument(row) not in FRETTED:
+        raise HTTPException(400,'This is for guitar and bass songs; this song is played on the piano.')
+
+
+def check_position(lesson, string, fret):
+    spec=spec_of(guitar_part(lesson))
+    if not 1<=string<=spec.strings or not 0<=fret<=spec.max_fret:
+        raise HTTPException(400,f'On the {spec.name} the string must be 1-{spec.strings} and the fret 0-{spec.max_fret}.')
 
 
 def lesson_for_edit(identity, guitar=False):
@@ -827,26 +1037,29 @@ def save_edited_notes(row,lesson):
 def update_note(identity: str,payload: TabNoteEdit):
     """Move a note to another string and fret (its pitch follows), and optionally in time."""
     row,lesson=lesson_for_edit(identity,guitar=True)
-    guitar_part(lesson)
+    check_position(lesson,payload.string,payload.fret)
     note=next((n for n in lesson['music']['notes'] if str(n.get('id'))==payload.note_id),None)
     if note is None:
         raise HTTPException(404,'Note not found')
-    set_position(lesson,note,payload.string,payload.fret)
+    set_position(lesson,note,payload.string,payload.fret,fretted_name(lesson))
     if payload.start_beat is not None:
         note['start_beat']=edit_beat(payload.start_beat,'Start beat')
     if payload.duration_beats is not None:
         note['duration_beats']=edit_beat(payload.duration_beats,'Length')
+    if payload.muted is not None:
+        set_muted(note,payload.muted)
     return save_edited_notes(row,lesson)
 
 
 @app.post('/api/songs/{identity}/notes')
 def add_note(identity: str,payload: TabNoteNew):
     row,lesson=lesson_for_edit(identity,guitar=True)
-    guitar_part(lesson)
+    check_position(lesson,payload.string,payload.fret)
     notes=lesson['music'].setdefault('notes',[])
     note=dict(id=new_note_id(notes,'e'),start_beat=edit_beat(payload.start_beat,'Start beat'),
               duration_beats=edit_beat(payload.duration_beats,'Length'))
-    set_position(lesson,note,payload.string,payload.fret)
+    set_position(lesson,note,payload.string,payload.fret,fretted_name(lesson))
+    set_muted(note,payload.muted)
     notes.append(note)
     rules=lesson_rules(lesson)
     notes.sort(key=lambda n:(lesson_beat(n['start_beat']),rules.order(n)))
@@ -856,16 +1069,17 @@ def add_note(identity: str,payload: TabNoteNew):
 @app.put('/api/songs/{identity}/notes')
 def replace_notes(identity: str,payload: TabNotes):
     """Put back a whole note list (and lesson end) saved by the dashboard's note Undo / Redo;
-    notes are guitar-view notes (id, string, fret, start_beat, duration_beats)."""
+    notes are guitar-view notes (id, string, fret, start_beat, duration_beats, optional muted)."""
     row,lesson=lesson_for_edit(identity,guitar=True)
-    guitar_part(lesson)
+    spec=spec_of(guitar_part(lesson))
     keys=('id','string','fret','start_beat','duration_beats')
     if any(any(k not in n for k in keys) for n in payload.notes):
         raise HTTPException(400,'Every note needs id, string, fret, start_beat and duration_beats.')
     try:
-        set_notes(lesson,[{k:n[k] for k in keys} for n in payload.notes])
-    except (KeyError,TypeError) as exc:
-        raise HTTPException(400,'Every note needs a string from 1 to 6 and a fret from 0 to 20.') from exc
+        set_notes(lesson,[dict({k:n[k] for k in keys},muted=n.get('muted') is True) for n in payload.notes],
+                  fretted_name(lesson))
+    except (KeyError,TypeError,IndexError) as exc:
+        raise HTTPException(400,f'Every note needs a string from 1 to {spec.strings} and a fret from 0 to {spec.max_fret}.') from exc
     if payload.end_beat is not None:
         lesson['music']['end_beat']=edit_beat(payload.end_beat,'Lesson end')
     return save_edited_notes(row,lesson)
@@ -883,7 +1097,7 @@ def delete_note(identity: str,note_id: str):
 
 
 class InstrumentInput(BaseModel):
-    instrument: Literal['guitar','piano']
+    instrument: Literal['guitar','piano','bass']
 
 
 @app.post('/api/songs/{identity}/instrument')
@@ -898,11 +1112,13 @@ def update_instrument(identity: str,payload: InstrumentInput):
         path=Path(row['json_path'])
         lesson=read_lesson(path)
         options={}
-        if payload.instrument=='guitar':
-            part=lesson['parts'].get(GUITAR,{})
+        if payload.instrument in FRETTED:
+            spec=FRETTED[payload.instrument]
+            part=lesson['parts'].get(payload.instrument,{})
             pitches={n['id']:n['pitch'] for n in lesson['music']['notes']}
             options=dict(position=row.get('hand_position'),
-                         keep={i for i,p in part.get('positions',{}).items() if pitch_of(p['string'],p['fret'])==pitches.get(i)})
+                         keep={i for i,p in part.get('positions',{}).items()
+                               if 1<=p['string']<=spec.strings and spec.pitch_of(p['string'],p['fret'])==pitches.get(i)})
         try:
             changed=activate(lesson,payload.instrument,**options)
             details=summary(lesson)
@@ -1092,10 +1308,11 @@ def generate_midi(identity: str):
     if not row['wav_path']:
         raise HTTPException(400,'Import WAV or MP3 audio first')
     folder=STORE/identity
+    options,generated=transcription_setup(row)
     try:
-        midi_path=transcribe_wav_to_midi(row['wav_path'],folder/'generated-midi')
+        midi_path=transcribe_song(row,generated,options)
         stored_path=folder/f'{uuid.uuid4().hex}.mid'
-        cleanup=clean_transcribed_midi(midi_path,stored_path)
+        cleanup=clean_transcribed_midi(midi_path,stored_path,line=options or None)
         store_midi_analysis(identity,stored_path,f"{file_stem(row['name'])}.mid",Path(row['wav_name'] or stored_path.name).stem,tolerate_unplayable=True)
         onsets_path=midi_path.with_suffix('.onsets.json')
         onsets=json.loads(onsets_path.read_text(encoding='utf-8')) if onsets_path.exists() else []
@@ -1111,12 +1328,38 @@ def generate_midi(identity: str):
 
 
 @app.get('/api/songs/{identity}/audio')
-def audio(identity: str, download: bool = False):
+def audio(identity: str, download: bool = False, stem: Literal['bass'] | None = None):
+    """The song's audio, or with stem='bass' its bass separated from the full band (extract_bass_stem)."""
     row=song(identity)
     if not row['wav_path']:
         raise HTTPException(404,'No audio')
+    if stem:
+        path=bass_stem_of(row)
+        if not path.exists():
+            raise HTTPException(404,'The bass has not been extracted from this audio yet.')
+        return FileResponse(path,media_type='audio/wav',filename=f"{Path(row.get('wav_name') or 'audio').stem} (bass).wav",
+                            content_disposition_type='attachment' if download else 'inline')
     return FileResponse(row['wav_path'],media_type='audio/wav',filename=Path(row.get('wav_name') or 'audio').with_suffix('.wav').name,
                         content_disposition_type='attachment' if download else 'inline')
+
+
+@app.post('/api/songs/{identity}/bass-stem')
+def extract_bass_stem(identity: str):
+    """Separate a bass song's bass from its full audio (Demucs, separated_bass) to listen to it alone; the
+    stem is kept and reused, also by Generate MIDI with recording 'stem'."""
+    row=song(identity)
+    if not row['wav_path']:
+        raise HTTPException(400,'Import the audio first.')
+    if song_instrument(row)!='bass':
+        raise HTTPException(400,'Switch the song to bass first.')
+    options,folder=transcription_setup(row)
+    try:
+        separated_bass(row['wav_path'],folder,options['low'],options['high'])
+    except TranscriptionUnavailable as exc:
+        raise HTTPException(501,str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(500,f'Bass separation failed: {exc}') from exc
+    return public(song(identity))
 
 
 @app.get('/api/songs/{identity}/lesson')
@@ -1312,9 +1555,11 @@ def start_render(identity: str, payload: RenderInput):
     folder_render=payload.mode in COMPOSITING_MODES
     if folder_render and not visual:
         raise HTTPException(400,'Layers and reference frames are for the piano stage; choose the Musical notes or Plumes look.')
-    scene=PIANO_VISUAL_SCENE if visual else PIANO_RENDER_SCENE if instrument=='piano' else RENDER_SCENE
+    scene=(PIANO_VISUAL_SCENE if visual else PIANO_RENDER_SCENE if instrument=='piano'
+           else BASS_RENDER_SCENE if instrument=='bass' else RENDER_SCENE)
     if not scene.exists():
-        builder='make_piano_visual_scene.py' if visual else 'make_piano_scene.py'
+        builder=('make_piano_visual_scene.py' if visual else 'make_bass_scene.py' if instrument=='bass'
+                 else 'make_piano_scene.py')
         raise HTTPException(503,f'The {instrument} scene {scene.name} is missing; build it with scripts/{builder}.')
     view_path,view=write_view(identity,read_lesson(row['json_path']),instrument)
     prepare_view=prepare_piano_view if instrument=='piano' else prepare_guitar_view

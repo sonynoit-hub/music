@@ -4,14 +4,14 @@ import math
 import bpy
 from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
-from guitar_video_app.instruments.guitar.view import prepare
+from guitar_video_app.instruments.guitar.view import prepare, view_spec
 from guitar_video_app.music.lesson import seconds_between, state
 from guitar_video_app.integrations import lesson_controller as legacy
 
 HANDLER = 'guitar_lesson_v2_controller'
-# The scene names its strings from thick bass to thin treble.
-GUITAR_OBJECTS = {string: f'String_{7-string}' for string in range(1, 7)}
+# The scene names its strings from thick bass to thin treble (legacy.string_object).
 _lesson = None
+_strings = 6  # strings of the installed view's instrument: 6 guitar, 4 bass
 _draw_key = None
 _retriggered = set()
 RETRIGGER_GAP_SECONDS = 0.1
@@ -33,6 +33,35 @@ def _in_retrigger_gap(lesson, note, position):
         return False
     gap = min(RETRIGGER_GAP_SECONDS, seconds_between(lesson, note['start'], note['end']) / 2)
     return seconds_between(lesson, position, note['end']) <= gap
+
+
+def _mute_mesh(string):
+    """The X shown instead of the round marker on a string playing a muted note; one mesh per string
+    so each takes its string's colour."""
+    name = f'Lesson_V2_Mute_X_{string}'
+    mesh = bpy.data.meshes.get(name)
+    if mesh is None:
+        mesh = bpy.data.meshes.new(name)
+        arm, width = 0.0075, 0.0016
+        verts, faces = [], []
+        for angle in (math.pi / 4, -math.pi / 4):
+            c, s = math.cos(angle), math.sin(angle)
+            base = len(verts)
+            verts += [(c * x - s * y, s * x + c * y, 0) for x, y in
+                      ((-arm, -width), (arm, -width), (arm, width), (-arm, width))]
+            faces.append((base, base + 1, base + 2, base + 3))
+        mesh.from_pydata(verts, [], faces)
+        mesh.update()
+    return mesh
+
+
+def _set_marker_shape(marker, muted):
+    if 'Lesson_Disc_Mesh' not in marker:
+        marker['Lesson_Disc_Mesh'] = marker.data.name
+    disc = bpy.data.meshes.get(marker['Lesson_Disc_Mesh'])
+    target = _mute_mesh(int(marker.name.rsplit('_', 1)[1])) if muted else disc
+    if target is not None and marker.data != target:
+        marker.data = target
 
 
 def _draw_number(scene, cam, slot, label, x, y, height, depth, material):
@@ -104,7 +133,7 @@ def update(scene):
     # Use the actual staff centerlines, which define the musical layout.
     lines = []
     line_objects = []
-    for i in range(1, 7):
+    for i in range(1, _strings + 1):
         staff = bpy.data.objects[f'Lesson_Tab_Line_{i}']
         if 'Lesson_Original_Bevel_Depth' not in staff:
             staff['Lesson_Original_Bevel_Depth'] = staff.data.bevel_depth
@@ -149,11 +178,14 @@ def update(scene):
         slot = 0
         gaps = {obj: [] for obj in line_objects}
         for note in visible:
-            digits = str(note['fret'])
+            digits = 'x' if note.get('muted') else str(note['fret'])
             # Keep labels just inside the bar at measure starts; chord notes share x.
             x = max(left + width * 0.012, min(right - width * 0.012, x_at(note['start'])))
-            height = min(abs(a-b) for a,b in zip(ys,ys[1:])) * 0.72
-            box = _draw_number(scene, cam, slot, digits, x, ys[note['string']-1], height, depth, black)
+            # Fewer lines spread over the same staff height keep the six-line number size.
+            height = min(abs(a-b) for a,b in zip(ys,ys[1:])) * 0.72 * min(1, (_strings - 1) / 5)
+            # A lower-case x is fitted to the same height as digits; keep it at x-height.
+            box = _draw_number(scene, cam, slot, digits, x, ys[note['string']-1],
+                               height * (0.75 if digits == 'x' else 1), depth, black)
             slot += 1
             gaps[line_objects[note['string']-1]].append((box[0],box[2]))
         _staff_number_gaps(scene,cam,gaps)
@@ -164,8 +196,8 @@ def update(scene):
     cursor.hide_render = False
     # Blank the highlight just before a same-fret repeat so each attack reads as a new hit.
     by_string = {n['string']: n for n in active if not _in_retrigger_gap(lesson, n, position)}
-    for string in range(1, 7):
-        obj = bpy.data.objects[GUITAR_OBJECTS[string]]
+    for string in range(1, _strings + 1):
+        obj = bpy.data.objects[legacy.string_object(string, _strings)]
         legacy._restore_string_rest(obj)
         note = by_string.get(string)
         material = legacy._mat(f'JSON_{obj.name}_Active', legacy.STRING_NOTE_COLORS[obj.name]) if note else neutral
@@ -176,17 +208,19 @@ def update(scene):
         marker = bpy.data.objects[f'Lesson_V2_Marker_{string}']
         marker.hide_set(note is None)
         marker.hide_render = note is None
+        _set_marker_shape(marker, bool(note and note.get('muted')))
         if note:
             # Geometry helpers accept the old reversed tab-row mapping.
             row = string
-            marker.location = legacy._open_string_point(row) if note['fret'] == 0 else legacy._point_on_string(row, note['fret'])
+            marker.location = (legacy._open_string_point(row, _strings) if note['fret'] == 0
+                               else legacy._point_on_string(row, note['fret'], _strings))
             marker.rotation_euler = cam.matrix_world.to_euler()
             marker.data.materials.clear()
             marker.data.materials.append(material)
             marker['note_id'] = note['id']
             age = seconds_between(lesson, note['start'], position)
-            # Small, deterministic attack decay; no lingering deformation at note-off.
-            if age < 0.3:
+            # Small, deterministic attack decay; no lingering deformation at note-off. A muted string does not ring.
+            if age < 0.3 and not note.get('muted'):
                 legacy._vibrate_active_string(scene, cam, obj, string)
                 rest = json.loads(obj['JSON_String_Rest_State'])
                 decay = math.exp(-12 * age)
@@ -200,9 +234,11 @@ def update(scene):
 
 
 def register():
-    global _lesson, _draw_key, _retriggered
+    global _lesson, _draw_key, _retriggered, _strings
     _draw_key = None
-    _lesson = prepare(json.loads(bpy.data.texts['Lesson_V2_JSON'].as_string()))
+    data = json.loads(bpy.data.texts['Lesson_V2_JSON'].as_string())
+    _lesson = prepare(data)
+    _strings = view_spec(data).strings
     _retriggered = _retriggered_notes(_lesson)
     legacy.SEGMENTS.update({'5': [0,5,6,2,3], '6': [0,5,6,4,2,3],
                             '7': [0,1,2], '8': list(range(7)), '9': [0,1,2,3,5,6]})

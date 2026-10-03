@@ -197,21 +197,36 @@ The dashboard stores each lesson as version 3: the music, independent of any ins
 }
 ```
 
-- `music` holds everything V2 holds except strings and frets: `tempo_bpm`, optional `tempo_changes`, `time_signature`, `end_beat`, optional `source` and `sections`, and `notes` with `id`, `pitch` (MIDI note number), `start_beat` and `duration_beats`.
+- `music` holds everything V2 holds except strings and frets: `tempo_bpm`, optional `tempo_changes`, `time_signature`, `end_beat`, optional `source` and `sections`, and `notes` with `id`, `pitch` (MIDI note number), `start_beat` and `duration_beats`. A note on a guitar or bass may add `"muted": true`, a dead note (decision 42): it keeps its pitch, is drawn "x" and sounds as a 0.05 s click. Only `true` or no key is valid.
 - `parts` maps a part name to its data; `instrument` names the instrument (`guitar_video_app/instruments`). A guitar part has `tuning` (open-string pitches, string 1 = high E first; only standard tuning is drawn) and `positions` by note id. Every note needs a position whose string and fret play its pitch. A lesson may have no parts; the music is still valid.
 - The first part is the active one: it is checked, drawn and exported. Other parts are kept unchecked so switching back finds them; switching makes that part first again and chooses its notes anew only if it no longer plays every note.
+- A bass part is a guitar part on the 4-string bass (decision 41): `{"instrument": "bass", "tuning": [43, 38, 33, 28], "positions": {"n0001": {"string": 4, "fret": 0}}}`. String 1 is the high G and string 4 the low E; frets 0 to 20, so pitches 28 (E1) to 63 (D#4). Only standard tuning is drawn.
 - A piano part is `{"instrument": "piano", "range": [21, 108], "hands_from": "midi_tracks" | "planned", "notes": {"n0001": {"hand": "left"}, "n0002": {"hand": "right", "by": "user"}}}`. Every note needs a hand and a pitch from 21 (A0) to 108 (C8). `by` is `"user"` (chosen in the dashboard) or `"midi"` (read from the MIDI file's hand tracks); planning the hands again keeps those notes. Finger numbers are not stored yet. Sustain pedal spans are stored separately in `music.pedal_events`.
 - Notes in one slot cannot start together, and a new note in a slot cuts the previous one off. The slot comes from the active part (the guitar's string, the piano's key, which is the pitch), or the pitch when there is no part.
-- The guitar view is the V2 lesson below, built by `guitar_view` in `guitar_video_app/instruments/guitar/view.py`; `from_v2` converts back, keeping note order and every field. `GET /api/songs/<id>/lesson` returns V3 (and downloads it); `?part=guitar` returns the guitar view the tab editor uses. Imported JSON may be V2, V3 or normalized; stored V2 files are read as V3 and written as V3 on their next save.
+- The guitar view is the V2 lesson below, built by `guitar_view` in `guitar_video_app/instruments/guitar/view.py`; `from_v2` converts back, keeping note order and every field. `GET /api/songs/<id>/lesson` returns V3 (and downloads it); `?part=guitar` (or `?part=bass`) returns the view the tab editor uses. Imported JSON may be V2, V3 or normalized; stored V2 files are read as V3 and written as V3 on their next save.
 
 ## Lesson V2 (Guitar View)
 
-Lesson V2 JSON is what Blender, the renderer and the dashboard tab editor read; the dashboard writes it from the V3 lesson (`guitar_view.json` in the song folder) on every send and render. Notes have `id`, `string`, `fret`, `start_beat` and `duration_beats`, with `"string_numbering": "1=high E, 6=low E"`. It is beat-based; its timing fields are:
+Lesson V2 JSON is what Blender, the renderer and the dashboard tab editor read; the dashboard writes it from the V3 lesson (`guitar_view.json` in the song folder) on every send and render. Notes have `id`, `string`, `fret`, `start_beat` and `duration_beats`, with `"string_numbering": "1=high E, 6=low E"`. A muted (dead) note adds `"muted": true` and keeps its string and fret; Blender draws "x" on the tab and an X on the string instead of the round marker (decision 42). It is beat-based; its timing fields are:
 
 - `tempo_bpm`: tempo from beat 0.
 - `tempo_changes` (optional): `[{"beat": "24", "bpm": 111}]`, beats strictly increasing and after 0; each tempo holds until the next change.
 
 Seconds come only from `tempo_map` / `seconds_at` / `beat_at` in `guitar_video_app/music/tempo.py`; Blender and the MIDI export call these rather than dividing by one tempo.
+
+The bass view (`bass_view.json`) is the same format on four strings. It adds two keys after `string_numbering`, which the guitar view does not have:
+
+```json
+{
+  "version": 2,
+  "string_numbering": "1=high G, 4=low E",
+  "instrument": "bass",
+  "tuning": [43, 38, 33, 28],
+  "notes": [{"id": "n0001", "string": 4, "fret": 0, "start_beat": "0", "duration_beats": "1"}]
+}
+```
+
+Strings are 1 to 4 and frets 0 to 20. The `string_numbering` tells which instrument a view is for (`view_spec`); Blender draws it on `outputs/bass-vertical.blend`, whose `Lesson_Strings` scene property is 4.
 
 ## Piano View
 
@@ -342,6 +357,6 @@ A published tab written as data, read by `read_tab` in `guitar_video_app/instrum
 ```
 
 - Required: `tempo_bpm` (the written tempo; the fit searches 70-140% of it; a tab above 120 BPM such as 2/2 at quarter = 164 keeps its meter, decision 29), `notes` with `string` (1 = high E), `fret`, `start_beat` and `duration_beats` in quarter-note beats as numbers or fraction strings.
-- Optional: `time_signature` (default 4/4), `end_beat` (default: the bar line after the last note), `title` and `artist` (become the video title and subtitle), `audio_start` (rough audio second of beat 0, for a tab of a later section; the search stays within 3 s of it), `fps` (default 60), `id` per note.
+- Optional: `instrument` (`"guitar"`, the default, or `"bass"`: strings 1 = high G to 4 = low E; the dashboard fills in the song's instrument and refuses a tab for the other one), `time_signature` (default 4/4; the dashboard fills in the song's time signature), `end_beat` (default: the bar line after the last note), `title` and `artist` (become the video title and subtitle), `audio_start` (rough audio second of beat 0, for a tab of a later section; the search stays within 3 s of it), `fps` (default 60), `id` per note, `"muted": true` per note for a dead note written "x" (its `fret` may be left out and is then 0; decision 42).
 - The imported lesson gets `tempo_bpm`, `tempo_changes` and `source.audio_offset` from the fit, then follows the recording: tab notes keep their string and fret but may move to where they are played or be removed if not played, and played notes the tab lacks are added (decision 24).
 - For a song that already has a lesson, the same file reviews it (decision 28). The tab may cover any part of the song, and is applied everywhere the recording plays it. The reviewed lesson has `source.kind` `"tab_review"`; notes from the tab's first place keep the tab's ids, later places add `-2`, `-3`, and so on. The dashboard stores the change report in the song summary (`tab_review`: places with bars and notes heard, counts, `changes` by note id, `removed_notes`), not in the lesson JSON.

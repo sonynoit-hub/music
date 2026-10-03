@@ -13,6 +13,10 @@ from guitar_video_app.music.rules import PitchRules
 class Instrument:
     name = ''
     midi_program = 0
+    # Audio transcription options (music.audio_transcription.transcribe_audio_to_midi): low/high
+    # MIDI pitch range, line='lowest' to keep one line, and onset_threshold/frame_threshold in place
+    # of the defaults; empty keeps every note with the default settings.
+    transcription: dict = {}
 
     def new_part(self) -> dict:
         """A part that plays no notes yet."""

@@ -61,18 +61,22 @@ def _number(value: Fraction) -> int | float:
 
 TEMPO_RANGE = (Fraction(4, 5), Fraction(5, 4))
 TEMPO_CHANGE_COST = 2
+# A busy single line (a bass in 16ths, with ghost notes) puts many notes near any 16th grid, so a
+# wrong tempo fixes a few of them by chance; a tempo change there must fix at least this many.
+LINE_TEMPO_CHANGE_COST = 6
 TEMPO_BEAM = 200
 TEMPO_BIN_SECONDS = 0.005
 
 
-def fit_tempo_map(data: dict, grid: Fraction) -> int:
+def fit_tempo_map(data: dict, grid: Fraction, change_cost: float = TEMPO_CHANGE_COST) -> int:
     """Give a measure its own tempo when that puts clearly more notes on the grid.
 
     Measure lengths are chosen in order by beam search over whole-BPM tempos within
     TEMPO_RANGE of the first tempo. A note costs 1 when it is further than
     SNAP_TOLERANCE_SECONDS from its measure's grid, plus its distance in seconds; each tempo
-    change costs TEMPO_CHANGE_COST, so one only appears when it fixes at least two notes.
-    Beat 0 and every note's time in seconds stay put. Returns the number of tempo changes.
+    change costs change_cost (TEMPO_CHANGE_COST, so one only appears when it fixes at least two
+    notes; LINE_TEMPO_CHANGE_COST for one line). Beat 0 and every note's time in seconds stay put.
+    Returns the number of tempo changes.
     """
     old = tempo_map(data)
     base = old[0][2]
@@ -103,7 +107,7 @@ def fit_tempo_map(data: dict, grid: Fraction) -> int:
                 finished.append((total, path))
                 continue
             for bpm in tempos:
-                value = total + cost(start, bpm) + (TEMPO_CHANGE_COST if path and bpm != path[-1] else 0)
+                value = total + cost(start, bpm) + (change_cost if path and bpm != path[-1] else 0)
                 following = start + float(measure) * 60 / float(bpm)
                 key = (round(following / TEMPO_BIN_SECONDS), bpm)
                 if key not in states or value < states[key][0]:
@@ -358,3 +362,29 @@ def suggest_grid(onsets: list[float]) -> tuple[float, float]:
                 key=lambda p: sum(math.cos(2 * math.pi * (t - p) / period) for t in onsets))
     first = phase + round((onsets[0] - phase) / period) * period
     return tempo, round(first, 3)
+
+
+def root_downbeat(notes: list[tuple[float, int, float]], tempo: float, first: float, measure: Fraction) -> float:
+    """A measure start for one line, such as a bass, which plays its roots long and low on the beat.
+
+    notes are (start seconds, MIDI pitch, length seconds); tempo and first come from suggest_grid,
+    measure is in beats. A note weighs its length, at most one beat, doubled when it is no higher
+    than the line's median pitch. Of the four 16th positions around first, the beat is the one
+    whose notes (within SNAP_TOLERANCE_SECONDS) weigh most; of the beats in a measure from there,
+    the measure starts on the one whose notes, a measure apart, weigh most. Returns its seconds,
+    which may lie after the first note; retime_lesson gives earlier notes a lead-in measure.
+    """
+    if not notes:
+        return first
+    period = 60 / tempo
+    low = sorted(pitch for _, pitch, _ in notes)[len(notes) // 2]
+    tolerance = float(SNAP_TOLERANCE_SECONDS)
+
+    def weight(phase, span):
+        return sum(min(length, period) * (2 if pitch <= low else 1) for start, pitch, length in notes
+                   if abs((start - phase) / span - round((start - phase) / span)) * span <= tolerance)
+
+    on_beat = max((first + k * period / 4 for k in range(-1, 3)), key=lambda phase: weight(phase, period))
+    bar = float(measure) * period
+    best = max((on_beat + k * period for k in range(math.ceil(measure))), key=lambda phase: weight(phase, bar))
+    return round(best, 3)

@@ -31,6 +31,19 @@ analyzes the music layer and creates the current V2 lesson JSON automatically.
 Positive offset delays audio; negative offset starts it before the lesson. Offset
 is rounded to Blender frames.
 
+The trash icon on a song in the library (shown on hover and on the selected song)
+deletes it after a confirmation. The song leaves the library and its folder (audio,
+MIDI, lessons, extracted bass, renders) moves to `data/dashboard/trash/<id>-<time>/`
+with its library row as `song.json`, so it can be recovered by hand; empty that
+folder to free the space.
+
+**Time signature** (next to Tempo: 4/4, 3/4, 2/4, 2/2, 6/8, 9/8, 12/8, 5/4, 7/8)
+sets the bar length for the whole song. Notes keep their audio timing and only the
+bar lines move, so the tab, staff, Blender pages and camera shots follow; set where
+bar 1 starts with First beat and Apply timing. The song remembers it: Generate MIDI
+bars the transcription in it, and a tab file without its own `time_signature` uses
+it (decision 45).
+
 The Generate MIDI from WAV button is local and pluggable. It uses Basic Pitch
 from a separate transcription environment when installed:
 
@@ -265,6 +278,26 @@ In Resolve (settings in `composite.json`):
 
 The colours are already in Blender's AgX view, like the MP4. Formats: `docs/JSON_SCHEMA.md`, "Compositing files"; design: decision 40.
 
+## Bass
+
+A song can be played on a 4-string bass (E1 A1 D2 G2, MIDI 28 to 63). In the dashboard choose Bass in the Instrument select. Then:
+
+- **Import MIDI** plans strings and frets on the bass (one finger per fret, low positions and open strings first). Notes the bass cannot play are left out.
+- **Generate MIDI from WAV** listens only in the bass range. Set **Recording** first: **Bass alone** (the default, for bass-tab videos) takes each note from the pitch struck hardest at each attack; **Full band** keeps the lowest note at each moment and drops chords and harmony above it (decision 43); **Full band, extract bass first** (for bass covers over a backing track) separates the bass with Demucs and takes each note's pitch from it with pYIN (decision 44). The first Generate with it takes about as long as the audio; it needs `uv pip install --python .venv-transcribe/bin/python demucs librosa`. With it, set **Bass style**: **Fingers** (the default) also keeps soft attacks such as quiet repeated notes; **Slap or pick** keeps only clear attacks, leaving out ghost hits, dead notes and the noise of a ringing note (decision 46). Bars of a generated bass start on its roots, the long low notes, so a pickup stays a pickup, and the tempo changes only where that clearly fits more notes (decision 47); move bar 1 with First beat and Apply timing if it is still off.
+- **Bass only** (next to Play) plays the bass separated from the full band at the same position, to check the tab by ear; press it again for the full audio. The first press extracts the bass when it has not been extracted yet (whatever the Recording setting), and Generate MIDI with **Full band, extract bass first** reuses it.
+- **Tab files** for the bass add `"instrument": "bass"`, with strings 1 = high G to 4 = low E (`docs/JSON_SCHEMA.md`, "Tab File"). A dead note is `"muted": true`; it stays where the tab puts it.
+- The tab editor shows four lines ("Bass · E A D G") under a bass-clef staff, written an octave above the sound as bass music usually is. Strings are 1 to 4 and frets 0 to 20.
+- **Muted (dead) notes**: select a note and press X, or tick Muted (x) in the note editor. The note is drawn "x" on the tab, as an X notehead in the notation and as an X on the string in Blender, and it sounds as a short click. Press X again to play it normally. This works on the guitar too.
+- Switching a song between guitar and bass keeps each instrument's strings and frets. A song with notes the other instrument cannot play stays where it is, with a message.
+
+Send to Blender and renders use `outputs/bass-vertical.blend`: open it in Blender before Send. Rebuild it from the guitar scene, which is only read, with:
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender -b outputs/v4-vertical.blend --python scripts/make_bass_scene.py
+```
+
+Design: decision 41.
+
 ## Checks
 
 Run every verify script, the Blender ones in background Blender, with one pass/fail line each:
@@ -272,6 +305,7 @@ Run every verify script, the Blender ones in background Blender, with one pass/f
 ```sh
 .venv/bin/python scripts/verify_all.py            # all checks, about 2 to 3 minutes
 .venv/bin/python scripts/verify_all.py --only piano
+.venv/bin/python scripts/verify_all.py --only bass  # the bass, its dashboard song and its scene
 ```
 
 No check writes a scene you work in. `scripts/verify_lesson_v2.py` regenerates its own samples, `outputs/lesson-v2-tests.blend` and `outputs/lesson-v2-chords.png`. `scripts/verify_dashboard.cjs` (Playwright, with the dashboard and Blender running) is run separately.

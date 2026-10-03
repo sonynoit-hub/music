@@ -96,9 +96,10 @@ def fit_part(tab: dict, onsets: list, transpose: int | None = None) -> tuple[dic
 
     onsets are (audio seconds, MIDI pitch, strength). The music starts at audio second
     stats['audio_start'], so the dashboard offset is its negative. transpose fixes the
-    audio's semitone shift instead of searching for one.
+    audio's semitone shift instead of searching for one. Muted (dead) notes have no pitch to hear
+    and are not matched.
     """
-    exact = sorted((beat(n['start_beat']), n['pitch']) for n in tab['notes'])
+    exact = sorted((beat(n['start_beat']), n['pitch']) for n in tab['notes'] if not n.get('muted'))
     notes = [(float(position), pitch) for position, pitch in exact]
     peaks: dict[int, list[float]] = {}
     strong: dict[int, list[float]] = {}
@@ -157,7 +158,8 @@ def adapt_to_audio(lesson: dict, onsets: list, played: list, audio_start: float,
     notes when that is within MOVE_SECONDS of the roll, else on the grid point of its first
     attack; the grid is 16ths, plus 8th-note triplets in beats where the tab has them. rules
     decide how an added note is played (rules.place); a note it cannot play is left out, and so
-    is a second note in one slot at one beat.
+    is a second note in one slot at one beat. A muted (dead) written note has no pitch to hear and
+    stays where it is written.
     """
     rules = rules or PitchRules()
     tempos = tempo_map(lesson)
@@ -173,8 +175,8 @@ def adapt_to_audio(lesson: dict, onsets: list, played: list, audio_start: float,
         return min((round(position / step) * step for step in steps), key=lambda q: abs(q - position))
 
     candidates = sorted((float(abs(to_beat(o[0]) - beat(n['start_beat']))) - STRENGTH_PREFERENCE * o[2], i, j)
-                        for i, n in enumerate(tab) for j, o in enumerate(onsets)
-                        if o[1] == pitch_of(n) + transpose and abs(to_beat(o[0]) - beat(n['start_beat'])) <= MOVE_BEATS)
+                        for i, n in enumerate(tab) for j, o in enumerate(onsets) if not n.get('muted')
+                        and o[1] == pitch_of(n) + transpose and abs(to_beat(o[0]) - beat(n['start_beat'])) <= MOVE_BEATS)
     match, used = {}, set()
     for _, i, j in candidates:
         if i not in match and j not in used:
@@ -217,7 +219,7 @@ def adapt_to_audio(lesson: dict, onsets: list, played: list, audio_start: float,
             groups.append((t, [ev]))
         previous = t
     chords = [[ev for ev in members if ev] for _, members in groups]
-    kept, extra, moved = [], [], 0
+    kept, extra, moved = [dict(n) for n in tab if n.get('muted')], [], 0
     for chord in filter(None, chords):
         first, last = chord[0]['time'], chord[-1]['time']
         written = sorted(ev['written'] for ev in chord if 'note' in ev

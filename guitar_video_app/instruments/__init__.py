@@ -8,12 +8,13 @@ back to them (activate), and are completed then.
 from __future__ import annotations
 
 from guitar_video_app.instruments.base import Instrument
+from guitar_video_app.instruments.bass import BASS
 from guitar_video_app.instruments.guitar import GUITAR
 from guitar_video_app.instruments.piano import PIANO
 from guitar_video_app.music.lesson import VERSION, prepare
 from guitar_video_app.music.rules import PitchRules
 
-INSTRUMENTS: dict[str, Instrument] = {GUITAR.name: GUITAR, PIANO.name: PIANO}
+INSTRUMENTS: dict[str, Instrument] = {GUITAR.name: GUITAR, PIANO.name: PIANO, BASS.name: BASS}
 
 
 def get_instrument(name: str) -> Instrument:

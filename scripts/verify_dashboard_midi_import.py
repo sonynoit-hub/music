@@ -83,7 +83,22 @@ def main() -> None:
         assert row["summary"]["mapping_mode"] == "tolerant"
         assert row["summary"]["notes"] > 0
 
-        print("PASS: dashboard imports MIDI first, creates lesson JSON, then accepts WAV.")
+        # Delete: the song leaves the library and its folder moves to the store's trash with its row.
+        from guitar_video_app.api.dashboard import HTTPException, delete_song, song, songs
+        reply = delete_song(song_id)
+        trash = Path(reply["trash"])
+        assert trash.parent == Path(store) / "trash" and not (Path(store) / song_id).exists()
+        assert any(trash.glob("*.wav")), list(trash.iterdir())
+        assert json.loads((trash / "song.json").read_text())["name"] == "MIDI first import test"
+        assert song_id not in [s["id"] for s in songs()]
+        try:
+            song(song_id)
+            raise AssertionError("a deleted song is gone")
+        except HTTPException as exc:
+            assert exc.status_code == 404
+        assert Path(delete_song(repeated["id"])["trash"]).name.startswith(repeated["id"])
+
+        print("PASS: dashboard imports MIDI first, creates lesson JSON, then accepts WAV; deleting a song moves it to the trash.")
 
 
 def _write_repeated_tempo_midi(path: Path) -> None:

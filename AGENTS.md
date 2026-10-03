@@ -30,6 +30,8 @@ Use `outputs/v4-vertical.blend` (9:16, 1080x1920) as the latest Blender scene ca
 
 Piano songs use `outputs/piano-vertical.blend`, built from code by `scripts/make_piano_scene.py`; rebuild it rather than editing it by hand.
 
+Bass songs use `outputs/bass-vertical.blend` (4 strings, 34-inch neck), built from `outputs/v4-vertical.blend` by `scripts/make_bass_scene.py`; rebuild it rather than editing it by hand, and re-run the script after changing the guitar scene.
+
 Do not overwrite `outputs/reference-guitar.blend` unless explicitly requested.
 
 ## Compositing Renders (PIANO_VISUAL)

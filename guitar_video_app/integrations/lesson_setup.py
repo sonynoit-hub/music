@@ -26,7 +26,7 @@ def validate_lesson(data: dict) -> None:
         raise ValueError("Page and timeline boundaries must match the note timings.")
 
 
-def build_bar_lines() -> None:
+def build_bar_lines(strings: int = 6) -> None:
     import bpy
     from mathutils import Matrix, Vector
     from bpy_extras.object_utils import world_to_camera_view
@@ -44,7 +44,7 @@ def build_bar_lines() -> None:
         points.sort(key=lambda p: world_to_camera_view(scene, scene.camera, p).x)
         return points[0], points[-1]
 
-    top, bottom = endpoints('Lesson_Tab_Line_1'), endpoints('Lesson_Tab_Line_6')
+    top, bottom = endpoints('Lesson_Tab_Line_1'), endpoints(f'Lesson_Tab_Line_{strings}')
     line = bpy.data.objects['Lesson_Tab_Line_1']
     inverse = group.matrix_world.inverted()
     for index, fraction in enumerate((0.0, 0.5, 1.0), 1):
@@ -135,19 +135,14 @@ def install_lesson(chart_path: str | Path) -> dict:
 
 def install_v2(data):
     import bpy
-    from guitar_video_app.instruments.guitar.view import prepare
+    from guitar_video_app.instruments.guitar.view import prepare, view_spec
     from guitar_video_app.integrations import lesson_controller as legacy
     from guitar_video_app.integrations import lesson_controller_v2 as runtime
+    from guitar_video_app.integrations.blender_scene_refs import check_lesson_scene
     lesson = prepare(data)
-    required = ['App_Tab_White_Panel', 'App_Tab_Cursor_Visible_6_String_Length',
-                'App_Tab_Backdrop_Panel_Cursor_Lines_GROUP', 'Nut']
-    required += [f'String_{i}' for i in range(1, 7)]
-    required += [f'Lesson_Tab_Line_{i}' for i in range(1, 7)]
-    required += [f'Fret_{i:02d}' for i in range(1, 21)]
-    missing = [n for n in required if n not in bpy.data.objects]
-    if missing or bpy.context.scene.camera is None:
-        raise ValueError(f'Open the saved guitar scene. Missing: {missing}')
-    for i in range(1, 7):
+    strings = view_spec(data).strings
+    check_lesson_scene(bpy.context.scene, strings, bpy.data.objects)
+    for i in range(1, strings + 1):
         obj = bpy.data.objects[f'String_{i}']
         if obj.animation_data and obj.animation_data.action:
             raise ValueError('Remove legacy string transform actions before installing V2.')
@@ -155,13 +150,13 @@ def install_v2(data):
     text.clear()
     text.write(json.dumps(data, indent=2))
     template = legacy._ensure_flat_marker(legacy._ensure_materials()[3])
-    for i in range(1, 7):
+    for i in range(1, strings + 1):
         name = f'Lesson_V2_Marker_{i}'
         if name not in bpy.data.objects:
             marker = bpy.data.objects.new(name, template.data.copy())
             bpy.context.scene.collection.objects.link(marker)
             marker.show_in_front = True
-    build_bar_lines()
+    build_bar_lines(strings)
     scene = bpy.context.scene
     scene.render.fps = lesson['fps']
     scene.render.fps_base = 1

@@ -8,11 +8,13 @@ import wave
 
 def status():
     import bpy
+    from guitar_video_app.integrations.blender_scene_refs import scene_strings
     scene = bpy.context.scene
+    strings = scene_strings(scene)
     names = ['LessonVerticalCamera','App_Tab_White_Panel','Backdrop','Nut']
-    names += [f'String_{i}' for i in range(1,7)] + [f'Lesson_Tab_Line_{i}' for i in range(1,7)]
+    names += [f'String_{i}' for i in range(1,strings+1)] + [f'Lesson_Tab_Line_{i}' for i in range(1,strings+1)]
     matrices = {n:[list(row) for row in bpy.data.objects[n].matrix_world] for n in names if n in bpy.data.objects}
-    return dict(ok=True, scene=scene.name, file=bpy.data.filepath,
+    return dict(ok=True, scene=scene.name, file=bpy.data.filepath, strings=strings,
                 camera=scene.camera.name if scene.camera else None,
                 frame=scene.frame_current, song_id=scene.get('Dashboard_Song_ID'),
                 revision=scene.get('Dashboard_Revision'),
@@ -113,7 +115,9 @@ def sync(command):
 
     if command.get('instrument') == 'piano':
         return sync_piano(command)
-    from guitar_video_app.instruments.guitar.view import guitar_view, prepare
+    from guitar_video_app.instruments import part_view
+    from guitar_video_app.instruments.guitar.view import prepare, view_spec
+    from guitar_video_app.integrations.blender_scene_refs import check_lesson_scene
     from guitar_video_app.integrations.lesson_setup import install_v2
     from guitar_video_app.integrations.guitar_style import install_style
     from guitar_video_app.integrations.title_overlay import install_title
@@ -121,8 +125,10 @@ def sync(command):
     scene = bpy.context.scene
     data = json.loads(Path(command['json_path']).read_text())
     if data.get('version') != 2:
-        data = guitar_view(as_lesson(data))
+        lesson_v3 = as_lesson(data)
+        data = part_view(lesson_v3, next(iter(lesson_v3['parts'])))
     lesson = prepare(data)
+    strings = view_spec(data).strings
     audio = Path(command['wav_path']).resolve(strict=True)
     offset = float(command.get('offset_seconds', 0))
     if not math.isfinite(offset) or abs(offset) > 60:
@@ -130,17 +136,10 @@ def sync(command):
     with wave.open(str(audio)) as wav:
         if wav.getnframes() == 0:
             raise ValueError('The WAV file is empty.')
-    required = ['App_Tab_White_Panel','App_Tab_Cursor_Visible_6_String_Length',
-                'App_Tab_Backdrop_Panel_Cursor_Lines_GROUP','Nut']
-    required += [f'String_{i}' for i in range(1,7)]
-    required += [f'Lesson_Tab_Line_{i}' for i in range(1,7)]
-    required += [f'Fret_{i:02d}' for i in range(1,21)]
-    missing = [n for n in required if n not in scene.objects]
-    if missing or scene.camera is None:
-        raise ValueError('Open the guitar lesson scene first. Missing: ' + ', '.join(missing))
+    check_lesson_scene(scene, strings, scene.objects)
     if 'App_Tab_Backdrop_Panel_Cursor_Lines_COLLECTION' not in bpy.data.collections:
         raise ValueError('The tab collection is missing.')
-    for i in range(1,7):
+    for i in range(1,strings+1):
         obj = bpy.data.objects[f'String_{i}']
         if obj.animation_data and obj.animation_data.action:
             raise ValueError('Legacy string actions are still attached.')

@@ -6,9 +6,12 @@ struct Note: Decodable {
     let pitch: UInt8
     let start_seconds: Double
     let end_seconds: Double
+    let velocity: UInt8?  // 85 when missing; muted (dead) notes are softer
 }
 struct Lesson: Decodable {
     let duration_seconds: Double
+    let program: UInt8?  // General MIDI program; 24 (nylon guitar) when missing, 33 for the bass
+    let strings: Int?  // one sampler per string; 6 when missing
     let notes: [Note]
 }
 struct Event {
@@ -16,6 +19,7 @@ struct Event {
     let string: Int
     let pitch: UInt8
     let on: Bool
+    let velocity: UInt8
 }
 
 let lesson = try JSONDecoder().decode(Lesson.self, from: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1])))
@@ -24,11 +28,11 @@ let engine = AVAudioEngine()
 let format = AVAudioFormat(standardFormatWithSampleRate: rate, channels: 2)!
 let bank = URL(fileURLWithPath: "/System/Library/Components/CoreAudio.component/Contents/Resources/gs_instruments.dls")
 var samplers: [AVAudioUnitSampler] = []
-for _ in 1...6 {
+for _ in 1...(lesson.strings ?? 6) {
     let sampler = AVAudioUnitSampler()
     engine.attach(sampler)
     engine.connect(sampler, to: engine.mainMixerNode, format: format)
-    try sampler.loadSoundBankInstrument(at: bank, program: 24, bankMSB: UInt8(kAUSampler_DefaultMelodicBankMSB), bankLSB: 0)
+    try sampler.loadSoundBankInstrument(at: bank, program: lesson.program ?? 24, bankMSB: UInt8(kAUSampler_DefaultMelodicBankMSB), bankLSB: 0)
     samplers.append(sampler)
 }
 engine.mainMixerNode.outputVolume = 0.45
@@ -41,8 +45,8 @@ var file: AVAudioFile? = try AVAudioFile(forWriting: URL(fileURLWithPath: Comman
 let buffer = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: 4096)!
 var events: [Event] = []
 for note in lesson.notes {
-    events.append(Event(frame: Int64((note.start_seconds * rate).rounded()), string: note.string, pitch: note.pitch, on: true))
-    events.append(Event(frame: Int64((note.end_seconds * rate).rounded()), string: note.string, pitch: note.pitch, on: false))
+    events.append(Event(frame: Int64((note.start_seconds * rate).rounded()), string: note.string, pitch: note.pitch, on: true, velocity: note.velocity ?? 85))
+    events.append(Event(frame: Int64((note.end_seconds * rate).rounded()), string: note.string, pitch: note.pitch, on: false, velocity: 0))
 }
 events.sort { a, b in a.frame == b.frame ? (!a.on && b.on) : a.frame < b.frame }
 let end = Int64((lesson.duration_seconds * rate).rounded())
@@ -52,7 +56,7 @@ var retries = 0
 while current < end {
     while index < events.count && events[index].frame <= current {
         let e = events[index]
-        if e.on { samplers[e.string-1].startNote(e.pitch, withVelocity: 85, onChannel: 0) }
+        if e.on { samplers[e.string-1].startNote(e.pitch, withVelocity: e.velocity, onChannel: 0) }
         else { samplers[e.string-1].stopNote(e.pitch, onChannel: 0) }
         index += 1
     }
